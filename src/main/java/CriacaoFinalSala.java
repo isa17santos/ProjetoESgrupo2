@@ -40,13 +40,13 @@ public class CriacaoFinalSala extends JFrame {
         add(sucessoLabel);
 
         // Ícone de check
-        ImageIcon checkIcon = new ImageIcon(getClass().getResource("/imagens/image-removebg-preview (1).png"));
+        ImageIcon checkIcon = new ImageIcon(getClass().getResource("/imagens/vistoConfirmacao.png"));
         JLabel checkLabel = new JLabel(checkIcon);
         checkLabel.setBounds(500, 200, 100, 100);
         add(checkLabel);
 
         // Botão de voltar com ícone
-        ImageIcon backIcon = new ImageIcon(getClass().getResource("/imagens/image-removebg-preview.png"));
+        ImageIcon backIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
         JButton backButton = new JButton(backIcon);
         backButton.setBounds(10, 150, 40, 40);
         backButton.setBorderPainted(false);
