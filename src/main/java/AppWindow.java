@@ -41,15 +41,31 @@ public class AppWindow extends JFrame {
         trocarPainel(est.getMainPanel());
     }
 
+// --------------------------------------- MODO ADMIN --------------------------------------------------------
     public void mostrarAdmin() {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
 
+    //-------------------- FILMES ------------------
+    //pagina principal
     public void mostrarPaginaPrincipalFilmesAdmin() {
         PaginaPrincipalFilmesAdmin filmes = new PaginaPrincipalFilmesAdmin(this);
         trocarPainel(filmes.getMainPanel());
     }
+
+    //adicionar filme
+    public void mostrarAdicionarFilmes() {
+        AdicionarFilme filmes = new AdicionarFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //editar filme
+    public void mostrarEditarFilmes() {
+        EditarFilme filmes = new EditarFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+    //-------------------- FILMES -------------------
 
     public void mostrarPaginaPrincipalProdutosBarAdmin() {
         PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
@@ -65,6 +81,7 @@ public class AppWindow extends JFrame {
         PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
         trocarPainel(sessoes.getMainPanel());
     }
+// --------------------------------------- MODO ADMIN --------------------------------------------------------
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);

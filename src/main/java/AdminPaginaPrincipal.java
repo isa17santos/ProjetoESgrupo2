@@ -87,7 +87,7 @@ public class AdminPaginaPrincipal {
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
-        mainPanel.add(titleLabel, "x 500, y 80");
+        mainPanel.add(titleLabel, "x 500, y 40");
         mainPanel.add(salasButton, "x 150, y 350, w 400, h 100");
         mainPanel.add(sessoesButton, "x 700, y 350, w 400, h 100");
         mainPanel.add(filmesButton, "x 150, y 500, w 400, h 100");
