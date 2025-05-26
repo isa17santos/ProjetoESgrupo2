@@ -13,34 +13,10 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="2baa2" class="javax.swing.JButton" binding="estatisticasButton">
-        <constraints/>
-        <properties>
-          <text value="Button"/>
-        </properties>
-      </component>
-      <component id="fb752" class="javax.swing.JButton" binding="adminButton">
-        <constraints/>
-        <properties>
-          <text value="Button"/>
-        </properties>
-      </component>
       <component id="ef06" class="javax.swing.JLabel" binding="cartLabel">
         <constraints/>
         <properties>
           <text value=""/>
-        </properties>
-      </component>
-      <component id="cb105" class="javax.swing.JButton" binding="bilheteiraButton">
-        <constraints/>
-        <properties>
-          <text value="Button"/>
-        </properties>
-      </component>
-      <component id="cabd6" class="javax.swing.JButton" binding="barButton">
-        <constraints/>
-        <properties>
-          <text value="Button"/>
         </properties>
       </component>
     </children>

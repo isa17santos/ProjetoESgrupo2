@@ -15,10 +15,8 @@ public class PaginaInicial {
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
-    private final Color corBotaoSetaComboBox = Color.decode("#F2AF14");
-    private final Color corHoverComboBox = Color.decode("#FCD373");
-    private final Color corFundoSubMenu = Color.decode("#FBDC95");
     private final Color corFundo = Color.decode("#F9E6BB");
+    private final Color corFonte = Color.decode("#6B3838");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     //construtor
@@ -28,7 +26,6 @@ public class PaginaInicial {
     }
 
     private void configurarComponentes() {
-        Border rounded = new RoundedBorder(15); // define as bordas redondas
 
         // pagina principal
         mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
@@ -46,43 +43,31 @@ public class PaginaInicial {
         cartLabel.setIcon(new ImageIcon(cartImg));
 
         //----------------- BOTAO BILHETEIRA -------------
-        bilheteiraButton.setText("Bilheteira");
+        bilheteiraButton = new RoundedButton("Bilheteira", 20);
         bilheteiraButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        bilheteiraButton.setHorizontalAlignment(SwingConstants.CENTER);
         bilheteiraButton.setBackground(corFundoComponentes);
-        bilheteiraButton.setBorder(rounded);
-        bilheteiraButton.setContentAreaFilled(false);
-        bilheteiraButton.setOpaque(true);
+        bilheteiraButton.setForeground(corFonte); // texto
         //----------------- BOTAO BILHETEIRA -------------
 
         //----------------- BOTAO BAR -------------
-        barButton.setText("Bar");
+        barButton = new RoundedButton("Bar", 20);
         barButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        barButton.setHorizontalAlignment(SwingConstants.CENTER);
         barButton.setBackground(corFundoComponentes);
-        barButton.setBorder(rounded);
-        barButton.setContentAreaFilled(false);
-        barButton.setOpaque(true);
+        barButton.setForeground(corFonte); // texto
         //----------------- BOTAO BAR -------------
 
         //----------------- BOTAO ESTATISTICAS -------------
-        estatisticasButton.setText("Estatisticas");
+        estatisticasButton = new RoundedButton("Estatisticas", 20);
         estatisticasButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        estatisticasButton.setHorizontalAlignment(SwingConstants.CENTER);
         estatisticasButton.setBackground(corFundoComponentes);
-        estatisticasButton.setBorder(rounded);
-        estatisticasButton.setContentAreaFilled(false);
-        estatisticasButton.setOpaque(true);
+        estatisticasButton.setForeground(corFonte); // texto
         //----------------- BOTAO ESTATISTICAS -------------
 
         //----------------- BOTAO ADMIN -------------
-        adminButton.setText("Admin");
+        adminButton = new RoundedButton("Admin", 20);
         adminButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        adminButton.setHorizontalAlignment(SwingConstants.CENTER);
         adminButton.setBackground(corFundoComponentes);
-        adminButton.setBorder(rounded);
-        adminButton.setContentAreaFilled(false);
-        adminButton.setOpaque(true);
+        adminButton.setForeground(corFonte); // texto
         //----------------- BOTAO ADMIN -------------
 
         // Adiciona componentes com posicionamento personalizado
@@ -120,52 +105,5 @@ public class PaginaInicial {
 
     public JPanel getMainPanel() {
         return mainPanel;
-    }
-
-
-    static class RoundedBorder implements Border {
-        private final int radius;
-
-        public RoundedBorder(int radius) {
-            this.radius = radius;
-        }
-
-        @Override
-        public Insets getBorderInsets(Component c) {
-            return new Insets(this.radius + 1, this.radius + 1, this.radius + 1, this.radius + 1);
-        }
-
-        @Override
-        public boolean isBorderOpaque() {
-            return false;
-        }
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(Color.GRAY); // Podes mudar a cor da borda aqui
-            g2.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
-            g2.dispose();
-        }
-    }
-
-    static class RoundedPanel extends JPanel {
-        private final int radius;
-
-        public RoundedPanel(int radius) {
-            this.radius = radius;
-            setOpaque(false);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
-            g2.dispose();
-            super.paintComponent(g);
-        }
     }
 }

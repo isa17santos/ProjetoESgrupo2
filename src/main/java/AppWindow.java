@@ -46,6 +46,26 @@ public class AppWindow extends JFrame {
         trocarPainel(admin.getMainPanel());
     }
 
+    public void mostrarPaginaPrincipalFilmesAdmin() {
+        PaginaPrincipalFilmesAdmin filmes = new PaginaPrincipalFilmesAdmin(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    public void mostrarPaginaPrincipalProdutosBarAdmin() {
+        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
+        trocarPainel(produtos.getMainPanel());
+    }
+
+    public void mostrarPaginaPrincipalSalasAdmin() {
+        PaginaPrincipalSalasAdmin salas = new PaginaPrincipalSalasAdmin(this);
+        trocarPainel(salas.getMainPanel());
+    }
+
+    public void mostrarPaginaPrincipalSessoesAdmin() {
+        PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
+        trocarPainel(sessoes.getMainPanel());
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);
     }
