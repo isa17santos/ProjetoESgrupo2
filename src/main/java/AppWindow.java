@@ -15,6 +15,19 @@ public class AppWindow extends JFrame {
         revalidate();
         repaint();
     }
+    public void mostrarPaginaBebidas() {
+        PaginaBebidas pagina = new PaginaBebidas(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+    public void mostrarPaginaAperitivos() {
+        PaginaAperitivos pagina = new PaginaAperitivos(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+    public void mostrarPaginaPacks() {
+        PaginaPacks pagina = new PaginaPacks(this);
+        trocarPainel(pagina.getMainPanel());
+    }
 
     public void mostrarPaginaInicial() {
         PaginaInicial paginaInicial = new PaginaInicial(this);
