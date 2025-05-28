@@ -1,4 +1,6 @@
-public class Sala {
+import java.io.Serializable;
+
+public class Sala implements Serializable{
     private String designacao;
     private int numFilas;
     private int numLugaresFila;
@@ -6,6 +8,7 @@ public class Sala {
     private Acessibilidade acessibilidade;
     private String tipo;
     private Estado estado;
+    private static final long serialVersionUID = 1L;
 
     public Sala(String designacao, int numFilas, int numLugaresFila, String ecra, Acessibilidade acessibilidade, String tipo, Estado estado) {
         this.designacao = designacao;

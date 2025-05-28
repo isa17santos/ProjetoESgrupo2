@@ -82,8 +82,8 @@ public class PaginaPrincipalFilmesAdmin {
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 500, y 40");
         mainPanel.add(filmesLabel, "x 500, y 180");
-        mainPanel.add(adicionarButton, "x 250, y 350, w 800, h 100");
-        mainPanel.add(editarButton, "x 250, y 500, w 800, h 100");
+        mainPanel.add(adicionarButton, "x 250, y 380, w 800, h 100");
+        mainPanel.add(editarButton, "x 250, y 550, w 800, h 100");
 
 
 

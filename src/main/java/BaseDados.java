@@ -1,9 +1,14 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.*;
 
-public class BaseDados {
+public class BaseDados implements Serializable{
+    //------------ GUARDAR DADOS EM FICHEIROS ----------------
+    private static final long serialVersionUID = 1L;
     private static BaseDados instance = null;
+    private static final String FICHEIRO_DADOS = "basedados.dat";
+    //------------ GUARDAR DADOS EM FICHEIROS ----------------
 
     private List<Filme> filmes = new ArrayList<>();
     private List<Produto> produtos = new ArrayList<>();
@@ -333,15 +338,31 @@ public class BaseDados {
 
     public static BaseDados getInstance() {
         if (instance == null) {
-            instance = new BaseDados();
-            carregarDados();
+            instance = carregarDados();
+            if (instance == null) {
+                instance = new BaseDados();
+            }
         }
         return instance;
     }
 
-    private static void carregarDados() {}
+    private static BaseDados carregarDados() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_DADOS))) {
+            return (BaseDados) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Ficheiro não encontrado ou erro ao carregar: " + e.getMessage());
+            return null;
+        }
+    }
 
-    private static void gravarDados() {}
+    public void gravarDados() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FICHEIRO_DADOS))) {
+            oos.writeObject(this);
+            System.out.println("Dados guardados com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Erro ao guardar os dados: " + e.getMessage());
+        }
+    }
 
     public List<Filme> getFilmes() {
         return filmes;

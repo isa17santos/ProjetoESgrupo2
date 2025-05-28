@@ -1,4 +1,6 @@
-public class Sessao {
+import java.io.Serializable;
+
+public class Sessao implements Serializable{
     private Filme filme;
     private Sala sala;
     private Estado estado;
@@ -7,6 +9,7 @@ public class Sessao {
     private int ano;
     private int hora;
     private int minuto;
+    private static final long serialVersionUID = 1L;
 
     public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto) {
         this.filme = filme;

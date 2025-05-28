@@ -71,12 +71,12 @@ public class PaginaInicial {
         //----------------- BOTAO ADMIN -------------
 
         // Adiciona componentes com posicionamento personalizado
-        mainPanel.add(logoLabel, "x 350, y 30");
+        mainPanel.add(logoLabel, "x 310, y 30");
         mainPanel.add(cartLabel, "x 1100, y 200");
-        mainPanel.add(bilheteiraButton, "x 150, y 350, w 400, h 100");
-        mainPanel.add(barButton, "x 700, y 350, w 400, h 100");
-        mainPanel.add(estatisticasButton, "x 150, y 500, w 400, h 100");
-        mainPanel.add(adminButton, "x 700, y 500, w 400, h 100");
+        mainPanel.add(bilheteiraButton, "x 150, y 400, w 400, h 100");
+        mainPanel.add(barButton, "x 700, y 400, w 400, h 100");
+        mainPanel.add(estatisticasButton, "x 150, y 550, w 400, h 100");
+        mainPanel.add(adminButton, "x 700, y 550, w 400, h 100");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------

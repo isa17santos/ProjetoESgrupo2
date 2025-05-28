@@ -4,7 +4,7 @@ public class AppWindow extends JFrame {
     public AppWindow() {
         setTitle("Cinemagic");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1300, 700);
+        setSize(1300, 780);
         setResizable(false);
         setLocationRelativeTo(null);
         mostrarPaginaInicial(); // Página inicial ao arrancar

@@ -1,4 +1,6 @@
-public class Produto {
+import java.io.Serializable;
+
+public class Produto implements Serializable{
     private String foto;
     private String nome;
     private TipoProduto tipoProduto;
@@ -6,6 +8,7 @@ public class Produto {
     private int stock;
     private float precoCompraUnidade;
     private float precoVendaUnidade;
+    private static final long serialVersionUID = 1L;
 
     public Produto(String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {
         this.foto = foto;

@@ -1,6 +1,7 @@
 import java.util.LinkedList;
+import java.io.Serializable;
 
-public class Filme {
+public class Filme implements Serializable{
     private String nome;
     private int duracao;
     private String foto; //guardar o nome da foto
@@ -10,6 +11,7 @@ public class Filme {
     private LinkedList<String> tipos;
     private Estado estado;
     private float precoCompra;
+    private static final long serialVersionUID = 1L;
 
     public Filme(String nome, int duracao, String foto, LinkedList<Idioma> idiomas, String idade, LinkedList<Genero> generos, LinkedList<String> tipos, Estado estado, Float precoCompra) {
         this.nome = nome;
