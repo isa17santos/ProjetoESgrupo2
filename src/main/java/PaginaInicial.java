@@ -57,7 +57,7 @@ public class PaginaInicial {
         //----------------- BOTAO BAR -------------
 
         //----------------- BOTAO ESTATISTICAS -------------
-        estatisticasButton = new RoundedButton("Estatisticas", 20);
+        estatisticasButton = new RoundedButton("Estatísticas", 20);
         estatisticasButton.setFont(new Font("Georgia", Font.PLAIN, 35));
         estatisticasButton.setBackground(corFundoComponentes);
         estatisticasButton.setForeground(corFonte); // texto
