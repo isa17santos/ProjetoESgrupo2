@@ -10,6 +10,9 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.LinkedList;
 
 public class AdicionarFilme {
@@ -34,8 +37,10 @@ public class AdicionarFilme {
     private final String placeholder = "Preço da compra(€)";
     private BufferedImage imagemCarregada = null;
     private String nomeFicheiroImagem = null;
+    private File ficheiroImagemOriginal = null;
 
 
+    private BaseDados bd;
 
     private final AppWindow app;
 
@@ -93,86 +98,6 @@ public class AdicionarFilme {
         // --------------------- FILMES LABEL -----------------------
 
 
-        //----------------- BOTAO ADICIONAR -------------
-        adicionarButton = new RoundedButton("Adicionar", 20);
-        adicionarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
-        adicionarButton.setBackground(corFundoLabel);
-        adicionarButton.setForeground(corFontePreto); // texto
-        adicionarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Validação dos campos obrigatórios
-                if (imagemCarregada == null ||  // verifica se foi carregada imagem
-                        nomeFilme.getText().equals("Nome filme") ||
-                        duracaoFilme.getText().equals("Duração (minutos)") ||
-                        comboButtonIdioma.getText().equals("Idioma") ||
-                        comboBoxIdade.getSelectedItem() == null || comboBoxIdade.getSelectedItem().toString().equals("Idade") ||
-                        comboButtonGenero.getText().equals("Género") ||
-                        comboButtonTipo.getText().equals("Tipo") ||
-                        comboBoxEstado.getSelectedItem() == null || comboBoxEstado.getSelectedItem().toString().equals("Estado") ||
-                        precoCompraField.getText().equals("Preço da compra(€)")) {
-
-                    JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-
-                try {
-                    // Criar novo objeto Filme
-                    String nome = nomeFilme.getText().trim();
-                    int duracao = Integer.parseInt(duracaoFilme.getText().trim());
-                    String foto = nomeFicheiroImagem; // assumimos que isto foi guardado no momento do upload
-
-// Criar listas com os enums/tipos selecionados
-                    LinkedList<Idioma> idiomas = new LinkedList<>();
-                    idiomas.add(Idioma.valueOf(comboButtonIdioma.getText().trim().toUpperCase()));
-
-                    String idade = comboBoxIdade.getSelectedItem().toString().trim();
-
-                    LinkedList<Genero> generos = new LinkedList<>();
-                    generos.add(Genero.valueOf(comboButtonGenero.getText().trim().toUpperCase()));
-
-                    LinkedList<String> tipos = new LinkedList<>();
-                    tipos.add(comboButtonTipo.getText().trim());
-
-                    Estado estado = Estado.valueOf(comboBoxEstado.getSelectedItem().toString().trim().toUpperCase());
-
-                    Float precoCompra = Float.parseFloat(precoCompraField.getText().trim().replace(",", "."));
-
-                    Filme novoFilme = new Filme(
-                            nome,
-                            duracao,
-                            foto,
-                            idiomas,
-                            idade,
-                            generos,
-                            tipos,
-                            estado,
-                            precoCompra
-                    );
-
-                    // Carregar a base de dados (ou criar nova)
-                    BaseDados bd = BaseDados.carregarDados();
-                    bd.adicionarFilme(novoFilme);
-                    bd.gravarDados();
-
-                    // Redirecionar
-                    //JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
-                    //frame.dispose(); // fecha a janela atual
-                    //new ConfirmacaoAdicaoFilme().setVisible(true);
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro ao guardar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        //----------------- BOTAO ADICIONAR -------------
-
-
         //---------------------------- BOTAO UPLOAD ------------------------------
         uploadButton = new JButton("Carregar Cartaz");
         uploadButton.setFont(new Font("Georgia", Font.PLAIN, 35));
@@ -203,7 +128,8 @@ public class AdicionarFilme {
                             uploadButton.setIcon(icon);
                             uploadButton.setText(""); // remove texto
                             imagemCarregada = img;
-                            nomeFicheiroImagem = selectedFile.getName();
+                            ficheiroImagemOriginal = selectedFile;  // ficheiro completo com caminho
+                            nomeFicheiroImagem = selectedFile.getName(); // nome simples
                         } else {
                             JOptionPane.showMessageDialog(null, "Erro ao carregar imagem.");
                         }
@@ -850,6 +776,176 @@ public class AdicionarFilme {
         });
         // ------------ CAIXA TEXTO 'preco da compra' -----------------
 
+
+        //----------------- BOTAO ADICIONAR -------------
+        adicionarButton = new RoundedButton("Adicionar", 20);
+        adicionarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
+        adicionarButton.setBackground(corFundoLabel);
+        adicionarButton.setForeground(corFontePreto); // texto
+        adicionarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Validação dos campos obrigatórios
+                if (imagemCarregada == null ||  // verifica se foi carregada imagem
+                        nomeFilme.getText().equals("Nome filme") ||
+                        duracaoFilme.getText().equals("Duração (minutos)") ||
+                        comboButtonIdioma.getText().equals("Idioma") ||
+                        comboBoxIdade.getSelectedItem() == null || comboBoxIdade.getSelectedItem().toString().equals("Idade") ||
+                        comboButtonGenero.getText().equals("Género") ||
+                        comboButtonTipo.getText().equals("Tipo") ||
+                        comboBoxEstado.getSelectedItem() == null || comboBoxEstado.getSelectedItem().toString().equals("Estado") ||
+                        precoCompraField.getText().equals("Preço da compra(€)")) {
+
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+
+                try {
+                    // Criar novo objeto Filme
+                    String nome = nomeFilme.getText().trim();
+                    int duracao = Integer.parseInt(duracaoFilme.getText().trim());
+                    String foto = nomeFicheiroImagem; // assumimos que isto foi guardado no momento do upload
+
+                    // Criar listas com os enums/tipos selecionados
+                    LinkedList<Idioma> idiomas = new LinkedList<>();
+                    for (JCheckBox checkBox : checkBoxes) {
+                        if (checkBox.isSelected()) {
+                            if (checkBox.getText().contains("VP")) {
+                                idiomas.add(Idioma.VP);
+                            } else if (checkBox.getText().contains("VO")) {
+                                idiomas.add(Idioma.VO);
+                            }
+                        }
+                    }
+
+
+                    String idade = comboBoxIdade.getSelectedItem().toString().trim();
+
+                    LinkedList<Genero> generos = new LinkedList<>();
+                    for (JCheckBox checkBox : checkBoxesGenero) {
+                        if (checkBox.isSelected()) {
+                            String texto = checkBox.getText(); // Ex: "Ficção Científica"
+                            String normalizado = NormalizarEnum.normalizarEnum(texto); // Ex: "FICAO_CIENTIFICA"
+                            generos.add(Genero.valueOf(normalizado));
+                        }
+                    }
+
+
+                    LinkedList<String> tipos = new LinkedList<>();
+                    tipos.add(comboButtonTipo.getText().trim());
+
+                    Estado estado = Estado.valueOf(comboBoxEstado.getSelectedItem().toString().trim().toUpperCase());
+
+                    String precoTexto = precoCompraField.getText().trim()
+                            .replace("€", "")
+                            .replace(",", ".")
+                            .replaceAll("\\s+", ""); // remove espaços
+
+                    float precoCompra;
+                    try {
+                        precoCompra = Float.parseFloat(precoTexto);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos", "Erro", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    Filme novoFilme = new Filme(
+                            nome,
+                            duracao,
+                            foto,
+                            idiomas,
+                            idade,
+                            generos,
+                            tipos,
+                            estado,
+                            precoCompra
+                    );
+
+                    bd = BaseDados.getInstance();
+
+                    // -------- Verificar se o filme já existe na base de dados ----------
+                    boolean jaExiste = false;
+                    for (Filme f : bd.getFilmes()) {
+                        if (
+                                NormalizarTexto.normalizar(f.getNome()).equals(NormalizarTexto.normalizar(novoFilme.getNome())) &&
+                                        f.getDuracao() == novoFilme.getDuracao() &&
+                                        f.getFoto().equals(novoFilme.getFoto()) &&
+                                        f.getIdiomas().equals(novoFilme.getIdiomas()) &&
+                                        f.getIdade().equals(novoFilme.getIdade()) &&
+                                        f.getGeneros().equals(novoFilme.getGeneros()) &&
+                                        f.getTipos().equals(novoFilme.getTipos()) &&
+                                        f.getEstado().equals(novoFilme.getEstado()) &&
+                                        Float.compare(f.getPrecoCompra(), novoFilme.getPrecoCompra()) == 0
+                        ) {
+                            jaExiste = true;
+                            break;
+                        }
+                    }
+
+                    if (jaExiste) {
+                        JOptionPane.showMessageDialog(null, "Este filme já existe.", "Filme duplicado", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    // ------------- Verificar se o filme já existe na base de dados ---------
+
+                    bd.adicionarFilme(novoFilme);
+                    bd.gravarDados();
+
+                    // ------ debug -----
+                    BaseDados bdVerificacao = BaseDados.carregarDados();
+                    if (bdVerificacao != null) {
+                        System.out.println("Filmes guardados:");
+                        for (Filme f : bdVerificacao.getFilmes()) {
+                            System.out.println("- " + f.getNome() + " (" + f.getDuracao() + " min, idioma( " + f.getIdiomas() + " ), idade( " + f.getIdade() + " ), generos ( " + f.getGeneros() + " ), tipos ( " + f.getTipos() + " ), estado( " + f.getEstado() + " ), preço ( " + f.getPrecoCompra() + " €), cartaz ( " + f.getFoto() + " )");
+                        }
+                    } else {
+                        System.out.println("Erro: ficheiro de base de dados não foi carregado.");
+                    }
+                    // ------ debug -----
+
+
+                    // ----- Guardar imagem na raiz do projeto ----
+                    String nomeFicheiroFinal = ficheiroImagemOriginal.getName();
+                    File destino = new File("src/main/resources/imagens/cartazes/" + nomeFicheiroFinal);
+                    destino.getParentFile().mkdirs(); // cria a pasta se ainda não existir
+
+                    if (ficheiroImagemOriginal == null || !ficheiroImagemOriginal.exists()) {
+                        JOptionPane.showMessageDialog(null, "Erro: o ficheiro de imagem original não está acessível.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    try {
+                        Files.copy(ficheiroImagemOriginal.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Imagem copiada para: " + destino.getAbsolutePath());
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao copiar a imagem: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                        return;
+                    }
+                    //--debug--
+                    System.out.println("Ficheiro carregado: " + ficheiroImagemOriginal.getAbsolutePath());
+                    System.out.println("Existe? " + ficheiroImagemOriginal.exists());
+                    //--debug--
+
+                    // ----- Guardar imagem na raiz do projeto ----
+
+
+                    // Redirecionar para ConfirmacaoAdicaoFilme
+                    app.mostrarConfirmacaoAdicaoFilmes();
+
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao guardar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        //----------------- BOTAO ADICIONAR -------------
+
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
@@ -870,17 +966,13 @@ public class AdicionarFilme {
 
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Pagina Principal Admin
-        //voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        //voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            //@Override
-            //public void mouseClicked(java.awt.event.MouseEvent e) {
-                //app.mostrarAdmin();
-            //}
-        //});
-
-        // Redirecionar para AdicionarFilme
-        //adicionarButton.addActionListener(e -> app.mostrarAdicionarFilmes());
-
+        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                app.mostrarPaginaPrincipalFilmesAdmin();
+            }
+        });
     }
 
     // FUNCAO QUE CRIA E MANIPULA DAS SETAS DOS JComboBoxes

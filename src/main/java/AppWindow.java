@@ -74,6 +74,12 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
+    //confirmar adicao filme
+    public void mostrarConfirmacaoAdicaoFilmes() {
+        ConfirmacaoAdicaoFilme filmes = new ConfirmacaoAdicaoFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
     //editar filme
     public void mostrarEditarFilmes() {
         EditarFilme filmes = new EditarFilme(this);

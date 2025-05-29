@@ -56,7 +56,7 @@ public class BaseDados implements Serializable{
         //---- generos -----
         LinkedList<Genero> generosAquaman = new LinkedList<>();
         generosAquaman.add(Genero.ACAO);
-        generosAquaman.add(Genero.FICAO_CIENTIFICA);
+        generosAquaman.add(Genero.FICCAO_CIENTIFICA);
         //---- generos -----
         // -------- FILME AQUAMAN 2 -----------
 
@@ -115,18 +115,18 @@ public class BaseDados implements Serializable{
         // -------- FILME SONIC -----------
 
         // criar filmes
-        filmes.add(new Filme("Vaiana 2", 100,"812326.jpg", idiomas, "6+", generosVaiana2, tiposVaiana2, Estado.ATIVO, 30000.00f));
-        filmes.add(new Filme("Paddington na Amazónia", 106,"images.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 25000.00f));
-        filmes.add(new Filme("Aquaman 2 - O reino perdido", 124,"AQUAMAN_3_3.jpg", idiomas, "16+", generosAquaman, tiposVaiana2, Estado.ATIVO, 40000.00f));
-        filmes.add(new Filme("Um filme Minecraft", 100,"PT_MNCRFT_INSTA_TSR2_1936x1936_INTL.jpg", idiomas, "6+", generosMinecraft, tiposPaddington, Estado.ATIVO, 40000.00f));
-        filmes.add(new Filme("A semente do mal", 90,"terror.jpg", idiomas, "16+", generosASementeDoMal, tiposASementeDoMal, Estado.ATIVO, 20000.00f));
-        filmes.add(new Filme("Conclave", 120,"810654.jpg", idiomas, "12+", generosConclave, tiposPaddington, Estado.ATIVO, 20000.00f));
-        filmes.add(new Filme("Branca de Neve", 110,"image_4eb1eebd.jpeg", idiomas, "6+", generosBrancaNeve, tiposPaddington, Estado.ATIVO, 25000.00f));
-        filmes.add(new Filme("Joker: Loucura a dois", 140,"naom_660d5818c0da3.jpg", idiomas, "16+", generosConclave, tiposPaddington, Estado.ATIVO, 25000.00f));
-        filmes.add(new Filme("Divertidamente 2", 96,"807351.jpg", idiomas, "6+", generosDivertidamente, tiposPaddington, Estado.ATIVO, 35000.00f));
-        filmes.add(new Filme("Sonic 2", 115,"Sonic_the_Hedgehog_2_Poster.jpg", idiomas, "6+", generosSonic, tiposPaddington, Estado.ATIVO, 25000.00f));
-        filmes.add(new Filme("A Familia Addams", 87,"725902.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 20000.00f));
-        filmes.add(new Filme("Gru Maldisposto 4", 94,"519182_pt.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 30000.00f));
+        filmes.add(new Filme("Vaiana 2", 100,"vaianaDois.jpg", idiomas, "6+", generosVaiana2, tiposVaiana2, Estado.ATIVO, 30000.00f));
+        filmes.add(new Filme("Paddington na Amazónia", 106,"paddingtonNaAmazonia.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 25000.00f));
+        filmes.add(new Filme("Aquaman 2 - O reino perdido", 124,"aquamanEOReinoPerdido.jpg", idiomas, "16+", generosAquaman, tiposVaiana2, Estado.ATIVO, 40000.00f));
+        filmes.add(new Filme("Um filme Minecraft", 100,"umFilmeMinecraft.jpg", idiomas, "6+", generosMinecraft, tiposPaddington, Estado.ATIVO, 40000.00f));
+        filmes.add(new Filme("A semente do mal", 90,"ASementeDoMal.jpg", idiomas, "16+", generosASementeDoMal, tiposASementeDoMal, Estado.ATIVO, 20000.00f));
+        filmes.add(new Filme("Conclave", 120,"conclave.jpg", idiomas, "12+", generosConclave, tiposPaddington, Estado.ATIVO, 20000.00f));
+        filmes.add(new Filme("Branca de Neve", 110,"brancaDeNeve.jpeg", idiomas, "6+", generosBrancaNeve, tiposPaddington, Estado.ATIVO, 25000.00f));
+        filmes.add(new Filme("Joker: Loucura a dois", 140,"jokerLoucuraADois.jpg", idiomas, "16+", generosConclave, tiposPaddington, Estado.ATIVO, 25000.00f));
+        filmes.add(new Filme("Divertidamente 2", 96,"divertidamenteDois.jpg", idiomas, "6+", generosDivertidamente, tiposPaddington, Estado.ATIVO, 35000.00f));
+        filmes.add(new Filme("Sonic 2", 115,"sonicDois.jpg", idiomas, "6+", generosSonic, tiposPaddington, Estado.ATIVO, 25000.00f));
+        filmes.add(new Filme("A Familia Addams", 87,"familiaAddams.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 20000.00f));
+        filmes.add(new Filme("Gru Maldisposto 4", 94,"gruMaldispostoQuatro.jpg", idiomas, "6+", generosPaddington, tiposPaddington, Estado.ATIVO, 30000.00f));
 
 
         //criar produtos
