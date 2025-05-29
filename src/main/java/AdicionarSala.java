@@ -1,8 +1,14 @@
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AdicionarSala {
     private JPanel mainPanel = new JPanel();
@@ -13,8 +19,13 @@ public class AdicionarSala {
     private JTextField nomeSala = new JTextField(20);
     private JTextField numeroFilas = new JTextField(20);
     private JTextField numeroLugaresFila = new JTextField(20);
+    private JComboBox<Object> comboBoxEcra = new JComboBox<>();
+    private JComboBox<Object> comboBoxAcessibilidade = new JComboBox<>();
+    private JComboBox <Object> comboBoxTipo = new JComboBox<>();
+    private JComboBox<Object> comboBoxEstado = new JComboBox<>();
     private JButton adicionarButton = new JButton("Adicionar");
     private JLabel erroLabel = new JLabel("Erro: Insira valores válidos.");
+    private ArrowIcon arrowIcon = new ArrowIcon(null);
 
     private final AppWindow app;
 
@@ -26,7 +37,9 @@ public class AdicionarSala {
     private final Color corFundo = Color.decode("#F9E6BB");
     private final Color corFonte = Color.decode("#6B3838");
     private final Color corFontePreto = Color.decode("#000000");
-    private final Color corFundoUploadButton = Color.decode("#E3E3E3");
+    private final Color corFundoSubMenu = Color.decode("#FBDC95");
+    private final Color corBotaoSetaComboBox = Color.decode("#F2AF14");
+    private final Color corHoverComboBox = Color.decode("#FCD373");
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
@@ -39,7 +52,7 @@ public class AdicionarSala {
     private void configurarComponentes() {
 
         // pagina principal
-        mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
+        mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
 
         // Logo
@@ -186,60 +199,298 @@ public class AdicionarSala {
         });
         // --------------- CAIXA DE TEXTO NÚMERO DE LUGARES POR FILA --------------
 
-        // ----------------- ERRO LABEL ----------
+        // -------------------- COMBOBOX ECRÃ --------------------------
+        String[] opcoesEcra = {"10x5m", "14x6m", "22x16m", "30x23m"};
+        comboBoxEcra = new RoundedComboBox<>(opcoesEcra, 20);
 
-        erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        erroLabel.setForeground(Color.RED);
-        erroLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
-        erroLabel.setVisible(false); // Inicialmente invisível
-        erroLabel.setOpaque(true);
-        erroLabel.setBackground(corFundo); // Fundo para destacar o erro
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxEcra.setSelectedItem(null);
 
-        // ----------------- ERRO LABEL ----------
+        comboBoxEcra.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBoxEcra) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
 
-        // ----------------- ECRÃ DROPDOWN ----------
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
 
-        /* String[] opcoes = {"Opção 1", "Opção 2", "Opção 3"};
-        comboBox.removeAllItems();
-        for (String opcao : opcoes) {
-            comboBox.addItem(opcao);
-        }
-        comboBox.setUI(new BasicComboBoxUI() {
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
             @Override
             protected JButton createArrowButton() {
-                return new JButton(new ArrowIcon(comboBox)) {{
+                return new JButton(new ArrowIcon(comboBoxEcra)) {{
                     setBackground(corBotaoSetaComboBox);
                     setBorder(BorderFactory.createEmptyBorder());
                 }};
             }
         });
 
-        comboBox.setRenderer(new DefaultListCellRenderer() {
+        // Custom renderer com placeholder
+        comboBoxEcra.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                c.setForeground(Color.BLACK);
-                if (index == -1) c.setBackground(corFundoComponentes);
-                else if (isSelected) c.setBackground(corHoverComboBox);
-                else c.setBackground(corFundoSubMenu);
-                if (c instanceof JComponent) ((JComponent) c).setOpaque(true);
-                return c;
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Ecrã");
+                    label.setForeground(corFonte);
+                    comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 35));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
             }
         });
 
-        comboBox.setEditable(true);
-        comboBox.setBackground(corFundoComponentes);
-        comboBox.setBorder(rounded);
-        JTextField editor = (JTextField) comboBox.getEditor().getEditorComponent();
-        editor.setForeground(Color.BLACK);
-        editor.setBackground(corFundoComponentes);
-        editor.setOpaque(true);
-        editor.setBorder(null);
-        editor.setEditable(false);
-        editor.setHorizontalAlignment(SwingConstants.CENTER);
+        comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEcra.setBackground(corFundoComponentes);
 
-        // ----------------- ECRÃ DROPDOWN ---------- */
+        comboBoxEcra.setEditable(false);
+        // -------------------- COMBOX ECRÃ --------------------------
 
+        // -------------------- COMBOBOX ACESSIBILIDADE --------------------------
+
+        String[] opcoesAcessibilidade = {"Sim", "Não"};
+        comboBoxAcessibilidade = new RoundedComboBox<>(opcoesAcessibilidade, 20);
+
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxAcessibilidade.setSelectedItem(null);
+        comboBoxAcessibilidade.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBoxAcessibilidade) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new ArrowIcon(comboBoxAcessibilidade)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxAcessibilidade.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Acessibilidade");
+                    label.setForeground(corFonte);
+                    comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 35));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+        comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxAcessibilidade.setBackground(corFundoComponentes);
+        comboBoxAcessibilidade.setEditable(false);
+        // -------------------- COMBOBOX ACESSIBILIDADE --------------------------
+
+
+        // -------------------- COMBOBOX TIPO --------------------------
+        String[] opcoesTipo = {"Normal", "VIP", "5D"};
+        comboBoxTipo = new RoundedComboBox<>(opcoesTipo, 20);
+
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxTipo.setSelectedItem(null);
+        comboBoxTipo.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBoxTipo) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new ArrowIcon(comboBoxTipo)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxTipo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Tipo");
+                    label.setForeground(corFonte);
+                    comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxTipo.setBackground(corFundoComponentes);
+        comboBoxTipo.setEditable(false);
+        // -------------------- COMBOBOX TIPO --------------------------
+
+        // -------------------- COMBOBOX ESTADO --------------------------
+        String[] opcoesEstado = {"Ativo", "Inativo"};
+        comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxEstado.setSelectedItem(null);
+        comboBoxEstado.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBoxEstado) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new ArrowIcon(comboBoxEstado)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxEstado.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Estado");
+                    label.setForeground(corFonte);
+                    comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+
+        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEstado.setBackground(corFundoComponentes);
+        comboBoxEstado.setEditable(false);
+        // -------------------- COMBOBOX ESTADO --------------------------
 
         //----------------- BOTAO ADICIONAR -------------
         adicionarButton = new RoundedButton("Adicionar", 20);
@@ -256,6 +507,10 @@ public class AdicionarSala {
         mainPanel.add(nomeSala, "x 250, y 250, w 800, h 50");
         mainPanel.add(numeroFilas, "x 250, y 350, w 350, h 50");
         mainPanel.add(numeroLugaresFila, "x 700, y 350, w 350, h 50");
+        mainPanel.add(comboBoxEcra, "x 250, y 450, w 350, h 50");
+        mainPanel.add(comboBoxAcessibilidade, "x 700, y 450, w 350, h 50");
+        mainPanel.add(comboBoxTipo, "x 250, y 550, w 350, h 50");
+        mainPanel.add(comboBoxEstado, "x 700, y 550, w 350, h 50");
         mainPanel.add(adicionarButton, "x 250, y 650, w 800, h 50");
         mainPanel.add(erroLabel, "x 250, y 750, w 800, h 50");
 
@@ -263,9 +518,9 @@ public class AdicionarSala {
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Pagina Principal Admin
         voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        voltaLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 app.mostrarPaginaPrincipalSalasAdmin();
             }
         });
