@@ -203,7 +203,7 @@ public class AdicionarSala {
         String[] opcoesEcra = {"10x5m", "14x6m", "22x16m", "30x23m"};
         comboBoxEcra = new RoundedComboBox<>(opcoesEcra, 20);
 
-        // Não selecionar nenhum iten no início → mostra placeholder
+        // Não selecionar nenhum item no início → mostra placeholder
         comboBoxEcra.setSelectedItem(null);
 
         comboBoxEcra.setUI(new BasicComboBoxUI() {
@@ -279,7 +279,7 @@ public class AdicionarSala {
         String[] opcoesAcessibilidade = {"Sim", "Não"};
         comboBoxAcessibilidade = new RoundedComboBox<>(opcoesAcessibilidade, 20);
 
-        // Não selecionar nenhum iten no início → mostra placeholder
+        // Não selecionar nenhum item no início → mostra placeholder
         comboBoxAcessibilidade.setSelectedItem(null);
         comboBoxAcessibilidade.setUI(new BasicComboBoxUI() {
             @Override
