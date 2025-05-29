@@ -524,6 +524,25 @@ public class AdicionarSala {
                 app.mostrarPaginaPrincipalSalasAdmin();
             }
         });
+
+        // Redirecionar para ConfirmarCriaçãoSala
+        adicionarButton.addActionListener(e -> {
+            String nome = nomeSala.getText();
+            String filas = numeroFilas.getText();
+            String lugares = numeroLugaresFila.getText();
+            String ecra = (String) comboBoxEcra.getSelectedItem();
+            String acessibilidade = (String) comboBoxAcessibilidade.getSelectedItem();
+            String tipo = (String) comboBoxTipo.getSelectedItem();
+            String estado = (String) comboBoxEstado.getSelectedItem();
+
+            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas") ||
+                lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null ||
+                acessibilidade == null || tipo == null || estado == null) {
+                erroLabel.setVisible(true);
+            } else {
+                app.mostrarConfirmarCriacaoSala(nomeSala.getText());
+            }
+        });
     }
 
     public JPanel getMainPanel() {

@@ -99,7 +99,7 @@ public class PaginaPrincipalSalasAdmin {
         adicionarButton.addActionListener(e -> app.mostrarAdicionarSalas());
 
         // Redirecionar para EditarFilme
-        editarButton.addActionListener(e -> app.mostrarEditarSalas());
+        editarButton.addActionListener(e -> app.mostrarEditarSalaSelecao());
     }
 
     public JPanel getMainPanel() {

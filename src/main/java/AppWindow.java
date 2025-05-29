@@ -83,6 +83,7 @@ public class AppWindow extends JFrame {
 
     //-------------------- SALAS ------------------
 
+    //pagina principal
     public void mostrarPaginaPrincipalSalasAdmin() {
         PaginaPrincipalSalasAdmin salas = new PaginaPrincipalSalasAdmin(this);
         trocarPainel(salas.getMainPanel());
@@ -94,12 +95,30 @@ public class AppWindow extends JFrame {
         trocarPainel(salas.getMainPanel());
     }
 
-    // editar sala
-    public void mostrarEditarSalas() {
-        EditarSala salas = new EditarSala(this);
+    // confirmar criação sala
+    public void mostrarConfirmarCriacaoSala(String nomeSala) {
+        ConfirmarCriacaoSala confirmacao = new ConfirmarCriacaoSala(this, nomeSala);
+        trocarPainel(confirmacao.getMainPanel());
+    }
+
+    // editar sala seleção
+    public void mostrarEditarSalaSelecao() {
+        EditarSalaSelecao salas = new EditarSalaSelecao(this);
         trocarPainel(salas.getMainPanel());
     }
 
+    // editar sala
+    public void mostrarEditarSala(String nomeSala) {
+        EditarSala salas = new EditarSala(this, nomeSala);
+        trocarPainel(salas.getMainPanel());
+    }
+
+    // confirmar edição sala
+    public void mostrarConfirmarEdicaoSala(String nomeSala) {
+        ConfirmarEdicaoSala confirmacao = new ConfirmarEdicaoSala(this, nomeSala);
+        trocarPainel(confirmacao.getMainPanel());
+    }
+    //-------------------- SALAS ------------------
 
     public void mostrarPaginaPrincipalProdutosBarAdmin() {
         PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
