@@ -203,7 +203,7 @@ public class AdicionarSala {
         String[] opcoesEcra = {"10x5m", "14x6m", "22x16m", "30x23m"};
         comboBoxEcra = new RoundedComboBox<>(opcoesEcra, 20);
 
-        // Não selecionar nenhum item no início → mostra placeholder
+        // Não selecionar nenhum iten no início → mostra placeholder
         comboBoxEcra.setSelectedItem(null);
 
         comboBoxEcra.setUI(new BasicComboBoxUI() {
@@ -279,7 +279,7 @@ public class AdicionarSala {
         String[] opcoesAcessibilidade = {"Sim", "Não"};
         comboBoxAcessibilidade = new RoundedComboBox<>(opcoesAcessibilidade, 20);
 
-        // Não selecionar nenhum item no início → mostra placeholder
+        // Não selecionar nenhum iten no início → mostra placeholder
         comboBoxAcessibilidade.setSelectedItem(null);
         comboBoxAcessibilidade.setUI(new BasicComboBoxUI() {
             @Override
@@ -522,6 +522,25 @@ public class AdicionarSala {
             @Override
             public void mouseClicked(MouseEvent e) {
                 app.mostrarPaginaPrincipalSalasAdmin();
+            }
+        });
+
+        // Redirecionar para ConfirmarCriaçãoSala
+        adicionarButton.addActionListener(e -> {
+            String nome = nomeSala.getText();
+            String filas = numeroFilas.getText();
+            String lugares = numeroLugaresFila.getText();
+            String ecra = (String) comboBoxEcra.getSelectedItem();
+            String acessibilidade = (String) comboBoxAcessibilidade.getSelectedItem();
+            String tipo = (String) comboBoxTipo.getSelectedItem();
+            String estado = (String) comboBoxEstado.getSelectedItem();
+
+            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas") ||
+                lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null ||
+                acessibilidade == null || tipo == null || estado == null) {
+                erroLabel.setVisible(true);
+            } else {
+                app.mostrarConfirmarCriacaoSala(nomeSala.getText());
             }
         });
     }
