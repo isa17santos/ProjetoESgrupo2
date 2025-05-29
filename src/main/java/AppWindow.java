@@ -81,15 +81,32 @@ public class AppWindow extends JFrame {
     }
     //-------------------- FILMES -------------------
 
-    public void mostrarPaginaPrincipalProdutosBarAdmin() {
-        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
-        trocarPainel(produtos.getMainPanel());
-    }
+    //-------------------- SALAS ------------------
 
     public void mostrarPaginaPrincipalSalasAdmin() {
         PaginaPrincipalSalasAdmin salas = new PaginaPrincipalSalasAdmin(this);
         trocarPainel(salas.getMainPanel());
     }
+
+    //adicionar sala
+    public void mostrarAdicionarSalas() {
+        AdicionarSala salas = new AdicionarSala(this);
+        trocarPainel(salas.getMainPanel());
+    }
+
+    // editar sala
+    public void mostrarEditarSalas() {
+        EditarSala salas = new EditarSala(this);
+        trocarPainel(salas.getMainPanel());
+    }
+
+
+    public void mostrarPaginaPrincipalProdutosBarAdmin() {
+        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
+        trocarPainel(produtos.getMainPanel());
+    }
+
+
 
     public void mostrarPaginaPrincipalSessoesAdmin() {
         PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
@@ -100,4 +117,6 @@ public class AppWindow extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);
     }
+
+
 }
