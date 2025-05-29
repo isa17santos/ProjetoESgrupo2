@@ -10,6 +10,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 public class AdicionarFilme {
     private JPanel mainPanel;
@@ -21,9 +22,20 @@ public class AdicionarFilme {
     private JButton uploadButton;
     private JTextField nomeFilme;
     private JTextField duracaoFilme;
-    private JLabel erroLabel;
+    private JLabel erroDuracaoLabel;
     private JButton comboButtonIdioma;
     private JComboBox comboBoxIdade;
+    private JButton comboButtonGenero;
+    private JButton comboButtonTipo;
+    private JComboBox comboBoxEstado;
+    private JTextField precoCompraField;
+    private JLabel erroPrecoCompraLabel;
+
+    private final String placeholder = "Preço da compra(€)";
+    private BufferedImage imagemCarregada = null;
+    private String nomeFicheiroImagem = null;
+
+
 
     private final AppWindow app;
 
@@ -86,6 +98,78 @@ public class AdicionarFilme {
         adicionarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
         adicionarButton.setBackground(corFundoLabel);
         adicionarButton.setForeground(corFontePreto); // texto
+        adicionarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Validação dos campos obrigatórios
+                if (imagemCarregada == null ||  // verifica se foi carregada imagem
+                        nomeFilme.getText().equals("Nome filme") ||
+                        duracaoFilme.getText().equals("Duração (minutos)") ||
+                        comboButtonIdioma.getText().equals("Idioma") ||
+                        comboBoxIdade.getSelectedItem() == null || comboBoxIdade.getSelectedItem().toString().equals("Idade") ||
+                        comboButtonGenero.getText().equals("Género") ||
+                        comboButtonTipo.getText().equals("Tipo") ||
+                        comboBoxEstado.getSelectedItem() == null || comboBoxEstado.getSelectedItem().toString().equals("Estado") ||
+                        precoCompraField.getText().equals("Preço da compra(€)")) {
+
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+
+                try {
+                    // Criar novo objeto Filme
+                    String nome = nomeFilme.getText().trim();
+                    int duracao = Integer.parseInt(duracaoFilme.getText().trim());
+                    String foto = nomeFicheiroImagem; // assumimos que isto foi guardado no momento do upload
+
+// Criar listas com os enums/tipos selecionados
+                    LinkedList<Idioma> idiomas = new LinkedList<>();
+                    idiomas.add(Idioma.valueOf(comboButtonIdioma.getText().trim().toUpperCase()));
+
+                    String idade = comboBoxIdade.getSelectedItem().toString().trim();
+
+                    LinkedList<Genero> generos = new LinkedList<>();
+                    generos.add(Genero.valueOf(comboButtonGenero.getText().trim().toUpperCase()));
+
+                    LinkedList<String> tipos = new LinkedList<>();
+                    tipos.add(comboButtonTipo.getText().trim());
+
+                    Estado estado = Estado.valueOf(comboBoxEstado.getSelectedItem().toString().trim().toUpperCase());
+
+                    Float precoCompra = Float.parseFloat(precoCompraField.getText().trim().replace(",", "."));
+
+                    Filme novoFilme = new Filme(
+                            nome,
+                            duracao,
+                            foto,
+                            idiomas,
+                            idade,
+                            generos,
+                            tipos,
+                            estado,
+                            precoCompra
+                    );
+
+                    // Carregar a base de dados (ou criar nova)
+                    BaseDados bd = BaseDados.carregarDados();
+                    bd.adicionarFilme(novoFilme);
+                    bd.gravarDados();
+
+                    // Redirecionar
+                    //JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
+                    //frame.dispose(); // fecha a janela atual
+                    //new ConfirmacaoAdicaoFilme().setVisible(true);
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao guardar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         //----------------- BOTAO ADICIONAR -------------
 
 
@@ -114,10 +198,12 @@ public class AdicionarFilme {
                         BufferedImage img = ImageIO.read(selectedFile);
                         if (img != null) {
                             uploadButton.setOpaque(false);
-                            Image scaledImg = img.getScaledInstance(290, 410, Image.SCALE_SMOOTH);
+                            Image scaledImg = img.getScaledInstance(290, 420, Image.SCALE_SMOOTH);
                             ImageIcon icon = new ImageIcon(scaledImg);
                             uploadButton.setIcon(icon);
                             uploadButton.setText(""); // remove texto
+                            imagemCarregada = img;
+                            nomeFicheiroImagem = selectedFile.getName();
                         } else {
                             JOptionPane.showMessageDialog(null, "Erro ao carregar imagem.");
                         }
@@ -163,12 +249,12 @@ public class AdicionarFilme {
         duracaoFilme.setText("Duração (minutos)");
         duracaoFilme.setForeground(corFonte); // texto
 
-        erroLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
-        erroLabel.setText("");
-        erroLabel.setBackground(corFundo);
-        erroLabel.setForeground(Color.RED);
-        erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        erroLabel.setVisible(false);
+        erroDuracaoLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroDuracaoLabel.setText("");
+        erroDuracaoLabel.setBackground(corFundo);
+        erroDuracaoLabel.setForeground(Color.RED);
+        erroDuracaoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        erroDuracaoLabel.setVisible(false);
 
         duracaoFilme.addFocusListener(new FocusAdapter() {
             @Override
@@ -186,23 +272,23 @@ public class AdicionarFilme {
                 if (input.isEmpty()) {
                     duracaoFilme.setText("Duração (minutos)");
                     duracaoFilme.setForeground(corFonte);
-                    erroLabel.setVisible(false);
+                    erroDuracaoLabel.setVisible(false);
                     return;
                 }
 
                 try {
                     int duracao = Integer.parseInt(input);
                     if (duracao <= 0) {
-                        erroLabel.setText("Insira um valor superior a 0.");
-                        erroLabel.setVisible(true);
+                        erroDuracaoLabel.setText("Insira um valor superior a 0.");
+                        erroDuracaoLabel.setVisible(true);
                         duracaoFilme.setText("Duração (minutos)");
                         duracaoFilme.setForeground(corFonte);
                     } else {
-                        erroLabel.setVisible(false); // valor válido
+                        erroDuracaoLabel.setVisible(false); // valor válido
                     }
                 } catch (NumberFormatException ex) {
-                    erroLabel.setText("Insira um valor numérico válido.");
-                    erroLabel.setVisible(true);
+                    erroDuracaoLabel.setText("Insira um valor numérico válido.");
+                    erroDuracaoLabel.setVisible(true);
                     duracaoFilme.setText("Duração (minutos)");
                     duracaoFilme.setForeground(corFonte);
                 }
@@ -388,26 +474,399 @@ public class AdicionarFilme {
         comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 25));
         comboBoxIdade.setBackground(corFundoComponentes);
 
-        // Se quiseres o campo editável (não necessário para placeholder funcionar):
-        comboBoxIdade.setEditable(false); // ou true se necessário
+        comboBoxIdade.setEditable(false);
         // -------------------- ComboBox idade --------------------------
 
 
+        // ---------------------------- JCheckBox Genero -------------------------------
+        JCheckBox[] checkBoxesGenero = {
+                new JCheckBox("Animação"),
+                new JCheckBox("Ação"),
+                new JCheckBox("Comédia"),
+                new JCheckBox("Terror"),
+                new JCheckBox("Romance"),
+                new JCheckBox("Ficção Científica")
+        };
 
+        RoundedPanel checkBoxGenero = new RoundedPanel(20);
+        checkBoxGenero.setLayout(new BoxLayout(checkBoxGenero, BoxLayout.Y_AXIS));
+        checkBoxGenero.setBackground(corFundoSubMenu);
+        checkBoxGenero.setBorder(BorderFactory.createEmptyBorder(5, 30, 0, 0));
+        for (JCheckBox cb : checkBoxesGenero) {
+            cb.setOpaque(false);
+            cb.setBackground(corFundoSubMenu);
+            cb.setHorizontalAlignment(SwingConstants.CENTER);
+            cb.setFont(new Font("Georgia", Font.PLAIN, 25));
+            cb.setIconTextGap(30); // aumenta espaço entre quadrado e texto
+            cb.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0)); // top, left, bottom, right
+            checkBoxGenero.add(cb);
+        }
+
+        JPopupMenu popupMenuGenero = new JPopupMenu() {
+            {
+                setOpaque(false); // evita fundo quadrado
+                setBorder(BorderFactory.createEmptyBorder()); // sem bordas duras
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                // pinta fundo arredondado
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Shape shape = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20);
+                g2.setColor(corFundoSubMenu); // a tua cor definida
+                g2.fill(shape);
+                g2.dispose();
+            }
+        };
+
+        popupMenuGenero.add(checkBoxGenero);
+        popupMenuGenero.add(checkBoxGenero);
+
+        // Recalcular altura com base nos componentes adicionados
+        checkBoxGenero.revalidate();
+        checkBoxGenero.repaint();
+
+        // Define largura e altura com base no conteúdo
+        int popupGeneroWidth = 340;
+        int popupGeneroHeight = checkBoxGenero.getPreferredSize().height + 8; // margem extra opcional
+
+        popupMenuGenero.setPreferredSize(new Dimension(popupGeneroWidth, popupGeneroHeight));
+
+        popupMenuGenero.setBackground(corFundoSubMenu);
+
+        comboButtonGenero = new RoundedButton("Género", 20);
+        comboButtonGenero.setFont(new Font("Georgia", Font.PLAIN, 35));
+        comboButtonGenero.setBackground(corFundoComponentes);
+        comboButtonGenero.setForeground(Color.BLACK);
+        comboButtonGenero.setHorizontalAlignment(SwingConstants.CENTER);
+
+        boolean[] isMenuGeneroVisible = {false};
+
+        comboButtonGenero.addActionListener(e -> {
+            if (isMenuGeneroVisible[0]) {
+                popupMenuGenero.setVisible(false);
+                isMenuGeneroVisible[0] = false;
+            } else {
+                popupMenuGenero.setPreferredSize(new Dimension(comboButtonGenero.getWidth(), popupMenuGenero.getPreferredSize().height));
+                popupMenuGenero.show(comboButtonGenero, 0, comboButtonGenero.getHeight());
+                isMenuGeneroVisible[0] = true;
+            }
+        });
+
+        // Função para ajustar texto ao espaço do botão
+        Runnable updateGeneroButtonText = () -> {
+            StringBuilder fullText = new StringBuilder();
+            for (JCheckBox c : checkBoxesGenero) {
+                if (c.isSelected()) {
+                    fullText.append(c.getText()).append(", ");
+                }
+            }
+
+            if (fullText.length() > 0) {
+                fullText.setLength(fullText.length() - 2); // remove ", "
+                String full = fullText.toString();
+
+                // Medir texto e ajustar
+                FontMetrics fm = comboButtonGenero.getFontMetrics(comboButtonGenero.getFont());
+                int availableWidth = comboButtonGenero.getWidth() - 16; // margem de segurança
+                String displayText = "";
+                String[] parts = full.split(", ");
+                StringBuilder current = new StringBuilder();
+                for (int i = 0; i < parts.length; i++) {
+                    String test = current + (current.length() > 0 ? ", " : "") + parts[i];
+                    if (fm.stringWidth(test) > availableWidth) {
+                        displayText = current + "...";
+                        break;
+                    }
+                    current.append((current.length() > 0 ? ", " : "")).append(parts[i]);
+                    displayText = current.toString();
+                }
+
+                comboButtonGenero.setText(displayText);
+            } else {
+                comboButtonGenero.setText("Género");
+            }
+
+            // Atualizar o tamanho da fonte conforme o texto
+            if (comboButtonGenero.getText().equals("Género")) {
+                comboButtonGenero.setFont(new Font("Georgia", Font.PLAIN, 35));
+            } else {
+                comboButtonGenero.setFont(new Font("Georgia", Font.PLAIN, 22));
+            }
+        };
+
+        // Atualizar texto quando opções mudam
+        for (JCheckBox cb : checkBoxesGenero) {
+            cb.addItemListener(e -> updateGeneroButtonText.run());
+        }
+
+        // Ajustar texto ao redimensionar
+        comboButtonGenero.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                popupMenuGenero.setPreferredSize(new Dimension(comboButtonGenero.getWidth(), popupMenuGenero.getPreferredSize().height));
+                updateGeneroButtonText.run();
+            }
+        });
+        // ---------------------------- JCheckBox Genero -------------------------------
+
+
+        // ---------------------------- JCheckBox Tipo -------------------------------
+        JCheckBox[] checkBoxesTipo = {
+                new JCheckBox("2D"),
+                new JCheckBox("3D"),
+                new JCheckBox("5D")
+        };
+
+        RoundedPanel checkBoxTipo = new RoundedPanel(20);
+        checkBoxTipo.setLayout(new BoxLayout(checkBoxTipo, BoxLayout.Y_AXIS));
+        checkBoxTipo.setBackground(corFundoSubMenu);
+        checkBoxTipo.setBorder(BorderFactory.createEmptyBorder(5, 30, 0, 0));
+        for (JCheckBox cb : checkBoxesTipo) {
+            cb.setOpaque(false);
+            cb.setBackground(corFundoSubMenu);
+            cb.setHorizontalAlignment(SwingConstants.CENTER);
+            cb.setFont(new Font("Georgia", Font.PLAIN, 25));
+            cb.setIconTextGap(30); // aumenta espaço entre quadrado e texto
+            cb.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0)); // top, left, bottom, right
+            checkBoxTipo.add(cb);
+        }
+
+        JPopupMenu popupMenuTipo = new JPopupMenu() {
+            {
+                setOpaque(false); // evita fundo quadrado
+                setBorder(BorderFactory.createEmptyBorder()); // sem bordas duras
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                // pinta fundo arredondado
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Shape shape = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20);
+                g2.setColor(corFundoSubMenu); // a tua cor definida
+                g2.fill(shape);
+                g2.dispose();
+            }
+        };
+
+        popupMenuTipo.add(checkBoxTipo);
+        popupMenuTipo.add(checkBoxTipo);
+
+        // Recalcular altura com base nos componentes adicionados
+        checkBoxTipo.revalidate();
+        checkBoxTipo.repaint();
+
+        // Define largura e altura com base no conteúdo
+        int popupTipoWidth = 340;
+        int popupTipoHeight = checkBoxTipo.getPreferredSize().height + 8; // margem extra opcional
+
+        popupMenuTipo.setPreferredSize(new Dimension(popupTipoWidth, popupTipoHeight));
+
+        popupMenuTipo.setBackground(corFundoSubMenu);
+
+        comboButtonTipo = new RoundedButton("Tipo", 20);
+        comboButtonTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
+        comboButtonTipo.setBackground(corFundoComponentes);
+        comboButtonTipo.setForeground(Color.BLACK);
+        comboButtonTipo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        boolean[] isMenuTipoVisible = {false};
+
+        comboButtonTipo.addActionListener(e -> {
+            if (isMenuTipoVisible[0]) {
+                popupMenuTipo.setVisible(false);
+                isMenuTipoVisible[0] = false;
+            } else {
+                popupMenuTipo.setPreferredSize(new Dimension(comboButtonTipo.getWidth(), popupMenuTipo.getPreferredSize().height));
+                popupMenuTipo.show(comboButtonTipo, 0, comboButtonTipo.getHeight());
+                isMenuTipoVisible[0] = true;
+            }
+        });
+
+        // Atualizar texto do botão com os tipos selecionados
+        for (JCheckBox cb : checkBoxesTipo) {
+            cb.addItemListener(e -> {
+                StringBuilder sb = new StringBuilder();
+                for (JCheckBox c : checkBoxesTipo) {
+                    if (c.isSelected()) {
+                        sb.append(c.getText()).append(", ");
+                    }
+                }
+                if (sb.length() > 0) {
+                    sb.setLength(sb.length() - 2); // remove ", "
+                    comboButtonTipo.setText(sb.toString());
+                } else {
+                    comboButtonTipo.setText("Tipo");
+                }
+            });
+        }
+
+
+        comboButtonTipo.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                popupMenuTipo.setPreferredSize(new Dimension(comboButtonTipo.getWidth(), popupMenuTipo.getPreferredSize().height));
+            }
+        });
+
+        // ---------------------------- JCheckBox Tipo -------------------------------
+
+
+        // -------------------- ComboBox Estado --------------------------
+        String[] opcoesEstado = {"Ativo", "Inativo"};
+        comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
+
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxEstado.setSelectedItem(null);
+
+        comboBoxEstado.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBox) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new ArrowIcon(comboBox)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxEstado.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Estado");
+                    label.setForeground(corFonte);
+                    comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+
+        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEstado.setBackground(corFundoComponentes);
+
+
+        comboBoxEstado.setEditable(false);
+        // -------------------- ComboBox Estado --------------------------
+
+
+        // ------------ CAIXA TEXTO 'preco da compra' -----------------
+        precoCompraField = new RoundedTextField(1,20);
+        precoCompraField.setText(placeholder);
+        precoCompraField.setForeground(corFonte);
+        precoCompraField.setHorizontalAlignment(SwingConstants.CENTER);
+        precoCompraField.setBackground(corFundoComponentes);
+        precoCompraField.setFont(new Font("Georgia", Font.PLAIN, 35));
+
+        erroPrecoCompraLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroPrecoCompraLabel.setText("");
+        erroPrecoCompraLabel.setForeground(Color.RED);
+        erroPrecoCompraLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        erroPrecoCompraLabel.setVisible(false);
+
+        precoCompraField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (precoCompraField.getText().equals(placeholder)) {
+                    precoCompraField.setText("");
+                    precoCompraField.setForeground(corFontePreto);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String textoBruto = precoCompraField.getText().trim();
+                String textoLimpo = textoBruto.replace("€", "").replace(",", ".").replaceAll("[^\\d.-]", "");
+
+                if (textoLimpo.isEmpty() || textoLimpo.equals("-") || textoLimpo.equals(".")) {
+                    erroPrecoCompraLabel.setText("Insira um valor válido em euros.");
+                    erroPrecoCompraLabel.setVisible(true);
+                    precoCompraField.setText(placeholder);
+                    precoCompraField.setForeground(corFonte);
+                    return;
+                }
+
+                try {
+                    double valor = Double.parseDouble(textoLimpo);
+                    if (valor <= 0) {
+                        erroPrecoCompraLabel.setText("Insira um valor superior a 0 em euros.");
+                        erroPrecoCompraLabel.setVisible(true);
+                        precoCompraField.setText(placeholder);
+                        precoCompraField.setForeground(corFonte);
+                    } else {
+                        String valorFormatado = String.format("%.2f €", valor).replace(".", ",");
+                        precoCompraField.setText(valorFormatado);
+                        precoCompraField.setForeground(corFontePreto);
+                        erroPrecoCompraLabel.setVisible(false);
+                    }
+                } catch (NumberFormatException ex) {
+                    erroPrecoCompraLabel.setText("Insira um valor válido em euros.");
+                    erroPrecoCompraLabel.setVisible(true);
+                    precoCompraField.setText(placeholder);
+                    precoCompraField.setForeground(corFonte);
+                }
+            }
+        });
+        // ------------ CAIXA TEXTO 'preco da compra' -----------------
 
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 550, y 20");
         mainPanel.add(filmesLabel, "x 450, y 110");
-        mainPanel.add(adicionarButton, "x 1100, y 210, w 70, h 30");
-        mainPanel.add(uploadButton, "x 100, y 290, w 110, h 400");
+        mainPanel.add(adicionarButton, "x 1100, y 205, w 70, h 30");
+        mainPanel.add(uploadButton, "x 100, y 290, w 110, h 410");
         mainPanel.add(nomeFilme, "x 450, y 290, w 700, h 50");
-        mainPanel.add(duracaoFilme, "x 450, y 360, w 340, h 50");
-        mainPanel.add(erroLabel, "x 490, y 405, w 100, h 40");
-        mainPanel.add(comboButtonIdioma, "x 810, y 360, w 340, h 50");
-        mainPanel.add(comboBoxIdade, "x 450, y 450, w 340, h 50");
-
+        mainPanel.add(duracaoFilme, "x 450, y 380, w 340, h 50");
+        mainPanel.add(erroDuracaoLabel, "x 490, y 425, w 100, h 40");
+        mainPanel.add(comboButtonIdioma, "x 810, y 380, w 340, h 50");
+        mainPanel.add(comboBoxIdade, "x 450, y 470, w 340, h 50");
+        mainPanel.add(comboButtonGenero, "x 810, y 470, w 340, h 50");
+        mainPanel.add(comboButtonTipo, "x 450, y 560, w 340, h 50");
+        mainPanel.add(comboBoxEstado, "x 810, y 560, w 340, h 50");
+        mainPanel.add(precoCompraField, "x 450, y 650, w 700, h 50");
+        mainPanel.add(erroPrecoCompraLabel, "x 490, y 695, w 100, h 40");
 
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Pagina Principal Admin

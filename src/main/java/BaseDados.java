@@ -346,7 +346,7 @@ public class BaseDados implements Serializable{
         return instance;
     }
 
-    private static BaseDados carregarDados() {
+    public static BaseDados carregarDados() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_DADOS))) {
             return (BaseDados) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -378,5 +378,9 @@ public class BaseDados implements Serializable{
 
     public List<Sala> getSalas() {
         return salas;
+    }
+
+    public void adicionarFilme(Filme f) {
+        filmes.add(f);
     }
 }
