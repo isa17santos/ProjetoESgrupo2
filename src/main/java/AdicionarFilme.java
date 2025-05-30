@@ -833,7 +833,12 @@ public class AdicionarFilme {
 
 
                     LinkedList<String> tipos = new LinkedList<>();
-                    tipos.add(comboButtonTipo.getText().trim());
+                    for (JCheckBox checkBox : checkBoxesTipo) {
+                        if (checkBox.isSelected()) {
+                            tipos.add(checkBox.getText().trim());
+                        }
+                    }
+
 
                     Estado estado = Estado.valueOf(comboBoxEstado.getSelectedItem().toString().trim().toUpperCase());
 
@@ -850,46 +855,53 @@ public class AdicionarFilme {
                         return;
                     }
 
-                    Filme novoFilme = new Filme(
-                            nome,
-                            duracao,
-                            foto,
-                            idiomas,
-                            idade,
-                            generos,
-                            tipos,
-                            estado,
-                            precoCompra
-                    );
-
                     bd = BaseDados.getInstance();
 
                     // -------- Verificar se o filme já existe na base de dados ----------
-                    boolean jaExiste = false;
-                    for (Filme f : bd.getFilmes()) {
-                        if (
-                                NormalizarTexto.normalizar(f.getNome()).equals(NormalizarTexto.normalizar(novoFilme.getNome())) &&
-                                        f.getDuracao() == novoFilme.getDuracao() &&
-                                        f.getFoto().equals(novoFilme.getFoto()) &&
-                                        f.getIdiomas().equals(novoFilme.getIdiomas()) &&
-                                        f.getIdade().equals(novoFilme.getIdade()) &&
-                                        f.getGeneros().equals(novoFilme.getGeneros()) &&
-                                        f.getTipos().equals(novoFilme.getTipos()) &&
-                                        f.getEstado().equals(novoFilme.getEstado()) &&
-                                        Float.compare(f.getPrecoCompra(), novoFilme.getPrecoCompra()) == 0
-                        ) {
-                            jaExiste = true;
-                            break;
+                    boolean algumDuplicado = false;
+                    for (Idioma idioma : idiomas) {
+                        for (String tipo : tipos) {
+                            Filme novoFilme = new Filme(
+                                    nome,
+                                    duracao,
+                                    foto,
+                                    idioma,
+                                    idade,
+                                    generos,
+                                    tipo,
+                                    estado,
+                                    precoCompra
+                            );
+
+                            boolean jaExiste = false;
+                            for (Filme f : bd.getFilmes()) {
+                                if (
+                                        NormalizarTexto.normalizar(f.getNome()).equals(NormalizarTexto.normalizar(novoFilme.getNome())) &&
+                                                f.getDuracao() == novoFilme.getDuracao() &&
+                                                f.getFoto().equals(novoFilme.getFoto()) &&
+                                                f.getIdiomas().equals(novoFilme.getIdiomas()) &&
+                                                f.getIdade().equals(novoFilme.getIdade()) &&
+                                                f.getGeneros().equals(novoFilme.getGeneros()) &&
+                                                f.getTipos().equals(novoFilme.getTipos()) &&
+                                                f.getEstado().equals(novoFilme.getEstado()) &&
+                                                Float.compare(f.getPrecoCompra(), novoFilme.getPrecoCompra()) == 0
+                                ) {
+                                    jaExiste = true;
+                                    break;
+                                }
+                            }
+
+                            if (jaExiste) {
+                                algumDuplicado = true;
+                                continue;
+                            }
+
+                            bd.adicionarFilme(novoFilme);
                         }
                     }
 
-                    if (jaExiste) {
-                        JOptionPane.showMessageDialog(null, "Este filme já existe.", "Filme duplicado", JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
                     // ------------- Verificar se o filme já existe na base de dados ---------
 
-                    bd.adicionarFilme(novoFilme);
                     bd.gravarDados();
 
                     // ------ debug -----
@@ -902,6 +914,11 @@ public class AdicionarFilme {
                     } else {
                         System.out.println("Erro: ficheiro de base de dados não foi carregado.");
                     }
+
+                    if (algumDuplicado) {
+                        JOptionPane.showMessageDialog(null, "Alguns filmes não foram adicionados porque já existem.", "Filmes duplicados", JOptionPane.WARNING_MESSAGE);
+                    }
+
                     // ------ debug -----
 
 

@@ -5,15 +5,15 @@ public class Filme implements Serializable{
     private String nome;
     private int duracao;
     private String foto; //guardar o nome da foto
-    private LinkedList<Idioma> idiomas;
+    private Idioma idiomas;
     private String idade; // nao da para ser enum, por isso, guarda-se numa string
     private LinkedList<Genero> generos;
-    private LinkedList<String> tipos;
+    private String tipos;
     private Estado estado;
     private float precoCompra;
     private static final long serialVersionUID = 1L;
 
-    public Filme(String nome, int duracao, String foto, LinkedList<Idioma> idiomas, String idade, LinkedList<Genero> generos, LinkedList<String> tipos, Estado estado, Float precoCompra) {
+    public Filme(String nome, int duracao, String foto, Idioma idiomas, String idade, LinkedList<Genero> generos, String tipos, Estado estado, Float precoCompra) {
         this.nome = nome;
         this.duracao = duracao;
         this.foto = foto;
@@ -37,7 +37,7 @@ public class Filme implements Serializable{
         return foto;
     }
 
-    public LinkedList<Idioma> getIdiomas() {
+    public Idioma getIdiomas() {
         return idiomas;
     }
 
@@ -49,7 +49,7 @@ public class Filme implements Serializable{
         return generos;
     }
 
-    public LinkedList<String> getTipos() {
+    public String getTipos() {
         return tipos;
     }
 
@@ -73,7 +73,7 @@ public class Filme implements Serializable{
         this.foto = foto;
     }
 
-    public void setIdiomas(LinkedList<Idioma> idiomas) {
+    public void setIdiomas(Idioma idiomas) {
         this.idiomas = idiomas;
     }
 
@@ -85,7 +85,7 @@ public class Filme implements Serializable{
         this.generos = generos;
     }
 
-    public void setTipos(LinkedList<String> tipos) {
+    public void setTipos(String tipos) {
         this.tipos = tipos;
     }
 
