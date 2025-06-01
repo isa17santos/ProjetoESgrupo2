@@ -20,6 +20,7 @@ public class AppWindow extends JFrame {
         PaginaBebidas pagina = new PaginaBebidas(this);
         trocarPainel(pagina.getMainPanel());
     }
+
     public void mostrarPaginaAperitivos() {
         PaginaAperitivos pagina = new PaginaAperitivos(this);
         trocarPainel(pagina.getMainPanel());
@@ -131,11 +132,12 @@ public class AppWindow extends JFrame {
         trocarPainel(produtos.getMainPanel());
     }
 
-
-
+    //-------------------- SESSÃO ------------------
     public void mostrarPaginaPrincipalSessoesAdmin() {
-        PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
-        trocarPainel(sessoes.getMainPanel());
+        Criarsessao criarSessao = new Criarsessao(this);
+        setContentPane(criarSessao.getMainPanel());
+        revalidate();
+        repaint();
     }
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
