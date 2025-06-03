@@ -62,6 +62,9 @@ public class AppWindow extends JFrame {
         trocarPainel(admin.getMainPanel());
     }
 
+
+
+
     //-------------------- FILMES ------------------
     //pagina principal
     public void mostrarPaginaPrincipalFilmesAdmin() {
@@ -87,6 +90,10 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
     //-------------------- FILMES -------------------
+
+
+
+
 
     //-------------------- SALAS ------------------
 
@@ -126,6 +133,10 @@ public class AppWindow extends JFrame {
         trocarPainel(confirmacao.getMainPanel());
     }
     //-------------------- SALAS ------------------
+
+
+
+
 
     public void mostrarPaginaPrincipalProdutosBarAdmin() {
         PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);

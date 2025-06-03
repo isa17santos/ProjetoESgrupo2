@@ -96,4 +96,8 @@ public class Filme implements Serializable{
     public void setPrecoCompra(Float precoCompra) {
         this.precoCompra = precoCompra;
     }
+
+    public int getPrecoBilhete() {
+        return 0;
+    }
 }
