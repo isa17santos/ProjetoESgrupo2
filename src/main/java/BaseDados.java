@@ -277,6 +277,7 @@ public class BaseDados implements Serializable{
         //------- GRU MALDISPOSTO 4 ----------
         sessoes.add(new Sessao(filmes.get(28),salas.get(0),Estado.ATIVO,1,7,2025,12,0)); // filme Gru Maldisposto 4 VP 2D, Sala 1, dia 1-7-2025, hora 12h00
         //------- GRU MALDISPOSTO 4 ----------
+
         // ------------------------------------ criar sessoes -------------------------------------------
     }
 
@@ -312,6 +313,15 @@ public class BaseDados implements Serializable{
         return filmes;
     }
 
+    public Filme getFilmeByNome(String nome) {
+        for (Filme filme : filmes) {
+            if (filme.getNome().equalsIgnoreCase(nome)) {
+                return filme;
+            }
+        }
+        return null;
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }
@@ -327,4 +337,19 @@ public class BaseDados implements Serializable{
     public void adicionarFilme(Filme f) {
         filmes.add(f);
     }
+
+    public boolean removerFilme(Filme filme) {
+        return filmes.removeIf(f ->
+                f.getNome().equalsIgnoreCase(filme.getNome()) &&
+                        f.getDuracao() == filme.getDuracao() &&
+                        f.getFoto().equals(filme.getFoto()) &&
+                        f.getIdiomas().equals(filme.getIdiomas()) &&
+                        f.getIdade().equalsIgnoreCase(filme.getIdade()) &&
+                        f.getGeneros().equals(filme.getGeneros()) &&
+                        f.getTipos().equals(filme.getTipos()) &&
+                        f.getEstado().equals(filme.getEstado()) &&
+                        Float.compare(f.getPrecoCompra(), filme.getPrecoCompra()) == 0
+        );
+    }
+
 }
