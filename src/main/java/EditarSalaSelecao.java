@@ -7,6 +7,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditarSalaSelecao {
@@ -18,6 +19,7 @@ public class EditarSalaSelecao {
     private JLabel salasLabel = new JLabel("Salas - Editar");
     private JComboBox <Object> salasComboBox = new JComboBox<>();
     private JButton editarButton = new JButton("Editar");
+    private BaseDados bd = BaseDados.getInstance();
 
     private final AppWindow app;
 
@@ -71,8 +73,28 @@ public class EditarSalaSelecao {
         // ComboBox de Salas
 
         // Dados das salas
-        List<Sala> salas = BaseDados.getInstance().getSalas();
-        String[] opcoesSalas = salas.stream()
+        List<Sala> salas = bd.getSalas();
+        List<Sessao> sessoes = bd.getSessoes();
+        List<Sala> salasSemBilhetes = new ArrayList<>();
+
+        sessoes.get(0).venderBilhete();     // Simula a venda de um bilhete para testar a lógica
+        sessoes.get(0).getBilhetesVendidos();
+
+        // Filtrar salas que não têm bilhetes associados
+        for (Sala sala : salas) {
+            boolean temBilhetes = false;
+            for (Sessao sessao : sessoes) {
+                if (sessao.getSala().equals(sala) && sessao.getBilhetesVendidos() > 0) {
+                    temBilhetes = true;
+                    break;
+                }
+            }
+            if (!temBilhetes) {
+                salasSemBilhetes.add(sala);
+            }
+        }
+        // Criar array de strings com as designações das salas filtradas
+        String[] opcoesSalas = salasSemBilhetes.stream()
                 .map(Sala::getDesignacao)
                 .toArray(String[]::new);
 

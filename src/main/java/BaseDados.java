@@ -338,4 +338,14 @@ public class BaseDados implements Serializable{
         }
         return null;
     }
+
+    public void editarSala(Sala salaAEditar, Sala salaEditada) {
+        for (int i = 0; i < salas.size(); i++) {
+            if (salas.get(i).equals(salaAEditar)) {
+                salas.set(i, salaEditada);
+                return;
+            }
+        }
+    }
+    
 }

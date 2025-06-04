@@ -9,6 +9,7 @@ public class Sessao implements Serializable{
     private int ano;
     private int hora;
     private int minuto;
+    private int bilhetesVendidos;
     private static final long serialVersionUID = 1L;
 
     public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto) {
@@ -20,6 +21,7 @@ public class Sessao implements Serializable{
         this.ano = ano;
         this.hora = hora;
         this.minuto = minuto;
+        this.bilhetesVendidos = 0; // Inicializa o número de bilhetes vendidos como 0
     }
 
     public Filme getFilme() {
@@ -56,5 +58,13 @@ public class Sessao implements Serializable{
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public int getBilhetesVendidos() {
+        return bilhetesVendidos;
+    }
+
+    public void venderBilhete() {
+        this.bilhetesVendidos++;
     }
 }

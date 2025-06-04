@@ -9,6 +9,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class EditarSala {
     private JPanel mainPanel = new JPanel();
@@ -26,6 +27,7 @@ public class EditarSala {
     private JButton editarButton = new JButton("Editar");
     private JLabel erroLabel = new JLabel("Erro: Insira valores válidos.");
     private Sala salaAEditar = null;
+    private BaseDados bd = BaseDados.getInstance();
 
     private final AppWindow app;
 
@@ -120,7 +122,8 @@ public class EditarSala {
         numeroFilas.setBackground(corFundoComponentes);
         numeroFilas.setFont(new Font("Georgia", Font.PLAIN, 35));
 
-        numeroFilas.setText(String.valueOf(salaAEditar.getNumFilas()));// Substituir por Dados da sala
+        // Substituir por Dados da sala
+        numeroFilas.setText(String.valueOf(salaAEditar.getNumFilas()));
 
         numeroFilas.setForeground(corFonte); // texto
         numeroFilas.addFocusListener(new FocusAdapter() {
@@ -166,7 +169,10 @@ public class EditarSala {
         numeroLugaresFila.setHorizontalAlignment(SwingConstants.CENTER);
         numeroLugaresFila.setBackground(corFundoComponentes);
         numeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 35));
-        numeroLugaresFila.setText(String.valueOf(salaAEditar.getNumLugaresFila()));               // Substituir por Dados da sala
+
+        // Substituir por Dados da sala
+        numeroLugaresFila.setText(String.valueOf(salaAEditar.getNumLugaresFila()));
+
         numeroLugaresFila.setForeground(corFonte); // texto
         numeroLugaresFila.addFocusListener(new FocusAdapter() {
             @Override
@@ -208,6 +214,9 @@ public class EditarSala {
         // -------------------- COMBOBOX ECRÃ --------------------------
         String[] opcoesEcra = {"10x5m", "14x6m", "22x16m", "30x23m"};
         comboBoxEcra = new RoundedComboBox<>(opcoesEcra, 20);
+
+        // Mudar o valor do placeholder para o valor atual da sala
+        comboBoxEcra.setSelectedItem(salaAEditar.getEcra());
 
         comboBoxEcra.setUI(new BasicComboBoxUI() {
             @Override
@@ -259,7 +268,7 @@ public class EditarSala {
                     comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
                     label.setForeground(corFontePreto);
-                    label.setText(salaAEditar.getEcra());
+                    label.setText(value.toString());
                 }
 
                 if (index == -1) label.setBackground(corFundoComponentes);
@@ -283,7 +292,12 @@ public class EditarSala {
         String[] opcoesAcessibilidade = {"Sim", "Não"};
         comboBoxAcessibilidade = new RoundedComboBox<>(opcoesAcessibilidade, 20);
 
-
+        // Mudar o valor do placeholder para o valor atual da sala
+        if (salaAEditar.getAcessibilidade() == Acessibilidade.SIM) {
+            comboBoxAcessibilidade.setSelectedItem("Sim");
+        } else {
+            comboBoxAcessibilidade.setSelectedItem("Não");
+        }
         comboBoxAcessibilidade.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
@@ -330,7 +344,7 @@ public class EditarSala {
 
                 // Placeholder (quando nada está selecionado)
                 if (value == null) {
-                    label.setText(salaAEditar.getAcessibilidade().toString());
+                    label.setText("Acessibilidade");
                     label.setForeground(corFonte);
                     comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
@@ -355,6 +369,9 @@ public class EditarSala {
         // -------------------- COMBOBOX TIPO --------------------------
         String[] opcoesTipo = {"Normal", "VIP", "5D"};
         comboBoxTipo = new RoundedComboBox<>(opcoesTipo, 20);
+
+        // Mudar o valor do placeholder para o valor atual da sala
+        comboBoxTipo.setSelectedItem(salaAEditar.getTipo());
 
         // Não selecionar nenhum item no início → mostra placeholder
         comboBoxTipo.setSelectedItem(null);
@@ -427,8 +444,14 @@ public class EditarSala {
         // -------------------- COMBOBOX ESTADO --------------------------
         String[] opcoesEstado = {"Ativo", "Inativo"};
         comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
-        // Não selecionar nenhum item no início → mostra placeholder
-        comboBoxEstado.setSelectedItem(null);
+
+        // Mudar o valor do placeholder para o valor atual da sala
+        if (salaAEditar.getEstado() == Estado.ATIVO) {
+            comboBoxEstado.setSelectedItem("Ativo");
+        } else {
+            comboBoxEstado.setSelectedItem("Inativo");
+        }
+
         comboBoxEstado.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
@@ -538,20 +561,102 @@ public class EditarSala {
 
         // Redirecionar para ConfirmarCriaçãoSala
         editarButton.addActionListener(e -> {
-            String nome = nomeSala.getText();
-            String filas = numeroFilas.getText();
-            String lugares = numeroLugaresFila.getText();
-            String ecra = (String) comboBoxEcra.getSelectedItem();
-            String acessibilidade = (String) comboBoxAcessibilidade.getSelectedItem();
-            String tipo = (String) comboBoxTipo.getSelectedItem();
-            String estado = (String) comboBoxEstado.getSelectedItem();
+            String nome = nomeSala.getText().trim();
+            String filas = numeroFilas.getText().trim();
+            String lugares = numeroLugaresFila.getText().trim();
+            String ecra = comboBoxEcra.getSelectedItem().toString().trim();
+            String acessibilidade = comboBoxAcessibilidade.getSelectedItem().toString().trim();
+            String tipo = comboBoxTipo.getSelectedItem().toString().trim();
+            String estado = comboBoxEstado.getSelectedItem().toString().trim();
 
-            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas") ||
-                    lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null ||
-                    acessibilidade == null || tipo == null || estado == null) {
-                erroLabel.setVisible(true);
+
+            // VALIDAÇÃO DOS CAMPOS
+            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas")
+                               || lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null
+                               || acessibilidade == null || tipo == null || estado == null) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                app.mostrarConfirmarEdicaoSala(nomeSala.getText());
+                try {
+                    // Obter a sala a editar
+                    int numFilas = Integer.parseInt(filas);
+                    int numLugaresFila = Integer.parseInt(lugares);
+
+                    // Transforma a acessibilidade e estado em enums
+                    Acessibilidade acessibilidadeEnum;
+                    if (acessibilidade.equalsIgnoreCase("Sim")) {
+                        acessibilidadeEnum = Acessibilidade.SIM;
+                    } else if (acessibilidade.equalsIgnoreCase("Não")) {
+                        acessibilidadeEnum = Acessibilidade.NAO;
+                    } else {
+                        throw new IllegalArgumentException("Valor de acessibilidade inválido: " + acessibilidade);
+                    }
+
+                    // Transformar o estado em enum
+                    Estado estadoEnum;
+                    if (estado.equalsIgnoreCase("Ativo")) {
+                        estadoEnum = Estado.ATIVO;
+                    } else if (estado.equalsIgnoreCase("Inativo")) {
+                        estadoEnum = Estado.INATIVO;
+                    } else {
+                        throw new IllegalArgumentException("Invalid estado value: " + estado);
+                    }
+
+                    // Criar a nova sala com os dados editados
+                    Sala salaEditada = new Sala(nome, numFilas, numLugaresFila, ecra, acessibilidadeEnum, tipo, estadoEnum);
+
+                    // -------- Verificar se já existe outra sala com o mesmo nome na base de dados ----------
+                    boolean salaDuplicada = false;
+                    for (Sala sala : bd.getSalas()) {
+
+                        // Passa a sala que está a ser editada
+                        if (sala.equals(salaAEditar)) continue;
+
+                        // Verifica se existe outra sala com o mesmo nome
+                        if (sala.getDesignacao().equalsIgnoreCase(salaEditada.getDesignacao())) {
+                            salaDuplicada = true;
+                            break;
+                        }
+                    }
+                    if (salaDuplicada) {
+                        JOptionPane.showMessageDialog(null, "A sala já existe na base de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    } else{
+                        // Atualizar a sala na base de dados
+                        bd.editarSala(salaAEditar, salaEditada);
+
+                        // Redirecionar para ConfirmarEdicaoSala
+                        app.mostrarConfirmarEdicaoSala(nome);
+
+                        // Gravar a base de dados
+                        bd.gravarDados();
+
+                        // Redirecionar para ConfirmarEdicaoSala
+                        app.mostrarConfirmarEdicaoSala(nome);
+                    }
+
+                    // ------ debug -----
+
+                    BaseDados bdVerificacao = BaseDados.carregarDados();
+                    List<Sala> salas = bdVerificacao.getSalas();
+                    if (bdVerificacao != null) {
+                        System.out.println("Base de dados carregada com sucesso.");
+                        for (Sala sala : salas) {
+                            if (sala.equals(salaEditada)) {
+                                System.out.println("Sala editada com sucesso: " + sala);
+                            }
+                        }
+                    } else {
+                        System.out.println("Erro ao carregar a base de dados.");
+                    }
+
+                    // ------ debug -----
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao guardar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
             }
         });
     }
