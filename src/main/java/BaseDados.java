@@ -2,8 +2,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
 
 public class BaseDados implements Serializable{
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
@@ -314,6 +318,15 @@ public class BaseDados implements Serializable{
         return filmes;
     }
 
+    public Filme getFilmeByNome(String nome) {
+        for (Filme filme : filmes) {
+            if (filme.getNome().equalsIgnoreCase(nome)) {
+                return filme;
+            }
+        }
+        return null;
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }
@@ -330,7 +343,19 @@ public class BaseDados implements Serializable{
         filmes.add(f);
     }
 
-
+    public boolean removerFilme(Filme filme) {
+        return filmes.removeIf(f ->
+                f.getNome().equalsIgnoreCase(filme.getNome()) &&
+                        f.getDuracao() == filme.getDuracao() &&
+                        f.getFoto().equals(filme.getFoto()) &&
+                        f.getIdiomas().equals(filme.getIdiomas()) &&
+                        f.getIdade().equalsIgnoreCase(filme.getIdade()) &&
+                        f.getGeneros().equals(filme.getGeneros()) &&
+                        f.getTipos().equals(filme.getTipos()) &&
+                        f.getEstado().equals(filme.getEstado()) &&
+                        Float.compare(f.getPrecoCompra(), filme.getPrecoCompra()) == 0
+        );
+    }
 
     // ------------------- ESTATÍSTICAS -------------------
 

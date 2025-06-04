@@ -77,15 +77,7 @@ public class EditarFilme {
                 listaFilmesAEditar.add(f);
             }
         }
-
-        System.out.println(listaFilmesAEditar);
-
-        System.out.println(filme.getNome());
-        System.out.println(filme.getDuracao());
-        System.out.println(filme.getEstado());
-        System.out.println(filme.getFoto());
-        System.out.println(filme.getIdade());
-        System.out.println(filme.getPrecoCompra());
+        
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
