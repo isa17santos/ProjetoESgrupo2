@@ -21,6 +21,7 @@ public class AppWindow extends JFrame {
         trocarPainel(pagina.getMainPanel());
     }
 
+
     public void mostrarPaginaAperitivos() {
         PaginaAperitivos pagina = new PaginaAperitivos(this);
         trocarPainel(pagina.getMainPanel());
@@ -84,11 +85,24 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
-    //editar filme
-    public void mostrarEditarFilmes() {
-        EditarFilme filmes = new EditarFilme(this);
+    //escolher filme a editar
+    public void mostrarEscolhaFilmeEditar() {
+        PaginaEscolhaFilmeEditar filmes = new PaginaEscolhaFilmeEditar(this);
         trocarPainel(filmes.getMainPanel());
     }
+
+    //editar filme
+    public void mostrarEditarFilmes(Filme filme) {
+        EditarFilme filmes = new EditarFilme(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //confirmar edicao filme
+    public void mostrarConfirmacaoEdicaoFilmes() {
+        ConfirmacaoEdicaoFilme filmes = new ConfirmacaoEdicaoFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
     //-------------------- FILMES -------------------
 
 

@@ -171,7 +171,7 @@ public class AdicionarFilme {
         duracaoFilme = new RoundedTextField(1,20);
         duracaoFilme.setHorizontalAlignment(SwingConstants.CENTER);
         duracaoFilme.setBackground(corFundoComponentes);
-        duracaoFilme.setFont(new Font("Georgia", Font.PLAIN, 25));
+        duracaoFilme.setFont(new Font("Georgia", Font.PLAIN, 35));
         duracaoFilme.setText("Duração (minutos)");
         duracaoFilme.setForeground(corFonte); // texto
 
@@ -398,6 +398,7 @@ public class AdicionarFilme {
         });
 
         comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxIdade.setForeground(corFontePreto);
         comboBoxIdade.setBackground(corFundoComponentes);
 
         comboBoxIdade.setEditable(false);
@@ -554,6 +555,7 @@ public class AdicionarFilme {
             cb.setBackground(corFundoSubMenu);
             cb.setHorizontalAlignment(SwingConstants.CENTER);
             cb.setFont(new Font("Georgia", Font.PLAIN, 25));
+            cb.setForeground(corFontePreto);
             cb.setIconTextGap(30); // aumenta espaço entre quadrado e texto
             cb.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0)); // top, left, bottom, right
             checkBoxTipo.add(cb);
@@ -709,7 +711,8 @@ public class AdicionarFilme {
             }
         });
 
-        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
+        comboBoxEstado.setForeground(corFontePreto);
         comboBoxEstado.setBackground(corFundoComponentes);
 
 
