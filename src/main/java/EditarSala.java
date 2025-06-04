@@ -25,7 +25,7 @@ public class EditarSala {
     private JComboBox<Object> comboBoxEstado = new JComboBox<>();
     private JButton editarButton = new JButton("Editar");
     private JLabel erroLabel = new JLabel("Erro: Insira valores válidos.");
-    private ArrowIcon arrowIcon = new ArrowIcon(null);
+    private Sala salaAEditar = null;
 
     private final AppWindow app;
 
@@ -47,28 +47,13 @@ public class EditarSala {
     public EditarSala(AppWindow app, String nomeSala) {
         this.app = app;
         configurarComponentes(nomeSala);
-        buscarDadosSala(nomeSala);
     }
 
-    // Buscar dados da sala selecionada
-    private void buscarDadosSala(String nomeSala) {
-
-        // Aqui você pode implementar a lógica para buscar os dados da sala selecionada
-        // e preencher os campos correspondentes.
-        // Exemplo:
-        // Sala sala = app.getSalaByName(nomeSala);
-        // if (sala != null) {
-        //     nomeSala.setText(sala.getNome());
-        //     numeroFilas.setText(String.valueOf(sala.getNumeroFilas()));
-        //     numeroLugaresFila.setText(String.valueOf(sala.getNumeroLugaresPorFila()));
-        //     comboBoxEcra.setSelectedItem(sala.getEcra());
-        //     comboBoxAcessibilidade.setSelectedItem(sala.isAcessibilidade() ? "Sim" : "Não");
-        //     comboBoxTipo.setSelectedItem(sala.getTipo());
-        //     comboBoxEstado.setSelectedItem(sala.isAtivo() ? "Ativo" : "Inativo");
-        // }
-    }
 
     private void configurarComponentes(String nomeSalaValue) {
+
+        // Obter a sala a editar
+        salaAEditar = BaseDados.getInstance().getSalaByNome(nomeSalaValue);
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
@@ -106,7 +91,7 @@ public class EditarSala {
         nomeSala.setHorizontalAlignment(SwingConstants.CENTER);
         nomeSala.setBackground(corFundoComponentes);
         nomeSala.setFont(new Font("Georgia", Font.PLAIN, 35));
-        nomeSala.setText(nomeSalaValue);            // Substituir por Dados da sala
+        nomeSala.setText(salaAEditar.getDesignacao());            // Substituir por Dados da sala
         nomeSala.setForeground(corFonte); // texto
         nomeSala.addFocusListener(new FocusAdapter() {
             @Override
@@ -134,7 +119,9 @@ public class EditarSala {
         numeroFilas.setHorizontalAlignment(SwingConstants.CENTER);
         numeroFilas.setBackground(corFundoComponentes);
         numeroFilas.setFont(new Font("Georgia", Font.PLAIN, 35));
-        numeroFilas.setText("Nº Filas");        // Substituir por Dados da sala
+
+        numeroFilas.setText(String.valueOf(salaAEditar.getNumFilas()));// Substituir por Dados da sala
+
         numeroFilas.setForeground(corFonte); // texto
         numeroFilas.addFocusListener(new FocusAdapter() {
             @Override
@@ -179,7 +166,7 @@ public class EditarSala {
         numeroLugaresFila.setHorizontalAlignment(SwingConstants.CENTER);
         numeroLugaresFila.setBackground(corFundoComponentes);
         numeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 35));
-        numeroLugaresFila.setText("Nº Lugares por Fila");               // Substituir por Dados da sala
+        numeroLugaresFila.setText(String.valueOf(salaAEditar.getNumLugaresFila()));               // Substituir por Dados da sala
         numeroLugaresFila.setForeground(corFonte); // texto
         numeroLugaresFila.addFocusListener(new FocusAdapter() {
             @Override
@@ -221,9 +208,6 @@ public class EditarSala {
         // -------------------- COMBOBOX ECRÃ --------------------------
         String[] opcoesEcra = {"10x5m", "14x6m", "22x16m", "30x23m"};
         comboBoxEcra = new RoundedComboBox<>(opcoesEcra, 20);
-
-        // Não selecionar nenhum iten no início → mostra placeholder
-        comboBoxEcra.setSelectedItem(null);
 
         comboBoxEcra.setUI(new BasicComboBoxUI() {
             @Override
@@ -275,6 +259,7 @@ public class EditarSala {
                     comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
                     label.setForeground(corFontePreto);
+                    label.setText(salaAEditar.getEcra());
                 }
 
                 if (index == -1) label.setBackground(corFundoComponentes);
@@ -287,7 +272,7 @@ public class EditarSala {
             }
         });
 
-        comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEcra.setFont(new Font("Georgia", Font.PLAIN, 35));
         comboBoxEcra.setBackground(corFundoComponentes);
 
         comboBoxEcra.setEditable(false);
@@ -298,8 +283,7 @@ public class EditarSala {
         String[] opcoesAcessibilidade = {"Sim", "Não"};
         comboBoxAcessibilidade = new RoundedComboBox<>(opcoesAcessibilidade, 20);
 
-        // Não selecionar nenhum iten no início → mostra placeholder
-        comboBoxAcessibilidade.setSelectedItem(null);
+
         comboBoxAcessibilidade.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
@@ -321,6 +305,7 @@ public class EditarSala {
                         g2.dispose();
                     }
                 };
+
 
                 popup.setBorder(BorderFactory.createEmptyBorder());
                 popup.setOpaque(false);
@@ -345,7 +330,7 @@ public class EditarSala {
 
                 // Placeholder (quando nada está selecionado)
                 if (value == null) {
-                    label.setText("Acessibilidade");
+                    label.setText(salaAEditar.getAcessibilidade().toString());
                     label.setForeground(corFonte);
                     comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
@@ -361,7 +346,7 @@ public class EditarSala {
                 return label;
             }
         });
-        comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxAcessibilidade.setFont(new Font("Georgia", Font.PLAIN, 35));
         comboBoxAcessibilidade.setBackground(corFundoComponentes);
         comboBoxAcessibilidade.setEditable(false);
         // -------------------- COMBOBOX ACESSIBILIDADE --------------------------
@@ -418,7 +403,7 @@ public class EditarSala {
 
                 // Placeholder (quando nada está selecionado)
                 if (value == null) {
-                    label.setText("Tipo");
+                    label.setText(salaAEditar.getTipo());
                     label.setForeground(corFonte);
                     comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
@@ -434,7 +419,7 @@ public class EditarSala {
                 return label;
             }
         });
-        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
         comboBoxTipo.setBackground(corFundoComponentes);
         comboBoxTipo.setEditable(false);
         // -------------------- COMBOBOX TIPO --------------------------
@@ -481,6 +466,7 @@ public class EditarSala {
             }
         });
 
+
         // Custom renderer com placeholder
         comboBoxEstado.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -488,8 +474,14 @@ public class EditarSala {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 // Placeholder (quando nada está selecionado)
+                // Placeholder (quando nada está selecionado)
                 if (value == null) {
-                    label.setText("Estado");
+                    String estado = salaAEditar.getEstado().toString();
+                    if (!estado.isEmpty()) {
+                        label.setText(estado.substring(0, 1).toUpperCase() + estado.substring(1).toLowerCase());
+                    } else {
+                        label.setText("Estado");
+                    }
                     label.setForeground(corFonte);
                     comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
@@ -506,14 +498,14 @@ public class EditarSala {
             }
         });
 
-        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
         comboBoxEstado.setBackground(corFundoComponentes);
         comboBoxEstado.setEditable(false);
         // -------------------- COMBOBOX ESTADO --------------------------
 
         //----------------- BOTAO EDITAR -------------
         editarButton = new RoundedButton("Editar", 20);
-        editarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
+        editarButton.setFont(new Font("Georgia", Font.PLAIN, 40));
         editarButton.setBackground(corFundoLabel);
         editarButton.setForeground(corFontePreto); // texto
         //----------------- BOTAO EDITAR -------------

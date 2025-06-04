@@ -327,4 +327,15 @@ public class BaseDados implements Serializable{
     public void adicionarFilme(Filme f) {
         filmes.add(f);
     }
+
+    // --------------------- Salas ---------------------
+
+    public Sala getSalaByNome(String nome) {
+        for (Sala sala : salas) {
+            if (sala.getDesignacao().equalsIgnoreCase(nome)) {
+                return sala;
+            }
+        }
+        return null;
+    }
 }
