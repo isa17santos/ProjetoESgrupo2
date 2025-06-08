@@ -164,6 +164,29 @@ public class AppWindow extends JFrame {
         revalidate();
         repaint();
     }
+
+    //-------------------- BAR ------------------
+    public void mostrarPaginaPrincipalBar() {
+        PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
+        setContentPane(paginaPrincipalProdutosBarAdmin.getMainPanel());
+        revalidate();
+        repaint();
+    }
+
+    public void mostrarPaginaConfirmacaoAdicaoProduto() {
+        ConfirmacaoAdicaoProduto adicionarProdutoAdmin = new ConfirmacaoAdicaoProduto(this);
+        setContentPane(adicionarProdutoAdmin.getMainPanel());
+        revalidate();
+        repaint();
+    }
+
+
+    public void mostrarPaginaAdicionarProduto() {
+        AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
+        setContentPane(adicionarProdutoAdmin.getMainPanel());
+        revalidate();
+        repaint();
+    }
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
     public static void main(String[] args) {

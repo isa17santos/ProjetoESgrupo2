@@ -75,4 +75,18 @@ public class Produto implements Serializable{
     public void setPrecoVendaUnidade(float precoVendaUnidade) {
         this.precoVendaUnidade = precoVendaUnidade;
     }
+
+    //mostra na consola informação sobre os produtos
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "foto='" + foto + '\'' +
+                ", nome='" + nome + '\'' +
+                ", tipoProduto=" + tipoProduto +
+                ", estado=" + estado +
+                ", stock=" + stock +
+                ", precoCompraUnidade=" + precoCompraUnidade +
+                ", precoVendaUnidade=" + precoVendaUnidade +
+                '}';
+    }
 }
