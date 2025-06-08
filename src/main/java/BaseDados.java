@@ -556,4 +556,9 @@ public class BaseDados implements Serializable{
 
 
     // ------------------- ESTATÍSTICAS -------------------
+
+    // ------------------- PRODUTO -------------------
+    public void adicionarProduto(Produto produto) {
+        produtos.add(produto);
+    }
 }
