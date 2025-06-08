@@ -88,10 +88,10 @@ public class ConfirmacaoAdicaoProduto {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 550, y 20");
-        mainPanel.add(produtoAdicionarLabel, "x 450, y 110");
+        mainPanel.add(produtoAdicionarLabel, "x 350, y 100");
         mainPanel.add(produtoLabel, "x 420, y 320");
-        mainPanel.add(adicionadoLabel, "x 340, y 460");
-        mainPanel.add(vistoConfirmacaoLabel, "x 800, y 300");
+        mainPanel.add(adicionadoLabel, "x 370, y 460");
+        mainPanel.add(vistoConfirmacaoLabel, "x 830, y 300");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
