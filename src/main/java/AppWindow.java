@@ -42,10 +42,19 @@ public class AppWindow extends JFrame {
         trocarPainel(carrinho.getMainPanel());
     }
 
+    //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {
         Bilheteira bilheteira = new Bilheteira(this);
         trocarPainel(bilheteira.getMainPanel());
     }
+
+    //escolha filme bilheteira
+    public void mostrarEscolhaFilmeBilhteira(Filme filme) {
+        EscolhaFilmeBilheteira filmes = new EscolhaFilmeBilheteira(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //-------------------------- BILHETEIRA -----------------------------
 
     public void mostrarBar() {
         Bar bar = new Bar(this);
