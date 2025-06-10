@@ -347,5 +347,8 @@ public class BaseDados implements Serializable{
             }
         }
     }
-    
+
+    public void adicionarSala(Sala sala) {
+        salas.add(sala);
+    }
 }

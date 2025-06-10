@@ -25,7 +25,8 @@ public class EditarSala {
     private JComboBox <Object> comboBoxTipo = new JComboBox<>();
     private JComboBox<Object> comboBoxEstado = new JComboBox<>();
     private JButton editarButton = new JButton("Editar");
-    private JLabel erroLabel = new JLabel("Erro: Insira valores válidos.");
+    private JLabel erroNumeroFilas = new JLabel();
+    private JLabel erroNumeroLugaresFila = new JLabel();
     private Sala salaAEditar = null;
     private BaseDados bd = BaseDados.getInstance();
 
@@ -121,6 +122,14 @@ public class EditarSala {
         numeroFilas.setHorizontalAlignment(SwingConstants.CENTER);
         numeroFilas.setBackground(corFundoComponentes);
         numeroFilas.setFont(new Font("Georgia", Font.PLAIN, 35));
+        
+        // Erro label para mostrar mensagens de erro
+        erroNumeroFilas.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroNumeroFilas.setText("");
+        erroNumeroFilas.setBackground(corFundo);
+        erroNumeroFilas.setForeground(Color.RED);
+        erroNumeroFilas.setHorizontalAlignment(SwingConstants.CENTER);
+        erroNumeroFilas.setVisible(false);
 
         // Substituir por Dados da sala
         numeroFilas.setText(String.valueOf(salaAEditar.getNumFilas()));
@@ -146,16 +155,16 @@ public class EditarSala {
                 try {
                     int duracao = Integer.parseInt(input);
                     if (duracao <= 0) {
-                        erroLabel.setText("Insira um valor superior a 0.");
-                        erroLabel.setVisible(true);
+                        erroNumeroFilas.setText("Insira um valor superior a 0.");
+                        erroNumeroFilas.setVisible(true);
                         numeroFilas.setText("Nº Filas");
                         numeroFilas.setForeground(corFonte);
                     } else {
-                        erroLabel.setVisible(false); // valor válido
+                        erroNumeroFilas.setVisible(false); // valor válido
                     }
                 } catch (NumberFormatException ex) {
-                    erroLabel.setText("Insira um valor numérico válido.");
-                    erroLabel.setVisible(true);
+                    erroNumeroFilas.setText("Insira um valor numérico válido.");
+                    erroNumeroFilas.setVisible(true);
                     numeroFilas.setText("Nº Filas");
                     numeroFilas.setForeground(corFonte);
                 }
@@ -169,6 +178,14 @@ public class EditarSala {
         numeroLugaresFila.setHorizontalAlignment(SwingConstants.CENTER);
         numeroLugaresFila.setBackground(corFundoComponentes);
         numeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 35));
+        
+        // Erro label para mostrar mensagens de erro
+        erroNumeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroNumeroLugaresFila.setText("");
+        erroNumeroLugaresFila.setBackground(corFundo);
+        erroNumeroLugaresFila.setForeground(Color.RED);
+        erroNumeroLugaresFila.setHorizontalAlignment(SwingConstants.CENTER);
+        erroNumeroLugaresFila.setVisible(false);
 
         // Substituir por Dados da sala
         numeroLugaresFila.setText(String.valueOf(salaAEditar.getNumLugaresFila()));
@@ -194,16 +211,16 @@ public class EditarSala {
                 try {
                     int duracao = Integer.parseInt(input);
                     if (duracao <= 0) {
-                        erroLabel.setText("Insira um valor superior a 0.");
-                        erroLabel.setVisible(true);
+                        erroNumeroLugaresFila.setText("Insira um valor superior a 0.");
+                        erroNumeroLugaresFila.setVisible(true);
                         numeroLugaresFila.setText("Nº Lugares por Fila");
                         numeroLugaresFila.setForeground(corFonte);
                     } else {
-                        erroLabel.setVisible(false); // valor válido
+                        erroNumeroLugaresFila.setVisible(false); // valor válido
                     }
                 } catch (NumberFormatException ex) {
-                    erroLabel.setText("Insira um valor numérico válido.");
-                    erroLabel.setVisible(true);
+                    erroNumeroLugaresFila.setText("Insira um valor numérico válido.");
+                    erroNumeroLugaresFila.setVisible(true);
                     numeroLugaresFila.setText("Nº Lugares por Fila");
                     numeroLugaresFila.setForeground(corFonte);
                 }
@@ -546,7 +563,8 @@ public class EditarSala {
         mainPanel.add(comboBoxTipo, "x 250, y 550, w 350, h 50");
         mainPanel.add(comboBoxEstado, "x 700, y 550, w 350, h 50");
         mainPanel.add(editarButton, "x 250, y 650, w 800, h 50");
-        mainPanel.add(erroLabel, "x 250, y 750, w 800, h 50");
+        mainPanel.add(erroNumeroFilas, "x 250, y 400, w 350, h 30");
+        mainPanel.add(erroNumeroLugaresFila, "x 700, y 400, w 350, h 30");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -623,9 +641,6 @@ public class EditarSala {
                     } else{
                         // Atualizar a sala na base de dados
                         bd.editarSala(salaAEditar, salaEditada);
-
-                        // Redirecionar para ConfirmarEdicaoSala
-                        app.mostrarConfirmarEdicaoSala(nome);
 
                         // Gravar a base de dados
                         bd.gravarDados();
