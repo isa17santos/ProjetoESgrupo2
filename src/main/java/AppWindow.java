@@ -146,8 +146,8 @@ public class AppWindow extends JFrame {
 
     // editar sala
     public void mostrarEditarSala(String nomeSala) {
-        EditarSala salas = new EditarSala(this, nomeSala);
-        trocarPainel(salas.getMainPanel());
+        EditarSala editarSala = new EditarSala(this, nomeSala);
+        trocarPainel(editarSala.getMainPanel());
     }
 
     // confirmar edição sala

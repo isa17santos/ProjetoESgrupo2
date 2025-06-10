@@ -1,15 +1,12 @@
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
-public class BaseDados implements Serializable{
+public class BaseDados implements Serializable {
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
     private static final long serialVersionUID = 1L;
     private static BaseDados instance = null;
@@ -560,5 +557,29 @@ public class BaseDados implements Serializable{
     // ------------------- PRODUTO -------------------
     public void adicionarProduto(Produto produto) {
         produtos.add(produto);
+    }
+
+    // --------------------- Salas ---------------------
+
+    public Sala getSalaByNome(String nome) {
+        for (Sala sala : salas) {
+            if (sala.getDesignacao().equalsIgnoreCase(nome)) {
+                return sala;
+            }
+        }
+        return null;
+    }
+
+    public void editarSala(Sala salaAEditar, Sala salaEditada) {
+        for (int i = 0; i < salas.size(); i++) {
+            if (salas.get(i).equals(salaAEditar)) {
+                salas.set(i, salaEditada);
+                return;
+            }
+        }
+    }
+
+    public void adicionarSala(Sala sala) {
+        salas.add(sala);
     }
 }

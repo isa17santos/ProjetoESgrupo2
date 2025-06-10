@@ -63,4 +63,8 @@ public class Sessao implements Serializable{
     public int getBilhetesVendidos() {
         return bilhetesVendidos;
     }
+
+    public void venderBilhete() {
+        this.bilhetesVendidos++;
+    }
 }
