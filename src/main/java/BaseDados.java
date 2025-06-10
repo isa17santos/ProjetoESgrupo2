@@ -1,11 +1,12 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
-public class BaseDados implements Serializable{
+public class BaseDados implements Serializable {
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
     private static final long serialVersionUID = 1L;
     private static BaseDados instance = null;
