@@ -21,7 +21,7 @@ public class Sessao implements Serializable{
         this.ano = ano;
         this.hora = hora;
         this.minuto = minuto;
-        this.bilhetesVendidos = 0; // Inicializa o número de bilhetes vendidos como 0
+        this.bilhetesVendidos = 0; // Inicializa bilhetes vendidos como 0
     }
 
     public Filme getFilme() {

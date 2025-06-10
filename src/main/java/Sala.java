@@ -75,4 +75,8 @@ public class Sala implements Serializable{
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+
+    public double getLotacao() {
+        return (double) (numFilas * numLugaresFila);
+    }
 }

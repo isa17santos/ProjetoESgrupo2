@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 
 public class BaseDados implements Serializable{
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
@@ -312,6 +314,15 @@ public class BaseDados implements Serializable{
         return filmes;
     }
 
+    public Filme getFilmeByNome(String nome) {
+        for (Filme filme : filmes) {
+            if (filme.getNome().equalsIgnoreCase(nome)) {
+                return filme;
+            }
+        }
+        return null;
+    }
+
     public List<Produto> getProdutos() {
         return produtos;
     }
@@ -326,6 +337,225 @@ public class BaseDados implements Serializable{
 
     public void adicionarFilme(Filme f) {
         filmes.add(f);
+    }
+
+    public boolean removerFilme(Filme filme) {
+        return filmes.removeIf(f ->
+                f.getNome().equalsIgnoreCase(filme.getNome()) &&
+                        f.getDuracao() == filme.getDuracao() &&
+                        f.getFoto().equals(filme.getFoto()) &&
+                        f.getIdiomas().equals(filme.getIdiomas()) &&
+                        f.getIdade().equalsIgnoreCase(filme.getIdade()) &&
+                        f.getGeneros().equals(filme.getGeneros()) &&
+                        f.getTipos().equals(filme.getTipos()) &&
+                        f.getEstado().equals(filme.getEstado()) &&
+                        Float.compare(f.getPrecoCompra(), filme.getPrecoCompra()) == 0
+        );
+    }
+
+    // ------------------- ESTATÍSTICAS -------------------
+
+    // Fetches ticket sales per day (example: count of Sessao per date)
+    public Map<String, Integer> vendasPorDia() {        // Apenas os ultimos 30 dias
+        Map<String, Integer> vendasPorDia = new LinkedHashMap<>();
+        LocalDate hoje = LocalDate.now();
+        for (Sessao s : sessoes) {
+            LocalDate dataSessao = LocalDate.of(s.getAno(), s.getMes(), s.getDia());
+            if (!dataSessao.isBefore(hoje.minusDays(30))) {
+                String dataFormatada = dataSessao.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                vendasPorDia.put(dataFormatada, vendasPorDia.getOrDefault(dataFormatada, 0) + s.getBilhetesVendidos());
+            }
+        }
+        return vendasPorDia;
+    }
+
+    // Fetches stock for each product
+    public Object[][] tabelaStock() {
+        List<Produto> produtos = getProdutos();
+        Object[][] data = new Object[produtos.size()][2];
+        for (int i = 0; i < produtos.size(); i++) {
+            data[i][0] = produtos.get(i).getNome();
+            data[i][1] = produtos.get(i).getStock();
+        }
+        return data;
+    }
+
+    public Map<String, Integer> vendasPorMes() {        // últimos 12 meses
+        Map<String, Integer> vendasPorMes = new LinkedHashMap<>();
+        LocalDate hoje = LocalDate.now();
+        for (Sessao s : sessoes) {
+            LocalDate dataSessao = LocalDate.of(s.getAno(), s.getMes(), s.getDia());
+            if (!dataSessao.isBefore(hoje.minusMonths(12))) {
+                String mesAno = dataSessao.format(DateTimeFormatter.ofPattern("MM-yyyy"));
+                vendasPorMes.put(mesAno, vendasPorMes.getOrDefault(mesAno, 0) + s.getBilhetesVendidos());
+            }
+        }
+        return vendasPorMes;
+    }
+
+    public Map<String, Integer> vendasPorAno() {       // últimos 5 anos
+        Map<String, Integer> vendasPorAno = new LinkedHashMap<>();
+        LocalDate hoje = LocalDate.now();
+        for (Sessao s : sessoes) {
+            LocalDate dataSessao = LocalDate.of(s.getAno(), s.getMes(), s.getDia());
+            if (!dataSessao.isBefore(hoje.minusYears(5))) {
+                String ano = String.valueOf(s.getAno());
+                vendasPorAno.put(ano, vendasPorAno.getOrDefault(ano, 0) + s.getBilhetesVendidos());
+            }
+        }
+        return vendasPorAno;
+    }
+
+
+    public Map<String, Integer> vendasPorSessao() {     // Gera um mapa com o número de bilhetes vendidos por sessão
+        Map<String, Integer> vendasPorSessao = new LinkedHashMap<>();
+        for (Sessao s : sessoes) {
+            String sessaoInfo = String.format("%s - %02d/%02d/%04d %02d:%02d", s.getFilme().getNome(), s.getDia(), s.getMes(), s.getAno(), s.getHora(), s.getMinuto());
+            vendasPorSessao.put(sessaoInfo, vendasPorSessao.getOrDefault(sessaoInfo, 0) + s.getBilhetesVendidos());
+        }
+        return vendasPorSessao;
+    }
+
+    public Map<String, Integer> vendasPorFilme() {      // Gera um mapa com o número de bilhetes vendidos por filme
+        Map<String, Integer> vendasPorFilme = new LinkedHashMap<>();
+        for (Sessao s : sessoes) {
+            String filmeNome = s.getFilme().getNome();
+            vendasPorFilme.put(filmeNome, vendasPorFilme.getOrDefault(filmeNome, 0) + s.getBilhetesVendidos());
+        }
+        return vendasPorFilme;
+    }
+
+    public Map<String, Integer> produtosMaisVendidos() {    // Gera um mapa com os 10 produtos mais vendidos por ordem decrescente
+        return null; // Implementar lógica para calcular os produtos mais vendidos
+    }
+
+    public Map<String, Double> taxaOcupacaoPorSessao() {
+        Map<String, Double> taxaOcupacao = new LinkedHashMap<>();
+        for (Sessao s : sessoes) {
+            String sessaoInfo = String.format("%s - %02d/%02d/%04d %02d:%02d", s.getFilme().getNome(), s.getDia(), s.getMes(), s.getAno(), s.getHora(), s.getMinuto());
+            double taxa = (double) s.getBilhetesVendidos() / s.getSala().getLotacao() * 100;
+            taxaOcupacao.put(sessaoInfo, taxa);
+        }
+        return taxaOcupacao;
+    }
+
+    public Map<String, Double> taxaOcupacaoPorSala() {      // Gera um mapa com a taxa de ocupação por sala
+        Map<String, Double> taxaOcupacaoPorSala = new LinkedHashMap<>();
+        for (Sessao s : sessoes) {
+            String salaNome = s.getSala().getDesignacao();
+            double taxa = (double) s.getBilhetesVendidos() / s.getSala().getLotacao() * 100;
+            taxaOcupacaoPorSala.put(salaNome, taxaOcupacaoPorSala.getOrDefault(salaNome, 0.0) + taxa);
+        }
+        return taxaOcupacaoPorSala;
+    }
+
+    public Map<String, Double> lucros() {        // Gera um mapa com os lucros por sessão
+        return null; // Implementar lógica para calcular os lucros por sessão
+    }
+
+    public Map<String, Integer> generosMaisVistos() {       // Gera um mapa com os géneros mais vistos e o número de bilhetes vendidos por ordem decrescente
+        Map<String, Integer> generosMaisVistos = new LinkedHashMap<>();
+        for (Sessao s : sessoes) {
+            LinkedList<Genero> genero = s.getFilme().getGeneros();
+            for (Genero g : genero) {
+                String generoNome = g.toString(); // Assuming Genero is an enum or has a valid toString implementation
+                generosMaisVistos.put(generoNome, generosMaisVistos.getOrDefault(generoNome, 0) + s.getBilhetesVendidos());
+            }
+        }
+
+        // Sort the map by values (number of tickets sold) in descending order
+        return generosMaisVistos.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    public Map<String, Integer> top5FilmesMaisVistos() {        // Gera um mapa com os 5 filmes mais vistos e o número de bilhetes vendidos por ordem decrescente
+        Map<String, Integer> top5Filmes = vendasPorFilme();
+        return top5Filmes.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    public Object[][] tabelaVendasPorSessao() {     // Tabela de vendas por sessão ordenada por bilhetes vendidos decrescentes
+        List<Sessao> sessoes = getSessoes();
+        Object[][] data = new Object[sessoes.size()][3];
+        AtomicInteger index = new AtomicInteger(0);
+
+        sessoes.stream()
+                .sorted(Comparator.comparingInt(Sessao::getBilhetesVendidos).reversed())
+                .forEach(s -> {
+                    data[index.get()][0] = s.getFilme().getNome();
+                    data[index.get()][1] = String.format("%02d/%02d/%04d %02d:%02d", s.getDia(), s.getMes(), s.getAno(), s.getHora(), s.getMinuto());
+                    data[index.get()][2] = s.getBilhetesVendidos();
+                    index.getAndIncrement();
+                });
+
+        return data;
+    }
+
+    public Object[][] tabelaVendasPorFilme() {      // Tabela de vendas por filme ordenada por vendas decrescentes
+        Map<String, Integer> vendasPorFilme = vendasPorFilme();
+        Object[][] data = new Object[vendasPorFilme.size()][2];
+        AtomicInteger index = new AtomicInteger(0);
+
+        // Sort the map by values (number of tickets sold) in descending order
+        vendasPorFilme.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEach(entry -> {
+                    data[index.get()][0] = entry.getKey();
+                    data[index.get()][1] = entry.getValue();
+                    index.getAndIncrement();
+                });
+
+        return data;
+    }
+
+    public Object[][] tabelaTaxaOcupacaoPorSessao() {       // Tabela de taxa de ocupação por sessão ordenada por taxa decrescente
+        Map<String, Double> taxaOcupacao = taxaOcupacaoPorSessao();
+        Object[][] data = new Object[taxaOcupacao.size()][2];
+        AtomicInteger index = new AtomicInteger(0);
+
+        // Sort the map by values (taxa de ocupação) in descending order
+        taxaOcupacao.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEach(entry -> {
+                    data[index.get()][0] = entry.getKey();
+                    data[index.get()][1] = entry.getValue();
+                    index.getAndIncrement();
+                });
+
+        return data;
+    }
+
+    public Object[][] tabelaLucros() {      // Tabela de lucros por sessão ordenada por lucros decrescentes
+        Map<String, Double> lucros = lucros();
+        Object[][] data = new Object[lucros.size()][2];
+        AtomicInteger index = new AtomicInteger(0);
+
+        // Sort the map by values (lucro) in descending order
+        lucros.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEach(entry -> {
+                    data[index.get()][0] = entry.getKey();
+                    data[index.get()][1] = entry.getValue();
+                    index.getAndIncrement();
+                });
+
+        return data;
+    }
+
+
+    // ------------------- ESTATÍSTICAS -------------------
+
+    // ------------------- PRODUTO -------------------
+    public void adicionarProduto(Produto produto) {
+        produtos.add(produto);
     }
 
     // --------------------- Salas ---------------------

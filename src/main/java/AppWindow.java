@@ -21,6 +21,7 @@ public class AppWindow extends JFrame {
         trocarPainel(pagina.getMainPanel());
     }
 
+
     public void mostrarPaginaAperitivos() {
         PaginaAperitivos pagina = new PaginaAperitivos(this);
         trocarPainel(pagina.getMainPanel());
@@ -41,10 +42,19 @@ public class AppWindow extends JFrame {
         trocarPainel(carrinho.getMainPanel());
     }
 
+    //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {
         Bilheteira bilheteira = new Bilheteira(this);
         trocarPainel(bilheteira.getMainPanel());
     }
+
+    //escolha filme bilheteira
+    public void mostrarEscolhaFilmeBilhteira(Filme filme) {
+        EscolhaFilmeBilheteira filmes = new EscolhaFilmeBilheteira(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //-------------------------- BILHETEIRA -----------------------------
 
     public void mostrarBar() {
         Bar bar = new Bar(this);
@@ -61,6 +71,9 @@ public class AppWindow extends JFrame {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
+
+
+
 
     //-------------------- FILMES ------------------
     //pagina principal
@@ -81,12 +94,29 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
-    //editar filme
-    public void mostrarEditarFilmes() {
-        EditarFilme filmes = new EditarFilme(this);
+    //escolher filme a editar
+    public void mostrarEscolhaFilmeEditar() {
+        PaginaEscolhaFilmeEditar filmes = new PaginaEscolhaFilmeEditar(this);
         trocarPainel(filmes.getMainPanel());
     }
+
+    //editar filme
+    public void mostrarEditarFilmes(Filme filme) {
+        EditarFilme filmes = new EditarFilme(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //confirmar edicao filme
+    public void mostrarConfirmacaoEdicaoFilmes() {
+        ConfirmacaoEdicaoFilme filmes = new ConfirmacaoEdicaoFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
     //-------------------- FILMES -------------------
+
+
+
+
 
     //-------------------- SALAS ------------------
 
@@ -127,6 +157,10 @@ public class AppWindow extends JFrame {
     }
     //-------------------- SALAS ------------------
 
+
+
+
+
     public void mostrarPaginaPrincipalProdutosBarAdmin() {
         PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
         trocarPainel(produtos.getMainPanel());
@@ -136,6 +170,29 @@ public class AppWindow extends JFrame {
     public void mostrarPaginaPrincipalSessoesAdmin() {
         Criarsessao criarSessao = new Criarsessao(this);
         setContentPane(criarSessao.getMainPanel());
+        revalidate();
+        repaint();
+    }
+
+    //-------------------- BAR ------------------
+    public void mostrarPaginaPrincipalBar() {
+        PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
+        setContentPane(paginaPrincipalProdutosBarAdmin.getMainPanel());
+        revalidate();
+        repaint();
+    }
+
+    public void mostrarPaginaConfirmacaoAdicaoProduto() {
+        ConfirmacaoAdicaoProduto adicionarProdutoAdmin = new ConfirmacaoAdicaoProduto(this);
+        setContentPane(adicionarProdutoAdmin.getMainPanel());
+        revalidate();
+        repaint();
+    }
+
+
+    public void mostrarPaginaAdicionarProduto() {
+        AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
+        setContentPane(adicionarProdutoAdmin.getMainPanel());
         revalidate();
         repaint();
     }

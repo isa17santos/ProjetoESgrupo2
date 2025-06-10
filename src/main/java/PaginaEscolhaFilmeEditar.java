@@ -1,5 +1,4 @@
 import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
@@ -7,19 +6,19 @@ import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditarSalaSelecao {
+public class PaginaEscolhaFilmeEditar {
 
     private JPanel mainPanel = new JPanel();
     private JLabel logoLabel = new JLabel();
     private JLabel voltaLabel = new JLabel();
     private JLabel adminLabel = new JLabel("Admin");
-    private JLabel salasLabel = new JLabel("Salas - Editar");
-    private JComboBox <Object> salasComboBox = new JComboBox<>();
+    private JLabel filmesLabel = new JLabel("Filme - Editar");
+    private JComboBox <Object> filmesComboBox = new JComboBox<>();
     private JButton editarButton = new JButton("Editar");
-    private BaseDados bd = BaseDados.getInstance();
 
     private final AppWindow app;
 
@@ -36,12 +35,38 @@ public class EditarSalaSelecao {
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     // Construtor
-    public EditarSalaSelecao(AppWindow app) {
+    public PaginaEscolhaFilmeEditar(AppWindow app) {
         this.app = app;
         configurarComponentes();
     }
 
     private void configurarComponentes() {
+        // Dados dos filmes
+        List<Sessao> sessoes = BaseDados.getInstance().getSessoes();
+        for(Sessao sessao : sessoes) {
+            sessao.getFilme().setComSessao(true);
+        }
+
+        List<Filme> filmes = BaseDados.getInstance().getFilmes();
+        List<Filme> filmesSemSessao = new ArrayList<>();
+
+        //apenas filmes que nao estejam em sessoes
+
+        for (Filme filme : filmes) {
+            if(filme.isComSessao()==false){
+                filmesSemSessao.add(filme);
+            }
+        }
+
+        //------ evita que aparecam nomes de filmes repetidos
+        List<String> opcoesFilmes = new ArrayList<>();
+        for(Filme filme : filmesSemSessao){
+            if(!opcoesFilmes.contains(filme.getNome())){
+                opcoesFilmes.add(filme.getNome());
+            }
+        }
+
+
         // Página principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
@@ -64,48 +89,20 @@ public class EditarSalaSelecao {
         adminLabel.setOpaque(true);
 
         // Salas label
-        salasLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        salasLabel.setForeground(corFundoLabel);
-        salasLabel.setBackground(corFundo);
-        salasLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
-        salasLabel.setOpaque(true);
+        filmesLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        filmesLabel.setForeground(corFundoLabel);
+        filmesLabel.setBackground(corFundo);
+        filmesLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        filmesLabel.setOpaque(true);
 
         // ComboBox de Salas
-
-        // Dados das salas
-        List<Sala> salas = bd.getSalas();
-        List<Sessao> sessoes = bd.getSessoes();
-        List<Sala> salasSemBilhetes = new ArrayList<>();
-
-        sessoes.get(0).venderBilhete();     // Simula a venda de um bilhete para testar a lógica
-        sessoes.get(0).getBilhetesVendidos();
-
-        // Filtrar salas que não têm bilhetes associados
-        for (Sala sala : salas) {
-            boolean temBilhetes = false;
-            for (Sessao sessao : sessoes) {
-                if (sessao.getSala().equals(sala) && sessao.getBilhetesVendidos() > 0) {
-                    temBilhetes = true;
-                    break;
-                }
-            }
-            if (!temBilhetes) {
-                salasSemBilhetes.add(sala);
-            }
-        }
-        // Criar array de strings com as designações das salas filtradas
-        String[] opcoesSalas = salasSemBilhetes.stream()
-                .map(Sala::getDesignacao)
-                .toArray(String[]::new);
-
-        salasComboBox = new RoundedComboBox<>(opcoesSalas, 20);
+        filmesComboBox = new RoundedComboBox<>(opcoesFilmes.toArray(new String[0]), 20);
         // Não selecionar nenhum item no início → mostra placeholder
-        salasComboBox.setSelectedItem(null);
-        salasComboBox.setMaximumRowCount(5);                    // Show scroll if more than 5
-        salasComboBox.setUI(new BasicComboBoxUI() {
+        filmesComboBox.setSelectedItem(null);
+        filmesComboBox.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
-                BasicComboPopup popup = new BasicComboPopup(salasComboBox) {
+                BasicComboPopup popup = new BasicComboPopup(filmesComboBox) {
                     @Override
                     public void show() {
                         // Tira a borda preta
@@ -132,7 +129,7 @@ public class EditarSalaSelecao {
 
             @Override
             protected JButton createArrowButton() {
-                return new JButton(new ArrowIcon(salasComboBox)) {{
+                return new JButton(new ArrowIcon(filmesComboBox)) {{
                     setBackground(corBotaoSetaComboBox);
                     setBorder(BorderFactory.createEmptyBorder());
                 }};
@@ -140,18 +137,19 @@ public class EditarSalaSelecao {
         });
 
         // Custom renderer com placeholder
-        salasComboBox.setRenderer(new DefaultListCellRenderer() {
+        filmesComboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 // Placeholder (quando nada está selecionado)
                 if (value == null) {
-                    label.setText("Sala a editar");
-                    label.setForeground(corFonte);
-                    salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 40));
+                    label.setText("Filme");
+                    label.setForeground(corFontePreto);
+                    filmesComboBox.setFont(new Font("Georgia", Font.PLAIN, 40));
                 } else {
                     label.setForeground(corFontePreto);
+                    filmesComboBox.setFont(new Font("Georgia", Font.PLAIN, 30));
                 }
 
                 if (index == -1) label.setBackground(corFundoComponentes);
@@ -164,10 +162,12 @@ public class EditarSalaSelecao {
             }
         });
 
-        salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 40));
-        salasComboBox.setBackground(corFundoComponentes);
-        salasComboBox.setEditable(false);
-        salasComboBox.setFocusable(false);
+        filmesComboBox.setFont(new Font("Georgia", Font.PLAIN, 40));
+        filmesComboBox.setBackground(corFundoComponentes);
+        filmesComboBox.setForeground(corFontePreto);
+        filmesComboBox.setEditable(false);
+        filmesComboBox.setFocusable(false);
+
 
         // Botão Editar
         editarButton = new RoundedButton("Editar", 20);
@@ -179,9 +179,9 @@ public class EditarSalaSelecao {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 550, y 20");
-        mainPanel.add(salasLabel, "x 400, y 120");
-        mainPanel.add(salasComboBox, "x 150, y 400, w 600, h 70");
-        mainPanel.add(editarButton, "x 800, y 400, w 350, h 70");
+        mainPanel.add(filmesLabel, "x 400, y 120");
+        mainPanel.add(filmesComboBox, "x 150, y 300, w 600, h 70");
+        mainPanel.add(editarButton, "x 800, y 300, w 350, h 70");
 
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Página Principal Admin
@@ -189,17 +189,27 @@ public class EditarSalaSelecao {
         voltaLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                app.mostrarPaginaPrincipalSalasAdmin();
+                app.mostrarPaginaPrincipalFilmesAdmin();
             }
         });
 
-        // Redirecionar para EditarSala
+        // Redirecionar para EditarFilme
         editarButton.addActionListener(e -> {
-            Object selectedSala = salasComboBox.getSelectedItem();
-            if (selectedSala != null) {
-                app.mostrarEditarSala((String) selectedSala);
+            Object selectedFilme = filmesComboBox.getSelectedItem();
+            System.out.println(selectedFilme);
+            Filme filmeSelecionado = null;
+            for(Filme filme : filmesSemSessao){
+                if(filme.getNome().equals(selectedFilme))
+                {
+                    filmeSelecionado = filme;
+                    break;
+                }
+            }
+
+            if (selectedFilme != null) {
+                app.mostrarEditarFilmes(filmeSelecionado);
             } else {
-                JOptionPane.showMessageDialog(mainPanel, "Por favor, selecione uma sala para editar.", "Seleção de Sala", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(mainPanel, "Por favor, selecione um filme para editar.", "Seleção do Filme", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
