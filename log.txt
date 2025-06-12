@@ -1,0 +1,115 @@
+Error on line 4 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:4: error: package org.jdatepicker.impl does not exist
+import org.jdatepicker.impl.JDatePanelImpl;
+                           ^
+Error on line 5 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:5: error: package org.jdatepicker.impl does not exist
+import org.jdatepicker.impl.JDatePickerImpl;
+                           ^
+Error on line 6 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:6: error: package org.jdatepicker.impl does not exist
+import org.jdatepicker.impl.UtilDateModel;
+                           ^
+Error on line 27 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:27: error: cannot find symbol
+    private JDatePickerImpl datePicker;
+            ^
+  symbol:   class JDatePickerImpl
+  location: class Bilheteira
+Error on line 24 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:24: error: cannot find symbol
+    private JDatePickerImpl datePicker;
+            ^
+  symbol:   class JDatePickerImpl
+  location: class Criarsessao
+Error on line 11 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:11: error: package org.jdatepicker.impl does not exist
+import org.jdatepicker.impl.*;
+^
+Error on line 8 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:8: error: package com.formdev.flatlaf does not exist
+import com.formdev.flatlaf.FlatLightLaf;
+                          ^
+Error on line 12 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:12: error: cannot find symbol
+    private JDatePickerImpl datePicker;
+            ^
+  symbol:   class JDatePickerImpl
+  location: class CriarSessão
+Error on line 7 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:7: error: package org.jdatepicker.impl does not exist
+import org.jdatepicker.impl.*;
+^
+Error on line 185 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:185: error: cannot find symbol
+        UtilDateModel model = new UtilDateModel();
+        ^
+  symbol:   class UtilDateModel
+  location: class Bilheteira
+Error on line 185 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:185: error: cannot find symbol
+        UtilDateModel model = new UtilDateModel();
+                                  ^
+  symbol:   class UtilDateModel
+  location: class Bilheteira
+Error on line 195 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:195: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        ^
+  symbol:   class JDatePanelImpl
+  location: class Bilheteira
+Error on line 195 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:195: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+                                       ^
+  symbol:   class JDatePanelImpl
+  location: class Bilheteira
+Error on line 198 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Bilheteira.java:198: error: cannot find symbol
+        datePicker = new JDatePickerImpl(datePanel, new JFormattedTextField.AbstractFormatter() {
+                         ^
+  symbol:   class JDatePickerImpl
+  location: class Bilheteira
+Error on line 91 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:91: error: cannot find symbol
+        UtilDateModel dateModel = new UtilDateModel();
+        ^
+  symbol:   class UtilDateModel
+  location: class Criarsessao
+Error on line 91 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:91: error: cannot find symbol
+        UtilDateModel dateModel = new UtilDateModel();
+                                      ^
+  symbol:   class UtilDateModel
+  location: class Criarsessao
+Error on line 97 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:97: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+        ^
+  symbol:   class JDatePanelImpl
+  location: class Criarsessao
+Error on line 97 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:97: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+                                       ^
+  symbol:   class JDatePanelImpl
+  location: class Criarsessao
+Error on line 98 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\Criarsessao.java:98: error: cannot find symbol
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+                         ^
+  symbol:   class JDatePickerImpl
+  location: class Criarsessao
+Error on line 50 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:50: error: cannot find symbol
+        UtilDateModel dateModel = new UtilDateModel();
+        ^
+  symbol:   class UtilDateModel
+  location: class CriarSessão
+Error on line 50 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:50: error: cannot find symbol
+        UtilDateModel dateModel = new UtilDateModel();
+                                      ^
+  symbol:   class UtilDateModel
+  location: class CriarSessão
+Error on line 56 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:56: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+        ^
+  symbol:   class JDatePanelImpl
+  location: class CriarSessão
+Error on line 56 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:56: error: cannot find symbol
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+                                       ^
+  symbol:   class JDatePanelImpl
+  location: class CriarSessão
+Error on line 57 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:57: error: cannot find symbol
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+                         ^
+  symbol:   class JDatePickerImpl
+  location: class CriarSessão
+Error on line 109 in C:\Users\isa25\Desktop\ES\PROJETO\ENTREGA 2\ProjetoESgrupo2\src\main\java\CriarSessão.java:109: error: cannot find symbol
+            UIManager.setLookAndFeel(new FlatLightLaf());
+                                         ^
+  symbol:   class FlatLightLaf
+  location: class CriarSessão
+Error on line -1 in Note: Some input files use unchecked or unsafe operations.
+Error on line -1 in Note: Recompile with -Xlint:unchecked for details.

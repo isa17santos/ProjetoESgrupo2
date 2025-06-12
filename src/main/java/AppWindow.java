@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.List;
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -54,6 +55,19 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
+
+    //escolha sessao bilheteira
+    public void mostrarPaginaSessoes(Filme filme) {
+        PaginaEscolhaSessao filmes = new PaginaEscolhaSessao(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha sessao com sala especifica bilheteira
+    public void mostrarPaginaSessoesSalaEscolhida(Filme filme, List<Sala> sala) {
+        PaginaEscolhaSessaoComSala filmes = new PaginaEscolhaSessaoComSala(this, filme, sala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
     //-------------------------- BILHETEIRA -----------------------------
 
     public void mostrarBar() {
@@ -71,8 +85,6 @@ public class AppWindow extends JFrame {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
-
-
 
 
     //-------------------- FILMES ------------------
@@ -113,9 +125,6 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------- FILMES -------------------
-
-
-
 
 
     //-------------------- SALAS ------------------
@@ -169,32 +178,24 @@ public class AppWindow extends JFrame {
     //-------------------- SESSÃO ------------------
     public void mostrarPaginaPrincipalSessoesAdmin() {
         Criarsessao criarSessao = new Criarsessao(this);
-        setContentPane(criarSessao.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(criarSessao.getMainPanel());
     }
 
     //-------------------- BAR ------------------
     public void mostrarPaginaPrincipalBar() {
         PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
-        setContentPane(paginaPrincipalProdutosBarAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(paginaPrincipalProdutosBarAdmin.getMainPanel());
     }
 
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
         ConfirmacaoAdicaoProduto adicionarProdutoAdmin = new ConfirmacaoAdicaoProduto(this);
-        setContentPane(adicionarProdutoAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(adicionarProdutoAdmin.getMainPanel());
     }
 
 
     public void mostrarPaginaAdicionarProduto() {
         AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
-        setContentPane(adicionarProdutoAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(adicionarProdutoAdmin.getMainPanel());
     }
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 

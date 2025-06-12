@@ -354,6 +354,23 @@ public class BaseDados implements Serializable {
         );
     }
 
+    public Set<String> getTiposSalaDisponiveisParaFilme2D(Filme filmeSelecionado) {
+        Set<String> tiposSala = new HashSet<>();
+
+        for (Sessao sessao : sessoes) {
+            Filme f = sessao.getFilme();
+            Sala s = sessao.getSala();
+
+            // Verifica se é o mesmo filme e se é 2D
+            if (f.getNome().equalsIgnoreCase(filmeSelecionado.getNome()) && f.getIdiomas().equals(filmeSelecionado.getIdiomas()) && f.getTipos().equalsIgnoreCase("2D")) {
+                tiposSala.add(s.getTipo()); // Ex: "Normal", "VIP"
+            }
+        }
+
+        return tiposSala;
+    }
+
+
     // ------------------- ESTATÍSTICAS -------------------
 
     // Fetches ticket sales per day (example: count of Sessao per date)
