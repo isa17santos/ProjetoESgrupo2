@@ -550,7 +550,7 @@ public class EscolhaFilmeBilheteira {
 
                     Filme finalFilme = filmeFiltrado;
                     List<Sala> finalSalas = salasFiltradas;
-                    SwingUtilities.invokeLater(() -> app.mostrarPaginaSessoesSalaEscolhida(finalFilme, finalSalas));
+                    SwingUtilities.invokeLater(() -> app.mostrarPaginaSessoesSalaEscolhida(finalFilme, salaSelecionada));
                 }
             }
         } else {

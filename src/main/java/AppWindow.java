@@ -63,7 +63,7 @@ public class AppWindow extends JFrame {
     }
 
     //escolha sessao com sala especifica bilheteira
-    public void mostrarPaginaSessoesSalaEscolhida(Filme filme, List<Sala> sala) {
+    public void mostrarPaginaSessoesSalaEscolhida(Filme filme, String sala) {
         PaginaEscolhaSessaoComSala filmes = new PaginaEscolhaSessaoComSala(this, filme, sala);
         trocarPainel(filmes.getMainPanel());
     }

@@ -51,7 +51,7 @@ public class PaginaEscolhaSessao {
 
     private void configurarComponentes(Filme filme) {
 
-        List<Sessao> sessoes = new ArrayList<>();  // lista de todos os filmes como mesmo nome de 'filme'
+        List<Sessao> sessoes = new ArrayList<>();
 
         for(Sessao s : bd.getSessoes()) {
             // vai procurar todos os filmes com aquele nome
@@ -166,7 +166,7 @@ public class PaginaEscolhaSessao {
         mainPanel.add(nomeFilmeLabel, "x 450, y 290");
         mainPanel.add(duracaoLabel, "x 455, y 364");
         mainPanel.add(tipoFilmeLabel, "x 695, y 364");
-        mainPanel.add(tabela, "x 455, y 415, w 755, h 290");
+        mainPanel.add(tabela, "x 455, y 405, w 755, h 290");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
