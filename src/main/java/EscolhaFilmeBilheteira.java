@@ -344,14 +344,14 @@ public class EscolhaFilmeBilheteira {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(bilheteiraLabel, "x 510, y 30");
-        mainPanel.add(cartaz, "x 120, y 250");
-        mainPanel.add(nomeFilmeLabel, "x 450, y 240");
-        mainPanel.add(duracaoLabel, "x 450, y 355");
-        mainPanel.add(generosLabel, "x 450, y 400");
-        mainPanel.add(idadeLabel, "x 450, y 445");
-        mainPanel.add(idiomaComboBox, "x 450, y 550");
-        mainPanel.add(tipoComboBox, "x 750, y 550");
-        mainPanel.add(salaComboBox, "x 1000, y 550");
+        mainPanel.add(cartaz, "x 120, y 300");
+        mainPanel.add(nomeFilmeLabel, "x 450, y 290");
+        mainPanel.add(duracaoLabel, "x 450, y 405");
+        mainPanel.add(generosLabel, "x 450, y 450");
+        mainPanel.add(idadeLabel, "x 450, y 495");
+        mainPanel.add(idiomaComboBox, "x 450, y 600");
+        mainPanel.add(tipoComboBox, "x 750, y 600");
+        mainPanel.add(salaComboBox, "x 1000, y 600");
 
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Pagina Principal Admin
