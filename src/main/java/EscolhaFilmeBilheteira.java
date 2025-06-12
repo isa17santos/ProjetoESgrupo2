@@ -56,6 +56,20 @@ public class EscolhaFilmeBilheteira {
             }
         }
 
+        List<Sessao> sessoesDoFilme = new ArrayList<>();
+
+        for (Sessao sessao : bd.getSessoes())
+        {
+            for (Filme f: filmeSelecionado)
+            {
+                if(sessao.getFilme().equals(f))
+                {
+                    sessoesDoFilme.add(sessao);
+                }
+            }
+
+        }
+
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
@@ -131,8 +145,10 @@ public class EscolhaFilmeBilheteira {
         // -------------------- ComboBox idioma --------------------------
         List<Idioma> opcoesIdioma = new ArrayList<>();
         for (Filme f : filmeSelecionado) {
-            if (!opcoesIdioma.contains(f.getIdiomas())) {
-                opcoesIdioma.add(f.getIdiomas());
+            for (Sessao s: sessoesDoFilme) {
+                if (f.getIdiomas().equals(s.getFilme().getIdiomas()) && !opcoesIdioma.contains(f.getIdiomas())) {
+                    opcoesIdioma.add(f.getIdiomas());
+                }
             }
         }
 
@@ -255,8 +271,11 @@ public class EscolhaFilmeBilheteira {
         // -------------------- ComboBox tipo --------------------------
         List<String> opcoesTipo = new ArrayList<>();
         for (Filme f : filmeSelecionado) {
-            if (!opcoesTipo.contains(f.getTipos())) {
-                opcoesTipo.add(f.getTipos());
+            for(Sessao s: sessoesDoFilme)
+            {
+                if (f.getTipos().equalsIgnoreCase(s.getFilme().getTipos()) && !opcoesTipo.contains(f.getTipos())) {
+                    opcoesTipo.add(f.getTipos());
+                }
             }
         }
 
