@@ -40,6 +40,7 @@ public class PaginaPrincipalProdutosBarAdmin {
         ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
         Image cartImg = cartIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
         voltaLabel.setIcon(new ImageIcon(cartImg));
+        voltaLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // --------------------- ADMIN LABEL -----------------------
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -60,12 +61,14 @@ public class PaginaPrincipalProdutosBarAdmin {
         adicionarProduto.setFont(new Font("Georgia", Font.PLAIN, 35));
         adicionarProduto.setBackground(corFundoComponentes);
         adicionarProduto.setForeground(corFonte); // texto
+        adicionarProduto.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         //--------------------- EDITAR PRODUTO BUTTON -----------------------
         editarProduto = new RoundedButton("Editar", 20);
         editarProduto.setFont(new Font("Georgia", Font.PLAIN, 35));
         editarProduto.setBackground(corFundoComponentes);
         editarProduto.setForeground(corFonte); // texto
+        editarProduto.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
@@ -86,6 +89,8 @@ public class PaginaPrincipalProdutosBarAdmin {
         });
 
         adicionarProduto.addActionListener(e -> app.mostrarPaginaAdicionarProduto());
+
+        editarProduto.addActionListener(e -> app.mostrarPaginaEscolherProdutoEditar());
     }
     public JPanel getMainPanel() {
         return mainPanel;

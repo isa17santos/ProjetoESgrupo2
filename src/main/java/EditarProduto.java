@@ -1,3 +1,5 @@
+import net.miginfocom.swing.MigLayout;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -14,20 +16,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.LinkedList;
 
-public class AdicionarProdutoAdmin {
-    private final AppWindow app;
+public class EditarProduto {
     private JPanel mainPanel;
-    private JLabel logoLabel;
+    private JLabel adminLabel;
+    private JLabel produtoEditarLabel;
     private JLabel voltaLabel;
-    private JLabel titleLabel;
-    private JLabel produtoAdicionar;
+    private JLabel logoLabel;
     private JLabel erroStockLabel;
     private JLabel erroPrecoCompra;
     private JLabel erroPrecoVenda;
 
-    private JButton adicionarButton;
     private JButton uploadButton;
     private JTextField nomeProduto;
     private JComboBox comboBoxTipo;
@@ -35,6 +34,10 @@ public class AdicionarProdutoAdmin {
     private JTextField stockField;
     private JTextField precoCompraField;
     private JTextField precoVendaField;
+    private JButton editarButton;
+
+
+    private final AppWindow app;
 
     private BaseDados bd;
     private BufferedImage imagemCarregada = null;
@@ -44,7 +47,7 @@ public class AdicionarProdutoAdmin {
     private final String placeholderPrecoCompra = "Preço da compra (€) por unidade";
     private final String placeholderPrecoVenda = "Preço de venda (€) por unidade";
 
-
+    private Produto produtoEditar;
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundoLabel = Color.decode("#FBA720");
@@ -57,14 +60,16 @@ public class AdicionarProdutoAdmin {
     private final Color corHoverComboBox = Color.decode("#FCD373");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
-    public AdicionarProdutoAdmin(AppWindow app) {
+    public EditarProduto(AppWindow app, Produto produto) {
         this.app = app;
+        this.produtoEditar = produto;
         configurarComponentes();
+
     }
 
-    private void configurarComponentes(){
-        // pagina principal
-        mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
+    public void configurarComponentes() {
+        // Página principal
+        mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
 
         // Logo
@@ -72,29 +77,25 @@ public class AdicionarProdutoAdmin {
         Image logoImg = logoIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
 
-
-        // seta andar para atras
+        // Seta andar para trás
         ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
         Image cartImg = cartIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
         voltaLabel.setIcon(new ImageIcon(cartImg));
+        voltaLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Admin label
+        adminLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        adminLabel.setForeground(corFundoLabel);
+        adminLabel.setBackground(corFundo);
+        adminLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        adminLabel.setOpaque(true);
 
-        // --------------------- ADMIN LABEL -----------------------
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setForeground(corFundoLabel);
-        titleLabel.setBackground(corFundo);
-        titleLabel.setFont(new Font("Georgia", Font.PLAIN, 80));
-        titleLabel.setOpaque(true);
-        // --------------------- ADMIN LABEL -----------------------
-
-        // --------------------- ADICIONAR PRODUTO LABEL -----------------------
-        produtoAdicionar.setHorizontalAlignment(SwingConstants.CENTER);
-        produtoAdicionar.setForeground(corFundoLabel);
-        produtoAdicionar.setBackground(corFundo);
-        produtoAdicionar.setFont(new Font("Georgia", Font.PLAIN, 80));
-        produtoAdicionar.setOpaque(true);
-
-        // --------------------- ADICIONAR PRODUTO LABEL -----------------------
+        // produto label
+        produtoEditarLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        produtoEditarLabel.setForeground(corFundoLabel);
+        produtoEditarLabel.setBackground(corFundo);
+        produtoEditarLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        produtoEditarLabel.setOpaque(true);
 
         //---------------------------- BOTAO UPLOAD ------------------------------
         uploadButton = new JButton("Carregar Foto");
@@ -104,8 +105,24 @@ public class AdicionarProdutoAdmin {
         uploadButton.setFocusPainted(false);
         uploadButton.setContentAreaFilled(true);
         uploadButton.setBorderPainted(false);
-        uploadButton.setOpaque(true);
+        uploadButton.setOpaque(false);
         uploadButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        File selectedFile = new File(produtoEditar.getFoto());
+        try {
+            BufferedImage img = ImageIO.read(selectedFile);
+
+            Image scaledImg = img.getScaledInstance(290, 420, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(scaledImg);
+            uploadButton.setIcon(icon);
+            uploadButton.setText(""); // remove texto
+            imagemCarregada = img;
+            ficheiroImagemOriginal = selectedFile;  // ficheiro completo com caminho
+            nomeFicheiroImagem = selectedFile.getName(); // nome simples
+        }  catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar imagem: " + ex.getMessage());
+        }
+
 
         uploadButton.addActionListener(new ActionListener() {
             @Override
@@ -145,7 +162,7 @@ public class AdicionarProdutoAdmin {
         nomeProduto.setHorizontalAlignment(SwingConstants.CENTER);
         nomeProduto.setBackground(corFundoComponentes);
         nomeProduto.setFont(new Font("Georgia", Font.PLAIN, 35));
-        nomeProduto.setText("Nome produto");
+        nomeProduto.setText(produtoEditar.getNome());
         nomeProduto.setForeground(corFonte); // texto
         nomeProduto.addFocusListener(new FocusAdapter() {
             @Override
@@ -170,8 +187,13 @@ public class AdicionarProdutoAdmin {
         comboBoxTipo = new RoundedComboBox<>(opcoes, 20);
         comboBoxTipo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Não selecionar nenhum item no início → mostra placeholder
-        comboBoxTipo.setSelectedItem(null);
+        if(produtoEditar.getTipoProduto() == TipoProduto.BEBIDA){
+            comboBoxTipo.setSelectedItem(0);
+        }else if(produtoEditar.getTipoProduto() == TipoProduto.APERITIVO){
+            comboBoxTipo.setSelectedItem(1);
+        }else if(produtoEditar.getTipoProduto() == TipoProduto.PACK){
+            comboBoxTipo.setSelectedItem(2);
+        }
 
         comboBoxTipo.setUI(new BasicComboBoxUI() {
             @Override
@@ -216,14 +238,8 @@ public class AdicionarProdutoAdmin {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                // Placeholder (quando nada está selecionado)
-                if (value == null) {
-                    label.setText("Tipo");
-                    label.setForeground(corFonte);
-                    comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
-                } else {
-                    label.setForeground(corFontePreto);
-                }
+                label.setForeground(corFontePreto);
+
 
                 if (index == -1) label.setBackground(corFundoComponentes);
                 else if (isSelected) label.setBackground(corHoverComboBox);
@@ -235,7 +251,7 @@ public class AdicionarProdutoAdmin {
             }
         });
 
-        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 35));
         comboBoxTipo.setForeground(corFontePreto);
         comboBoxTipo.setBackground(corFundoComponentes);
 
@@ -246,8 +262,10 @@ public class AdicionarProdutoAdmin {
         String[] opcoesEstado = {"Ativo", "Inativo"};
         comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
 
-        // Não selecionar nenhum item no início → mostra placeholder
-        comboBoxEstado.setSelectedItem(null);
+        if(produtoEditar.getEstado() == Estado.ATIVO){
+            comboBoxEstado.setSelectedItem(0);
+        }else comboBoxEstado.setSelectedItem(1);
+
         comboBoxEstado.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         comboBoxEstado.setUI(new BasicComboBoxUI() {
@@ -293,14 +311,7 @@ public class AdicionarProdutoAdmin {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                // Placeholder (quando nada está selecionado)
-                if (value == null) {
-                    label.setText("Estado");
-                    label.setForeground(corFonte);
-                    comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 35));
-                } else {
-                    label.setForeground(corFontePreto);
-                }
+                label.setForeground(corFontePreto);
 
                 if (index == -1) label.setBackground(corFundoComponentes);
                 else if (isSelected) label.setBackground(corHoverComboBox);
@@ -322,8 +333,8 @@ public class AdicionarProdutoAdmin {
 
         // ------------ CAIXA TEXTO 'stock' -----------------
         stockField = new RoundedTextField(1,20);
-        stockField.setText(placeholder);
-        stockField.setForeground(corFonte);
+        stockField.setText(Integer.toString(produtoEditar.getStock()));
+        stockField.setForeground(corFontePreto);
         stockField.setHorizontalAlignment(SwingConstants.CENTER);
         stockField.setBackground(corFundoComponentes);
         stockField.setFont(new Font("Georgia", Font.PLAIN, 35));
@@ -381,8 +392,8 @@ public class AdicionarProdutoAdmin {
 
         // ------------ CAIXA TEXTO 'preco de compra' -----------------
         precoCompraField = new RoundedTextField(1,20);
-        precoCompraField.setText(placeholderPrecoCompra);
-        precoCompraField.setForeground(corFonte);
+        precoCompraField.setText( String.format("%.2f €", produtoEditar.getPrecoCompraUnidade()).replace(".", ","));
+        precoCompraField.setForeground(corFontePreto);
         precoCompraField.setHorizontalAlignment(SwingConstants.CENTER);
         precoCompraField.setBackground(corFundoComponentes);
         precoCompraField.setFont(new Font("Georgia", Font.PLAIN, 35));
@@ -440,8 +451,9 @@ public class AdicionarProdutoAdmin {
 
         // ------------ CAIXA TEXTO 'preco de venda' -----------------
         precoVendaField = new RoundedTextField(1,20);
-        precoVendaField.setText(placeholderPrecoVenda);
-        precoVendaField.setForeground(corFonte);
+
+        precoVendaField.setText( String.format("%.2f €", produtoEditar.getPrecoVendaUnidade()).replace(".", ","));
+        precoVendaField.setForeground(corFontePreto);
         precoVendaField.setHorizontalAlignment(SwingConstants.CENTER);
         precoVendaField.setBackground(corFundoComponentes);
         precoVendaField.setFont(new Font("Georgia", Font.PLAIN, 35));
@@ -498,13 +510,13 @@ public class AdicionarProdutoAdmin {
         // ------------ CAIXA TEXTO 'preco de venda' -----------------
 
         //----------------- BOTAO ADICIONAR -------------
-        adicionarButton = new RoundedButton("Adicionar", 20);
-        adicionarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
-        adicionarButton.setBackground(corFundoLabel);
-        adicionarButton.setForeground(corFontePreto); // texto
-        adicionarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editarButton = new RoundedButton("Editar", 20);
+        editarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
+        editarButton.setBackground(corFundoLabel);
+        editarButton.setForeground(corFontePreto); // texto
+        editarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        adicionarButton.addActionListener(new ActionListener() {
+        editarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Validação dos campos obrigatórios
@@ -521,7 +533,7 @@ public class AdicionarProdutoAdmin {
                 }
 
                 try {
-                    //criar novo produto
+                    //editar  produto
                     String nome = nomeProduto.getText().trim();
                     int stock = Integer.parseInt(stockField.getText().trim());
                     String foto = nomeFicheiroImagem;
@@ -549,21 +561,21 @@ public class AdicionarProdutoAdmin {
 
                     bd = BaseDados.getInstance();
 
-                    // -------- Verificar se o produto já existe na base de dados ----------
+                    // -------- produto a editar ----------
 
-                    Integer lastId = bd.getLastIdProduto() + 1;
-                    Produto novoProduto = new Produto(lastId, foto, nome, tipoProduto, estado, stock, precoCompra, precoVenda);
+
+                    System.out.println("produtoEditar: "+produtoEditar.toString());
 
 
                     boolean jaExiste = false;
                     for (Produto produto : bd.getProdutos()) {
-                        if (NormalizarTexto.normalizar(produto.getNome()).equals(NormalizarTexto.normalizar(novoProduto.getNome())) &&
-                                produto.getStock() == novoProduto.getStock() &&
-                                produto.getFoto().equals(novoProduto.getFoto()) &&
-                                produto.getTipoProduto().equals(novoProduto.getTipoProduto()) &&
-                                produto.getEstado().equals(novoProduto.getEstado()) &&
-                                Float.compare(produto.getPrecoCompraUnidade(), novoProduto.getPrecoCompraUnidade()) == 0 &&
-                                Float.compare(produto.getPrecoVendaUnidade(), novoProduto.getPrecoVendaUnidade()) == 0
+                        if (NormalizarTexto.normalizar(produto.getNome()).equals(NormalizarTexto.normalizar(nome)) &&
+                                produto.getStock() == stock &&
+                                produto.getFoto().equals(foto) &&
+                                produto.getTipoProduto().equals(tipoProduto) &&
+                                produto.getEstado().equals(estado) &&
+                                Float.compare(produto.getPrecoCompraUnidade(), precoCompra) == 0 &&
+                                Float.compare(produto.getPrecoVendaUnidade(), precoVenda) == 0
                         ) {
                             jaExiste = true;
                             break;
@@ -575,10 +587,16 @@ public class AdicionarProdutoAdmin {
                         return;
                     }
 
-                    bd.adicionarProduto(novoProduto);
+                    produtoEditar.setEstado(estado);
+                    produtoEditar.setFoto(foto);
+                    produtoEditar.setNome(nome);
+                    produtoEditar.setStock(stock);
+                    produtoEditar.setTipoProduto(tipoProduto);
+                    produtoEditar.setPrecoCompraUnidade(precoCompra);
+                    produtoEditar.setPrecoVendaUnidade(precoVenda);
 
 
-                    // ------------- Verificar se o filme já existe na base de dados ---------
+                    // ------------- Verificar se o produto já existe na base de dados ---------
 
                     bd.gravarDados();
 
@@ -622,7 +640,7 @@ public class AdicionarProdutoAdmin {
 
 
                     // Redirecionar para
-                    app.mostrarPaginaConfirmacaoAdicaoProduto();
+                    app.mostarConfirmacaoEditarProduto();
 
 
                 } catch (NumberFormatException ex) {
@@ -633,13 +651,13 @@ public class AdicionarProdutoAdmin {
                 }
             }
         });
-        //----------------- BOTAO ADICIONAR -------------
 
+        //estetica
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
-        mainPanel.add(titleLabel, "x 550, y 20");
-        mainPanel.add(produtoAdicionar, "x 350, y 100");
+        mainPanel.add(adminLabel, "x 550, y 20");
+        mainPanel.add(produtoEditarLabel, "x 350, y 130");
         mainPanel.add(uploadButton, "x 100, y 290, w 110, h 410");
         mainPanel.add(nomeProduto, "x 450, y 290, w 700, h 50");
         //combobox tipo
@@ -656,23 +674,14 @@ public class AdicionarProdutoAdmin {
         mainPanel.add(erroPrecoVenda, "x 490, y 695, w 100, h 40");
 
         //adicionar button
-        mainPanel.add(adicionarButton, "x 1100, y 205, w 70, h 30");
+        mainPanel.add(editarButton, "x 1100, y 205, w 70, h 30");
 
 
-        // ------------------- REDIRECIONAMENTOS -------------------
-        // Redirecionar para Pagina Principal Admin
-        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                app.mostrarPaginaPrincipalBar();
-            }
-        });
 
     }
-
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
+
 }

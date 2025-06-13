@@ -138,18 +138,18 @@ public class BaseDados implements Serializable {
         // -------------------------------------- criar filmes ----------------------------------
 
         //criar produtos
-        produtos.add(new Produto("cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f));
-        produtos.add(new Produto("sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
-        produtos.add(new Produto("icedTeaLimão.png","Iced tea Limão",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
-        produtos.add(new Produto("agua.png","Água",TipoProduto.BEBIDA,Estado.ATIVO,40,0.20f,0.90f));
-        produtos.add(new Produto("baldePequeno.png","Balde pequeno",TipoProduto.APERITIVO,Estado.ATIVO,40,0.20f,3.90f));
-        produtos.add(new Produto("baldeMedio.png","Balde medio",TipoProduto.APERITIVO,Estado.ATIVO,40,0.30f,5.50f));
-        produtos.add(new Produto("baldeGrande.png","Balde grande",TipoProduto.APERITIVO,Estado.ATIVO,40,0.40f,7.00f));
-        produtos.add(new Produto("nachos.png","Nachos",TipoProduto.APERITIVO,Estado.ATIVO,20,1.00f,4.00f));
-        produtos.add(new Produto("packPequeno.png","Pack pequeno",TipoProduto.PACK,Estado.ATIVO,20,6.20f,9.00f));
-        produtos.add(new Produto("packMedio.png","Pack medio",TipoProduto.PACK,Estado.ATIVO,20,6.30f,11.00f));
-        produtos.add(new Produto("packGrande.png","Pack grande",TipoProduto.PACK,Estado.ATIVO,20,6.40f,13.00f));
-        produtos.add(new Produto("packNachos.png","Pack nachos",TipoProduto.PACK,Estado.ATIVO,20,7.00f,9.00f));
+        produtos.add(new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f));
+        produtos.add(new Produto(2,"sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
+        produtos.add(new Produto(3,"icedTeaLimão.png","Iced tea Limão",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
+        produtos.add(new Produto(4,"agua.png","Água",TipoProduto.BEBIDA,Estado.ATIVO,40,0.20f,0.90f));
+        produtos.add(new Produto(5,"baldePequeno.png","Balde pequeno",TipoProduto.APERITIVO,Estado.ATIVO,40,0.20f,3.90f));
+        produtos.add(new Produto(6,"baldeMedio.png","Balde medio",TipoProduto.APERITIVO,Estado.ATIVO,40,0.30f,5.50f));
+        produtos.add(new Produto(7,"baldeGrande.png","Balde grande",TipoProduto.APERITIVO,Estado.ATIVO,40,0.40f,7.00f));
+        produtos.add(new Produto(8,"nachos.png","Nachos",TipoProduto.APERITIVO,Estado.ATIVO,20,1.00f,4.00f));
+        produtos.add(new Produto(9,"packPequeno.png","Pack pequeno",TipoProduto.PACK,Estado.ATIVO,20,6.20f,9.00f));
+        produtos.add(new Produto(10,"packMedio.png","Pack medio",TipoProduto.PACK,Estado.ATIVO,20,6.30f,11.00f));
+        produtos.add(new Produto(11,"packGrande.png","Pack grande",TipoProduto.PACK,Estado.ATIVO,20,6.40f,13.00f));
+        produtos.add(new Produto(12,"packNachos.png","Pack nachos",TipoProduto.PACK,Estado.ATIVO,20,7.00f,9.00f));
 
 
         //criar salas
@@ -324,9 +324,6 @@ public class BaseDados implements Serializable {
         return null;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
 
     public List<Sessao> getSessoes() {
         return sessoes;
@@ -558,6 +555,40 @@ public class BaseDados implements Serializable {
     public void adicionarProduto(Produto produto) {
         produtos.add(produto);
     }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public List<Produto> getProdutosPorTipo(TipoProduto tipo) {
+        List<Produto> produtosTipo = new ArrayList<>();
+
+        for(Produto produto : this.getProdutos()){
+            if(produto.getTipoProduto() == tipo){
+                produtosTipo.add(produto);
+            }
+        }
+
+        return produtosTipo;
+    }
+
+    public Produto getProdutosPorNome(String nome) {
+        Produto produtoSelecionado = null;
+        for(Produto produto : this.getProdutos()){
+            if(produto.getNome().equals(nome)){
+                produtoSelecionado = produto;
+                break;
+            }
+        }
+
+        return produtoSelecionado;
+    }
+
+    public Integer getLastIdProduto(){
+        Produto produto = produtos.get(produtos.size() - 1);
+        return produto.getIdProduto();
+    }
+
 
     // --------------------- Salas ---------------------
 

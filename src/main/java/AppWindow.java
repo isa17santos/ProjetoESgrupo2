@@ -159,13 +159,6 @@ public class AppWindow extends JFrame {
 
 
 
-
-
-    public void mostrarPaginaPrincipalProdutosBarAdmin() {
-        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
-        trocarPainel(produtos.getMainPanel());
-    }
-
     //-------------------- SESSÃO ------------------
     public void mostrarPaginaPrincipalSessoesAdmin() {
         Criarsessao criarSessao = new Criarsessao(this);
@@ -175,27 +168,42 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------- BAR ------------------
+    public void mostrarPaginaPrincipalProdutosBarAdmin() {
+        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
+        trocarPainel(produtos.getMainPanel());
+    }
+
     public void mostrarPaginaPrincipalBar() {
         PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
-        setContentPane(paginaPrincipalProdutosBarAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(paginaPrincipalProdutosBarAdmin.getMainPanel());
     }
 
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
-        ConfirmacaoAdicaoProduto adicionarProdutoAdmin = new ConfirmacaoAdicaoProduto(this);
-        setContentPane(adicionarProdutoAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
+        trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
     }
-
 
     public void mostrarPaginaAdicionarProduto() {
         AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
-        setContentPane(adicionarProdutoAdmin.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(adicionarProdutoAdmin.getMainPanel());
     }
+
+    // --- edicao produto ---
+    public void mostrarPaginaEscolherProdutoEditar() {
+        PaginaEscolherProdutoEditar paginaEscolherProdutoEditar = new PaginaEscolherProdutoEditar(this);
+        trocarPainel(paginaEscolherProdutoEditar.getMainPanel());
+    }
+
+    public void mostrarPaginaEditarProduto(Produto produto) {
+        EditarProduto editarProduto = new EditarProduto(this, produto);
+        trocarPainel(editarProduto.getMainPanel());
+    }
+
+    public void mostarConfirmacaoEditarProduto() {
+        ConfirmacaoEdicaoProduto confirmacaoEdicaoProduto = new ConfirmacaoEdicaoProduto(this);
+        trocarPainel(confirmacaoEdicaoProduto.getMainPanel());
+    }
+
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
     public static void main(String[] args) {
