@@ -37,10 +37,23 @@ public class AppWindow extends JFrame {
         trocarPainel(paginaInicial.getMainPanel());
     }
 
+    /// carrinho
     public void mostrarCarrinho() {
         Carrinho carrinho = new Carrinho(this);
         trocarPainel(carrinho.getMainPanel());
     }
+
+    public void mostrarCarrinhoPagamento(float total) {
+        CarrinhoPagamento pagamento = new CarrinhoPagamento(this, total);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+    public void mostrarConfirmacaoCarrinhoPagamento() {
+        ConfirmacaoCarrinhoPagamento pagamento = new ConfirmacaoCarrinhoPagamento(this);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+
 
     //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {

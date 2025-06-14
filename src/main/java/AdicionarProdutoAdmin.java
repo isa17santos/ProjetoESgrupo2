@@ -344,11 +344,14 @@ public class AdicionarProdutoAdmin {
                 }
             }
 
+            //validacao de stock - importante saber
             @Override
             public void focusLost(FocusEvent e) {
+
                 String textoBruto = stockField.getText().trim();
                 String textoLimpo = textoBruto.replaceAll("[^\\d.-]", "");
 
+                //texto está vazio, ou se tem um hifen ou se tem um ponto
                 if (textoLimpo.isEmpty() || textoLimpo.equals("-") || textoLimpo.equals(".")) {
                     erroStockLabel.setText("Insira um valor válido.");
                     erroStockLabel.setVisible(true);
@@ -358,6 +361,7 @@ public class AdicionarProdutoAdmin {
                 }
 
                 try {
+                    //verifica se é um valor inteiro
                     int valor = Integer.parseInt(textoLimpo);
                     if (valor <= 0) {
                         erroStockLabel.setText("Insira um valor superior a 0.");
@@ -402,6 +406,7 @@ public class AdicionarProdutoAdmin {
                 }
             }
 
+            //importante saber como funciona
             @Override
             public void focusLost(FocusEvent e) {
                 String textoBruto = precoCompraField.getText().trim();
@@ -504,6 +509,7 @@ public class AdicionarProdutoAdmin {
         adicionarButton.setForeground(corFontePreto); // texto
         adicionarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        //importante saber
         adicionarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -533,6 +539,7 @@ public class AdicionarProdutoAdmin {
                             .replace(",", ".")
                             .replaceAll("\\s+", "");
 
+                    //aqui retira o símbolo do euro e troca as virgulas por ponto
                     String precoVendaTexto = precoVendaField.getText().trim()
                             .replace("€", "")
                             .replace(",", ".")
@@ -547,11 +554,14 @@ public class AdicionarProdutoAdmin {
                         return;
                     }
 
+                    //abre a base de dados
                     bd = BaseDados.getInstance();
 
                     // -------- Verificar se o produto já existe na base de dados ----------
 
+                    //o ultimo indentificador unico, id + 1
                     Integer lastId = bd.getLastIdProduto() + 1;
+                    //cria um novo produto, mas ainda não guarda na base de dados
                     Produto novoProduto = new Produto(lastId, foto, nome, tipoProduto, estado, stock, precoCompra, precoVenda);
 
 
@@ -577,9 +587,9 @@ public class AdicionarProdutoAdmin {
 
                     bd.adicionarProduto(novoProduto);
 
+                    // ------------- Verificar se o produto já existe na base de dados ---------
 
-                    // ------------- Verificar se o filme já existe na base de dados ---------
-
+                    //no ficheiro basededados.dat
                     bd.gravarDados();
 
                     // ------ debug -----

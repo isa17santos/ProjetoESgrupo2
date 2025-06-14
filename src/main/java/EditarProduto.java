@@ -7,10 +7,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +56,7 @@ public class EditarProduto {
     private final Color corBotaoSetaComboBox = Color.decode("#F2AF14");
     private final Color corHoverComboBox = Color.decode("#FCD373");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
+
 
     public EditarProduto(AppWindow app, Produto produto) {
         this.app = app;
@@ -162,6 +160,7 @@ public class EditarProduto {
         nomeProduto.setHorizontalAlignment(SwingConstants.CENTER);
         nomeProduto.setBackground(corFundoComponentes);
         nomeProduto.setFont(new Font("Georgia", Font.PLAIN, 35));
+        //adiciona o nome do produto
         nomeProduto.setText(produtoEditar.getNome());
         nomeProduto.setForeground(corFonte); // texto
         nomeProduto.addFocusListener(new FocusAdapter() {
@@ -187,6 +186,7 @@ public class EditarProduto {
         comboBoxTipo = new RoundedComboBox<>(opcoes, 20);
         comboBoxTipo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        //adiciona o tipo de produto
         if(produtoEditar.getTipoProduto() == TipoProduto.BEBIDA){
             comboBoxTipo.setSelectedItem(0);
         }else if(produtoEditar.getTipoProduto() == TipoProduto.APERITIVO){
@@ -595,7 +595,6 @@ public class EditarProduto {
                     produtoEditar.setPrecoCompraUnidade(precoCompra);
                     produtoEditar.setPrecoVendaUnidade(precoVenda);
 
-
                     // ------------- Verificar se o produto já existe na base de dados ---------
 
                     bd.gravarDados();
@@ -676,8 +675,15 @@ public class EditarProduto {
         //adicionar button
         mainPanel.add(editarButton, "x 1100, y 205, w 70, h 30");
 
-
-
+        // ------------------- REDIRECIONAMENTOS -------------------
+        // Redirecionar para Página Principal Admin
+        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        voltaLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                app.mostrarPaginaPrincipalProdutosBarAdmin();
+            }
+        });
     }
 
     public JPanel getMainPanel() {

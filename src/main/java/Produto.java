@@ -81,8 +81,8 @@ public class Produto implements Serializable{
     public int getIdProduto(){
         return idProduto;
     }
-    //mostra na consola informação sobre os produtos
 
+    //mostra na consola informação sobre os produtos
     @Override
     public String toString() {
         return "Produto{" +

@@ -323,8 +323,9 @@ public class PaginaEscolherProdutoEditar {
             }
         });
 
-        // Redirecionar para EditarFilme
+        // Redirecionar para Editar
         editarButton.addActionListener(e -> {
+            //vai buscar o produto pelo nome na base de dados
             String selectedProduto = produtosComboBox.getSelectedItem().toString();
             Produto produto = BaseDados.getInstance().getProdutosPorNome(selectedProduto.toString());
 
