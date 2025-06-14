@@ -29,6 +29,8 @@ public class PaginaEscolhaSessaoComSala {
 
     private Filme filme;
 
+    private String tipoSala = "";
+
 
     private BaseDados bd = BaseDados.getInstance();
 
@@ -48,6 +50,7 @@ public class PaginaEscolhaSessaoComSala {
     public PaginaEscolhaSessaoComSala(AppWindow app, Filme filme, String tipoSala) {
         this.app = app;
         this.filme = filme;
+        this.tipoSala = tipoSala;
         configurarComponentes(filme, tipoSala);
     }
 
@@ -266,7 +269,14 @@ public class PaginaEscolhaSessaoComSala {
                 botao.setHorizontalAlignment(SwingConstants.CENTER);
                 botao.setVerticalAlignment(SwingConstants.CENTER);
 
-                botao.addActionListener(e -> app.mostrarEscolherLugar(sessao));
+
+                if(tipoSala.equalsIgnoreCase("VIP"))
+                {
+                    botao.addActionListener(e -> app.mostrarEscolherLugarSalaVip(sessao));
+                }
+                else{
+                    botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, true));
+                }
 
                 gbc.gridx = col++;
                 horariosPanel.add(botao, gbc);

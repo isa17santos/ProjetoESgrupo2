@@ -68,9 +68,15 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
-    //escolha sessao com sala especifica bilheteira
-    public void mostrarEscolherLugar(Sessao sessao) {
-        EscolherLugar filmes = new EscolherLugar(this, sessao);
+    //escolha lugar bilheteira
+    public void mostrarEscolherLugar(Sessao sessao, boolean comSala) {
+        EscolherLugar filmes = new EscolherLugar(this, sessao, comSala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha lugar sala vip bilheteira
+    public void mostrarEscolherLugarSalaVip(Sessao sessao) {
+        EscolherLugarSalaVip filmes = new EscolherLugarSalaVip(this, sessao);
         trocarPainel(filmes.getMainPanel());
     }
 

@@ -233,7 +233,7 @@ public class PaginaEscolhaSessao {
                 botao.setHorizontalAlignment(SwingConstants.CENTER);
                 botao.setVerticalAlignment(SwingConstants.CENTER);
 
-                botao.addActionListener(e -> app.mostrarEscolherLugar(sessao));
+                botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, false));
 
                 gbc.gridx = col++;
                 horariosPanel.add(botao, gbc);
