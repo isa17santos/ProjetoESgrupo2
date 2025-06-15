@@ -1,4 +1,8 @@
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Sessao implements Serializable{
     private Filme filme;
@@ -10,6 +14,9 @@ public class Sessao implements Serializable{
     private int hora;
     private int minuto;
     private int bilhetesVendidos;
+
+    private List<Integer> lugaresOcupados;
+
     private static final long serialVersionUID = 1L;
 
     public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto) {
@@ -22,6 +29,8 @@ public class Sessao implements Serializable{
         this.hora = hora;
         this.minuto = minuto;
         this.bilhetesVendidos = 0; // Inicializa bilhetes vendidos como 0
+
+        this.lugaresOcupados = new ArrayList<>();
     }
 
     public Filme getFilme() {
@@ -67,4 +76,30 @@ public class Sessao implements Serializable{
     public void venderBilhete() {
         this.bilhetesVendidos++;
     }
+
+    public List<Integer> getLugaresOcupados() {
+        if (lugaresOcupados == null) {
+            lugaresOcupados = new ArrayList<>();
+        }
+        return lugaresOcupados;
+    }
+
+    public void ocuparLugar(int lugar) {
+        if (!getLugaresOcupados().contains(lugar)) {
+            getLugaresOcupados().add(lugar);
+        }
+    }
+
+    public boolean isLugarOcupado(int lugar) {
+        return getLugaresOcupados().contains(lugar);
+    }
+
+    public void desocuparLugar(int lugar) {
+        getLugaresOcupados().remove((Integer) lugar);
+    }
+
+    public void setLugaresOcupados(List<Integer> lugares) {
+        this.lugaresOcupados = lugares;
+    }
+
 }

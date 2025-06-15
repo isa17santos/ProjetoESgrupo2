@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.List;
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -67,6 +68,31 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
+
+    //escolha sessao bilheteira
+    public void mostrarPaginaSessoes(Filme filme) {
+        PaginaEscolhaSessao filmes = new PaginaEscolhaSessao(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha sessao com sala especifica bilheteira
+    public void mostrarPaginaSessoesSalaEscolhida(Filme filme, String sala) {
+        PaginaEscolhaSessaoComSala filmes = new PaginaEscolhaSessaoComSala(this, filme, sala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha lugar bilheteira
+    public void mostrarEscolherLugar(Sessao sessao, boolean comSala) {
+        EscolherLugar filmes = new EscolherLugar(this, sessao, comSala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha lugar sala vip bilheteira
+    public void mostrarEscolherLugarSalaVip(Sessao sessao) {
+        EscolherLugarSalaVip filmes = new EscolherLugarSalaVip(this, sessao);
+        trocarPainel(filmes.getMainPanel());
+    }
+
     //-------------------------- BILHETEIRA -----------------------------
 
     public void mostrarBar() {
@@ -84,8 +110,6 @@ public class AppWindow extends JFrame {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
-
-
 
 
     //-------------------- FILMES ------------------
@@ -126,9 +150,6 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------- FILMES -------------------
-
-
-
 
 
     //-------------------- SALAS ------------------
@@ -175,9 +196,7 @@ public class AppWindow extends JFrame {
     //-------------------- SESSÃO ------------------
     public void mostrarPaginaPrincipalSessoesAdmin() {
         Criarsessao criarSessao = new Criarsessao(this);
-        setContentPane(criarSessao.getMainPanel());
-        revalidate();
-        repaint();
+        trocarPainel(criarSessao.getMainPanel());
     }
 
     //-------------------- BAR ------------------
@@ -194,6 +213,7 @@ public class AppWindow extends JFrame {
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
         ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
         trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
+
     }
 
     public void mostrarPaginaAdicionarProduto() {
@@ -215,6 +235,7 @@ public class AppWindow extends JFrame {
     public void mostarConfirmacaoEditarProduto() {
         ConfirmacaoEdicaoProduto confirmacaoEdicaoProduto = new ConfirmacaoEdicaoProduto(this);
         trocarPainel(confirmacaoEdicaoProduto.getMainPanel());
+
     }
 
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
