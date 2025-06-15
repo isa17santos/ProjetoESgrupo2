@@ -10,6 +10,7 @@ public class Bar {
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
+    private final Color corFundoLabel = Color.decode("#FBA720");
     private final Color corFundo = Color.decode("#F9E6BB");
     private final Color corFonte = Color.decode("#6B3838");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
@@ -44,8 +45,12 @@ public class Bar {
 
         // Título
         JLabel tituloLabel = new JLabel("Bar");
-        tituloLabel.setFont(new Font("Georgia", Font.BOLD, 50));
+        tituloLabel.setFont(new Font("Georgia", Font.PLAIN, 70));
         tituloLabel.setForeground(corFonte);
+        tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        tituloLabel.setForeground(corFundoLabel);
+        tituloLabel.setBackground(corFundo);
+        tituloLabel.setOpaque(true);
 
         // Botões
         JButton btnBebidas = new RoundedButton("Bebidas", 20);

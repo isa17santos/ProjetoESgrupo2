@@ -38,10 +38,23 @@ public class AppWindow extends JFrame {
         trocarPainel(paginaInicial.getMainPanel());
     }
 
+    /// carrinho
     public void mostrarCarrinho() {
         Carrinho carrinho = new Carrinho(this);
         trocarPainel(carrinho.getMainPanel());
     }
+
+    public void mostrarCarrinhoPagamento(float total) {
+        CarrinhoPagamento pagamento = new CarrinhoPagamento(this, total);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+    public void mostrarConfirmacaoCarrinhoPagamento() {
+        ConfirmacaoCarrinhoPagamento pagamento = new ConfirmacaoCarrinhoPagamento(this);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+
 
     //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {
@@ -180,13 +193,6 @@ public class AppWindow extends JFrame {
 
 
 
-
-
-    public void mostrarPaginaPrincipalProdutosBarAdmin() {
-        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
-        trocarPainel(produtos.getMainPanel());
-    }
-
     //-------------------- SESSÃO ------------------
     public void mostrarPaginaPrincipalSessoesAdmin() {
         Criarsessao criarSessao = new Criarsessao(this);
@@ -194,21 +200,44 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------- BAR ------------------
+    public void mostrarPaginaPrincipalProdutosBarAdmin() {
+        PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
+        trocarPainel(produtos.getMainPanel());
+    }
+
     public void mostrarPaginaPrincipalBar() {
         PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
         trocarPainel(paginaPrincipalProdutosBarAdmin.getMainPanel());
     }
 
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
-        ConfirmacaoAdicaoProduto adicionarProdutoAdmin = new ConfirmacaoAdicaoProduto(this);
-        trocarPainel(adicionarProdutoAdmin.getMainPanel());
-    }
+        ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
+        trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
 
+    }
 
     public void mostrarPaginaAdicionarProduto() {
         AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
         trocarPainel(adicionarProdutoAdmin.getMainPanel());
     }
+
+    // --- edicao produto ---
+    public void mostrarPaginaEscolherProdutoEditar() {
+        PaginaEscolherProdutoEditar paginaEscolherProdutoEditar = new PaginaEscolherProdutoEditar(this);
+        trocarPainel(paginaEscolherProdutoEditar.getMainPanel());
+    }
+
+    public void mostrarPaginaEditarProduto(Produto produto) {
+        EditarProduto editarProduto = new EditarProduto(this, produto);
+        trocarPainel(editarProduto.getMainPanel());
+    }
+
+    public void mostarConfirmacaoEditarProduto() {
+        ConfirmacaoEdicaoProduto confirmacaoEdicaoProduto = new ConfirmacaoEdicaoProduto(this);
+        trocarPainel(confirmacaoEdicaoProduto.getMainPanel());
+
+    }
+
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
     public static void main(String[] args) {

@@ -9,8 +9,10 @@ public class Produto implements Serializable{
     private float precoCompraUnidade;
     private float precoVendaUnidade;
     private static final long serialVersionUID = 1L;
+    private int idProduto;
 
-    public Produto(String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {
+    public Produto(Integer idProduto, String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {
+        this.idProduto = idProduto;
         this.foto = foto;
         this.nome = nome;
         this.tipoProduto = tipoProduto;
@@ -21,7 +23,7 @@ public class Produto implements Serializable{
     }
 
     public String getFoto() {
-        return foto;
+        return "src/main/resources/imagens/produtos-bar/" + foto;
     }
 
     public String getNome() {
@@ -76,6 +78,10 @@ public class Produto implements Serializable{
         this.precoVendaUnidade = precoVendaUnidade;
     }
 
+    public int getIdProduto(){
+        return idProduto;
+    }
+
     //mostra na consola informação sobre os produtos
     @Override
     public String toString() {
@@ -87,6 +93,7 @@ public class Produto implements Serializable{
                 ", stock=" + stock +
                 ", precoCompraUnidade=" + precoCompraUnidade +
                 ", precoVendaUnidade=" + precoVendaUnidade +
+                ", idProduto=" + idProduto +
                 '}';
     }
 }

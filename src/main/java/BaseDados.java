@@ -17,6 +17,7 @@ public class BaseDados implements Serializable {
     private List<Produto> produtos = new ArrayList<>();
     private List<Sala> salas = new ArrayList<>();
     private List<Sessao> sessoes = new ArrayList<>();
+    private List<ObjetoCarrinho> carrinho = new ArrayList<>();
 
     private BaseDados() {
         //---- generos VAIANA 2 -----
@@ -138,18 +139,18 @@ public class BaseDados implements Serializable {
         // -------------------------------------- criar filmes ----------------------------------
 
         //criar produtos
-        produtos.add(new Produto("cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f));
-        produtos.add(new Produto("sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
-        produtos.add(new Produto("icedTeaLimão.png","Iced tea Limão",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
-        produtos.add(new Produto("agua.png","Água",TipoProduto.BEBIDA,Estado.ATIVO,40,0.20f,0.90f));
-        produtos.add(new Produto("baldePequeno.png","Balde pequeno",TipoProduto.APERITIVO,Estado.ATIVO,40,0.20f,3.90f));
-        produtos.add(new Produto("baldeMedio.png","Balde medio",TipoProduto.APERITIVO,Estado.ATIVO,40,0.30f,5.50f));
-        produtos.add(new Produto("baldeGrande.png","Balde grande",TipoProduto.APERITIVO,Estado.ATIVO,40,0.40f,7.00f));
-        produtos.add(new Produto("nachos.png","Nachos",TipoProduto.APERITIVO,Estado.ATIVO,20,1.00f,4.00f));
-        produtos.add(new Produto("packPequeno.png","Pack pequeno",TipoProduto.PACK,Estado.ATIVO,20,6.20f,9.00f));
-        produtos.add(new Produto("packMedio.png","Pack medio",TipoProduto.PACK,Estado.ATIVO,20,6.30f,11.00f));
-        produtos.add(new Produto("packGrande.png","Pack grande",TipoProduto.PACK,Estado.ATIVO,20,6.40f,13.00f));
-        produtos.add(new Produto("packNachos.png","Pack nachos",TipoProduto.PACK,Estado.ATIVO,20,7.00f,9.00f));
+        produtos.add(new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f));
+        produtos.add(new Produto(2,"sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
+        produtos.add(new Produto(3,"icedTeaLimão.png","Iced tea Limão",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
+        produtos.add(new Produto(4,"agua.png","Água",TipoProduto.BEBIDA,Estado.ATIVO,40,0.20f,0.90f));
+        produtos.add(new Produto(5,"baldePequeno.png","Balde pequeno",TipoProduto.APERITIVO,Estado.ATIVO,40,0.20f,3.90f));
+        produtos.add(new Produto(6,"baldeMedio.png","Balde medio",TipoProduto.APERITIVO,Estado.ATIVO,40,0.30f,5.50f));
+        produtos.add(new Produto(7,"baldeGrande.png","Balde grande",TipoProduto.APERITIVO,Estado.ATIVO,40,0.40f,7.00f));
+        produtos.add(new Produto(8,"nachos.png","Nachos",TipoProduto.APERITIVO,Estado.ATIVO,20,1.00f,4.00f));
+        produtos.add(new Produto(9,"packPequeno.png","Pack pequeno",TipoProduto.PACK,Estado.ATIVO,20,6.20f,9.00f));
+        produtos.add(new Produto(10,"packMedio.png","Pack medio",TipoProduto.PACK,Estado.ATIVO,20,6.30f,11.00f));
+        produtos.add(new Produto(11,"packGrande.png","Pack grande",TipoProduto.PACK,Estado.ATIVO,20,6.40f,13.00f));
+        produtos.add(new Produto(12,"packNachos.png","Pack nachos",TipoProduto.PACK,Estado.ATIVO,20,7.00f,9.00f));
 
 
         //criar salas
@@ -296,8 +297,13 @@ public class BaseDados implements Serializable {
     public static BaseDados carregarDados() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_DADOS))) {
             return (BaseDados) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (NotSerializableException e) {
+            System.err.println("⚠️ Not serializable: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }catch (IOException | ClassNotFoundException e) {
             System.out.println("Ficheiro não encontrado ou erro ao carregar: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -324,9 +330,6 @@ public class BaseDados implements Serializable {
         return null;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
 
     public List<Sessao> getSessoes() {
         return sessoes;
@@ -576,6 +579,53 @@ public class BaseDados implements Serializable {
         produtos.add(produto);
     }
 
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public List<Produto> getProdutosPorTipo(TipoProduto tipo) {
+        List<Produto> produtosTipo = new ArrayList<>();
+
+        for(Produto produto : this.getProdutos()){
+            if(produto.getTipoProduto() == tipo){
+                produtosTipo.add(produto);
+            }
+        }
+
+        return produtosTipo;
+    }
+
+    public Produto getProdutosPorNome(String nome) {
+        Produto produtoSelecionado = null;
+        for(Produto produto : this.getProdutos()){
+            if(produto.getNome().equals(nome)){
+                produtoSelecionado = produto;
+                break;
+            }
+        }
+
+        return produtoSelecionado;
+    }
+
+    public Integer getLastIdProduto(){
+        Produto produto = produtos.get(produtos.size() - 1);
+        return produto.getIdProduto();
+    }
+
+    public Produto getProdutobyID(int id){
+        Produto produtoSelecionado = null;
+
+        for(Produto produto : this.getProdutos()){
+            if(produto.getIdProduto() == id){
+                produtoSelecionado = produto;
+                break;
+            }
+        }
+
+        return produtoSelecionado;
+    }
+
+
     // --------------------- Salas ---------------------
 
     public Sala getSalaByNome(String nome) {
@@ -599,4 +649,88 @@ public class BaseDados implements Serializable {
     public void adicionarSala(Sala sala) {
         salas.add(sala);
     }
+
+    // ------------------- CARRINHO -------------------
+    //adiciona objetos do tipo Produto, bilhete (?)
+    public void adicionarAoCarrinho(ObjetoCarrinho objeto){
+
+        boolean flagObjetoExiste = false;
+
+        //só verifica produtos, falta colocar bilhetes
+        if(objeto.getObjeto() instanceof Produto){
+
+            //produto a adicionar, quando clica no botão adicionar
+            Produto produto = (Produto) objeto.getObjeto();
+            for (ObjetoCarrinho carrinho : this.carrinho){
+                if(carrinho.getObjeto() instanceof Produto){
+                    Produto produtoCarrinho = (Produto) carrinho.getObjeto();
+
+                    //verifica se o produto do carrinho é o mesmo produto que está na lista
+                    if (produtoCarrinho.getIdProduto() == produto.getIdProduto()){
+
+                        //remove do carrinho caso a quantidade seja 0 ou inferior
+                        //fazer validação no frontedn
+                        if(objeto.getQuantidade() == 0 || objeto.getQuantidade() < 0 ){
+                            this.carrinho.remove(carrinho);
+                            return;
+                        }
+
+                        //alterar a quantidade
+                        carrinho.setQuantidade(objeto.getQuantidade());
+                        return;
+                    }
+                }
+            }
+        }
+
+        //caso seja novo na lista
+        if(!flagObjetoExiste){
+            carrinho.add(objeto);
+        }
+    }
+
+    public List<ObjetoCarrinho> getElementosCarrinho(){
+        return this.carrinho;
+    }
+
+    public float getTotalCarrinho(){
+        float total = 0;
+
+        for(ObjetoCarrinho objeto : this.carrinho){
+            if(objeto.getObjeto() instanceof Produto){
+                total += ((Produto) objeto.getObjeto()).getPrecoVendaUnidade() * objeto.getQuantidade() * (1 - objeto.getDesconto());
+            }
+        }
+
+        return total;
+    }
+
+    public boolean pagamentoCarrinho(){
+        boolean stockBaixo = false;
+
+        for(ObjetoCarrinho objeto : this.carrinho){
+            if(objeto.getObjeto() instanceof Produto){
+                //vai buscar o stock produto
+                int stock = ((Produto) objeto.getObjeto()).getStock();
+                //define um novo = stock atual - quantidade comprada
+                ((Produto) objeto.getObjeto()).setStock(stock - objeto.getQuantidade());
+
+                //se o stock do produto for menor que 5
+                if(((Produto) objeto.getObjeto()).getStock() < 5){
+                    stockBaixo = true;
+                }
+            }
+        }
+
+        //elimina todos produtos do carrinho
+        this.carrinho = new ArrayList<>();
+
+        this.gravarDados();
+
+        return stockBaixo;
+    }
+
+
+
+
 }

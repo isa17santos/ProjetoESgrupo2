@@ -35,7 +35,7 @@ public class Bilheteira {
     private JButton botaoFiltrar;
 
 
-    private BaseDados bd = BaseDados.getInstance();
+    private BaseDados bd;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
@@ -52,6 +52,7 @@ public class Bilheteira {
     //construtor
     public Bilheteira(AppWindow app) {
         this.app = app;
+        this.bd = BaseDados.getInstance();
         configurarComponentes();
     }
 
@@ -509,7 +510,7 @@ public class Bilheteira {
         //------------------------------- ComboBox Salas ----------------------------------
 
 
-        //------------------------------- Cartezes filmes ----------------------------------
+        //------------------------------- Cartazes filmes ----------------------------------
 
         // Painel para cartazes
         cartazPanel = new JPanel(new GridLayout(0, 4, 15, 15));
