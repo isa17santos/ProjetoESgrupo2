@@ -1,6 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import net.miginfocom.swing.MigLayout;
 
 public class PaginaInicial {
@@ -31,7 +34,7 @@ public class PaginaInicial {
     private void configurarComponentes() {
 
         // pagina principal
-        mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
+        mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
 
         // Logo
@@ -91,9 +94,9 @@ public class PaginaInicial {
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Carrinho
         cartLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        cartLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        cartLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 app.mostrarCarrinho();
             }
         });
@@ -102,7 +105,7 @@ public class PaginaInicial {
         bilheteiraButton.addActionListener(e -> app.mostrarBilheteira());
 
         // Redirecionar para Bar
-        barButton.addActionListener(e -> app.mostrarBar());
+        barButton.addActionListener(e -> app.mostrarBarAdmin());
 
         // Redirecionar para Estatísticas
         estatisticasButton.addActionListener(e -> app.mostrarEstatisticas());
