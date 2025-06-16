@@ -46,10 +46,6 @@ public class AppWindow extends JFrame {
         trocarPainel(bilheteira.getMainPanel());
     }
 
-    public void mostrarBar() {
-        Bar bar = new Bar(this);
-        trocarPainel(bar.getMainPanel());
-    }
 
     public void mostrarEstatisticas() {
         Estatisticas est = new Estatisticas(this);
@@ -144,12 +140,39 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------- SESSÃO ------------------
+    //pagina principal
     public void mostrarPaginaPrincipalSessoesAdmin() {
-        Criarsessao criarSessao = new Criarsessao(this);
-        setContentPane(criarSessao.getMainPanel());
-        revalidate();
-        repaint();
+        PaginaPrincipalSessoesAdmin Sessao = new PaginaPrincipalSessoesAdmin(this);
+        trocarPainel(Sessao.getMainPanel());
     }
+    //adicionar sessao
+    public void mostrarAdicionarSessao() {
+        CriarSessao sessao = new CriarSessao(this);
+        trocarPainel(sessao.getMainPanel());
+    }
+    // editar sessao
+    public void mostrarEditarSessao(String nomeSessao) {
+        EditarSessao sessao = new EditarSessao(this, nomeSessao);
+        trocarPainel(sessao.getMainPanel());
+    }
+    // editar sala seleção
+    public void mostrarEditarSessaoAI() {
+        EditarSessaoAI1 sessao = new EditarSessaoAI1(this);
+        trocarPainel(sessao.getMainPanel());
+    }
+    //-------------------- FIM SESSÃO ------------------
+
+    //-------------------- BAR ------------------
+    //adicionar paginabar
+    public void mostrarBarAdmin() {
+        BarAdmin bar = new BarAdmin(this);
+        trocarPainel(bar.getMainPanel());
+    }
+    //-------------------- BAR ------------------
+
+
+
+
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
     public static void main(String[] args) {

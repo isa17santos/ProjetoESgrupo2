@@ -54,7 +54,7 @@ public class PaginaAperitivos {
         voltarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         voltarLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                app.mostrarBar();
+                app.mostrarBarAdmin();
             }
         });
         mainPanel.add(voltarLabel);

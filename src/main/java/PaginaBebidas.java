@@ -32,7 +32,7 @@ public class PaginaBebidas {
         voltarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         voltarLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                app.mostrarBar(); // Chama o método da AppWindow
+                app.mostrarBarAdmin(); // Chama o método da AppWindow
             }
         });
         mainPanel.add(voltarLabel);
