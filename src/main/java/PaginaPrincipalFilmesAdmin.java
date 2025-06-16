@@ -101,7 +101,6 @@ public class PaginaPrincipalFilmesAdmin {
         adicionarButton.addActionListener(e -> app.mostrarAdicionarFilmes());
 
         // Redirecionar para EditarFilme
-        editarButton.addActionListener(e -> app.mostrarEditarFilmes());
 
     }
 

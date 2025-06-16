@@ -1,25 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 
 public class PaginaPrincipalSessoesAdmin {
     private JPanel mainPanel;
     private JButton adicionarButton;
     private JButton editarButton;
-<<<<<<< Updated upstream
     private JLabel logoLabel = new JLabel();
     private JLabel voltaLabel = new JLabel();
     private JLabel adminLabel = new JLabel("Admin");
     private JLabel salasLabel = new JLabel("Sessões");
-=======
-    private JLabel logoLabel;
-    private JLabel voltaLabel;
-    private JLabel adminLabel;
     private JLabel sessoesLabel;
->>>>>>> Stashed changes
     private final AppWindow app;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
@@ -27,10 +17,7 @@ public class PaginaPrincipalSessoesAdmin {
     private final Color corFundoLabel = Color.decode("#FBA720");
     private final Color corFundo = Color.decode("#F9E6BB");
     private final Color corFonte = Color.decode("#6B3838");
-<<<<<<< Updated upstream
     private String nomeSessao;
-=======
->>>>>>> Stashed changes
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
 
@@ -41,10 +28,6 @@ public class PaginaPrincipalSessoesAdmin {
     }
 
     private void configurarComponentes() {
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
         // pagina principal
         mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
@@ -68,7 +51,6 @@ public class PaginaPrincipalSessoesAdmin {
         adminLabel.setOpaque(true);
         // --------------------- ADMIN LABEL -----------------------
 
-<<<<<<< Updated upstream
         // --------------------- SALAS LABEL -----------------------
         salasLabel.setHorizontalAlignment(SwingConstants.CENTER);
         salasLabel.setForeground(corFundoLabel);
@@ -76,7 +58,6 @@ public class PaginaPrincipalSessoesAdmin {
         salasLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         salasLabel.setOpaque(true);
         // --------------------- SALAS LABEL -----------------------
-=======
         // --------------------- FILMES LABEL -----------------------
         sessoesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         sessoesLabel.setForeground(corFundoLabel);
@@ -84,7 +65,6 @@ public class PaginaPrincipalSessoesAdmin {
         sessoesLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         sessoesLabel.setOpaque(true);
         // --------------------- FILMES LABEL -----------------------
->>>>>>> Stashed changes
 
 
         //----------------- BOTAO ADICIONAR -------------
@@ -107,11 +87,8 @@ public class PaginaPrincipalSessoesAdmin {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 500, y 40");
-<<<<<<< Updated upstream
         mainPanel.add(salasLabel, "x 500, y 180");
-=======
         mainPanel.add(sessoesLabel, "x 500, y 180");
->>>>>>> Stashed changes
         mainPanel.add(adicionarButton, "x 250, y 380, w 800, h 100");
         mainPanel.add(editarButton, "x 250, y 550, w 800, h 100");
 
@@ -128,17 +105,14 @@ public class PaginaPrincipalSessoesAdmin {
         });
 
         // Redirecionar para AdicionarFilme
-<<<<<<< Updated upstream
         adicionarButton.addActionListener(e -> app.mostrarAdicionarSessao());
 
         // Redirecionar para EditarFilme
         editarButton.addActionListener(e -> app.mostrarEditarSessao(nomeSessao));
-=======
-        adicionarButton.addActionListener(e -> app.mostrarAdicionarSessao("Sessaos"));
+        adicionarButton.addActionListener(e -> app.mostrarAdicionarSessao());
 
         // Redirecionar para EditarSessao
         editarButton.addActionListener(e -> app.mostrarEditarSessao("Sessao"));
->>>>>>> Stashed changes
 
     }
 

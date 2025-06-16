@@ -1,4 +1,16 @@
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -21,10 +33,11 @@ public class AppWindow extends JFrame {
         trocarPainel(pagina.getMainPanel());
     }
 
-    public void mostrarPaginaAperitivos() {
-        PaginaAperitivos pagina = new PaginaAperitivos(this);
-        trocarPainel(pagina.getMainPanel());
-    }
+
+    //public void mostrarPaginaAperitivos() {
+    //    PaginaAperitivos pagina = new PaginaAperitivos(this);
+    //    trocarPainel(pagina.getMainPanel());
+    //}
 
     public void mostrarPaginaPacks() {
         PaginaPacks pagina = new PaginaPacks(this);
@@ -41,24 +54,62 @@ public class AppWindow extends JFrame {
         trocarPainel(carrinho.getMainPanel());
     }
 
+    //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {
         Bilheteira bilheteira = new Bilheteira(this);
         trocarPainel(bilheteira.getMainPanel());
     }
+/*
 
+    //escolha filme bilheteira
+    public void mostrarEscolhaFilmeBilhteira(Filme filme) {
+        EscolhaFilmeBilheteira filmes = new EscolhaFilmeBilheteira(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+
+    //escolha sessao bilheteira
+    public void mostrarPaginaSessoes(Filme filme) {
+        PaginaEscolhaSessao filmes = new PaginaEscolhaSessao(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha sessao com sala especifica bilheteira
+    public void mostrarPaginaSessoesSalaEscolhida(Filme filme, String sala) {
+        PaginaEscolhaSessaoComSala filmes = new PaginaEscolhaSessaoComSala(this, filme, sala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha lugar bilheteira
+    public void mostrarEscolherLugar(Sessao sessao, boolean comSala) {
+        EscolherLugar filmes = new EscolherLugar(this, sessao, comSala);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //escolha lugar sala vip bilheteira
+    public void mostrarEscolherLugarSalaVip(Sessao sessao) {
+        EscolherLugarSalaVip filmes = new EscolherLugarSalaVip(this, sessao);
+        trocarPainel(filmes.getMainPanel());
+    }
+*/
+
+    //-------------------------- BILHETEIRA -----------------------------
+
+    public void mostrarBar() {
+        Bar bar = new Bar(this);
+        trocarPainel(bar.getMainPanel());
+    }
 
     public void mostrarEstatisticas() {
         Estatisticas est = new Estatisticas(this);
         trocarPainel(est.getMainPanel());
     }
 
-// --------------------------------------- MODO ADMIN --------------------------------------------------------
+    // --------------------------------------- MODO ADMIN --------------------------------------------------------
     public void mostrarAdmin() {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
-
-
 
 
     //-------------------- FILMES ------------------
@@ -80,15 +131,8 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
-    //editar filme
-    public void mostrarEditarFilmes() {
-        EditarFilme filmes = new EditarFilme(this);
-        trocarPainel(filmes.getMainPanel());
-    }
+
     //-------------------- FILMES -------------------
-
-
-
 
 
     //-------------------- SALAS ------------------
@@ -119,8 +163,8 @@ public class AppWindow extends JFrame {
 
     // editar sala
     public void mostrarEditarSala(String nomeSala) {
-        EditarSala salas = new EditarSala(this, nomeSala);
-        trocarPainel(salas.getMainPanel());
+        EditarSala editarSala = new EditarSala(this, nomeSala);
+        trocarPainel(editarSala.getMainPanel());
     }
 
     // confirmar edição sala
@@ -142,7 +186,6 @@ public class AppWindow extends JFrame {
     //-------------------- SESSÃO ------------------
     //pagina principal
     public void mostrarPaginaPrincipalSessoesAdmin() {
-<<<<<<< Updated upstream
         PaginaPrincipalSessoesAdmin Sessao = new PaginaPrincipalSessoesAdmin(this);
         trocarPainel(Sessao.getMainPanel());
     }
@@ -169,32 +212,14 @@ public class AppWindow extends JFrame {
         BarAdmin bar = new BarAdmin(this);
         trocarPainel(bar.getMainPanel());
     }
-    //-------------------- BAR ------------------
-
-
+    //-------------------- FIM BAR ------------------
 
 
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
-=======
-            PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
-            trocarPainel(sessoes.getMainPanel());
-        
-    }
->>>>>>> Stashed changes
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);
     }
 
-    //adicionar sessao
-    public void mostrarAdicionarSessao(String designacao) {
-        CriarSessao sessaos = new CriarSessao(this);
-        trocarPainel(sessaos.getMainPanel());
-    }
-    // editar Sessao
-    public void mostrarEditarSessao(String nomeSessao) {
-        EditarSessao sessao = new EditarSessao(this, nomeSessao);
-        trocarPainel(sessao.getMainPanel());
-    }
 
 }

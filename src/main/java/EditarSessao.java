@@ -51,11 +51,8 @@ public class EditarSessao {
 
     public EditarSessao(AppWindow app, String nomeSessao) {
         this.app = app;
-<<<<<<< Updated upstream
-        configurarComponentes(String.valueOf(this.nomeSessao));
-=======
         configurarComponentes(nomeSessao);
->>>>>>> Stashed changes
+
     }
 
     // Buscar dados da sessão selecionada
@@ -302,11 +299,7 @@ public class EditarSessao {
         mainPanel.add(adminLabel, "x 500, y 40");
         mainPanel.add(sessoesLabel, "x 350, y 180");
         mainPanel.add(perguntaLabel, "x 350, y 300, w 700, h 50");
-<<<<<<< Updated upstream
         mainPanel.add(comboBoxFilme, "x 370, y 400, w 300, h 50");
-=======
-        mainPanel.add(comboBoxFilme, "x 350, y 400, w 300, h 50");
->>>>>>> Stashed changes
         mainPanel.add(comboBoxSala, "x 750, y 400, w 225, h 50");
         mainPanel.add(datePicker, "x 375, y 500, w 300, h 50");
         mainPanel.add(timeSpinner, "x 800, y 500, w 125, h 50");
@@ -320,7 +313,6 @@ public class EditarSessao {
                 app.mostrarPaginaPrincipalSessoesAdmin();
             }
         });
-<<<<<<< Updated upstream
         editarButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -348,14 +340,12 @@ public class EditarSessao {
                 boolean sucesso = SessaoController.atualizarSessao(nome, filmeSelecionado, salaSelecionada, dataHora.getTime());
 
                 if (sucesso) {
-                        app.mostrarEditarSessaoAI(); // vai para a tela desejada
+                    app.mostrarBar(); // vai para a tela desejada
                 } else {
                     JOptionPane.showMessageDialog(null, "Erro ao atualizar a sessão.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-=======
->>>>>>> Stashed changes
     }
 
     public JPanel getMainPanel() {
