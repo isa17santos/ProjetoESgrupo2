@@ -1,28 +1,28 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import net.miginfocom.swing.MigLayout;
 
-public class PaginaPrincipalFilmesAdmin {
+public class ConfirmacaoEdicaoProduto {
+    private final AppWindow app;
+
     private JPanel mainPanel;
-    private JButton adicionarButton;
-    private JButton editarButton;
     private JLabel logoLabel;
     private JLabel voltaLabel;
     private JLabel adminLabel;
-    private JLabel filmesLabel;
-    private final AppWindow app;
+    private JLabel produtoEditarLabel;
+    private JLabel produtoLabel;
+    private JLabel editadoLabel;
+    private JLabel vistoConfirmacaoLabel;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundoLabel = Color.decode("#FBA720");
     private final Color corFundo = Color.decode("#F9E6BB");
     private final Color corFonte = Color.decode("#6B3838");
+    private final Color corFontePreto = Color.decode("#000000");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
 
-    //construtor
-    public PaginaPrincipalFilmesAdmin(AppWindow app) {
+    public ConfirmacaoEdicaoProduto(AppWindow app) {
         this.app = app;
         configurarComponentes();
     }
@@ -48,43 +48,50 @@ public class PaginaPrincipalFilmesAdmin {
         adminLabel.setHorizontalAlignment(SwingConstants.CENTER);
         adminLabel.setForeground(corFundoLabel);
         adminLabel.setBackground(corFundo);
-        adminLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        adminLabel.setFont(new Font("Georgia", Font.PLAIN, 80));
         adminLabel.setOpaque(true);
         // --------------------- ADMIN LABEL -----------------------
 
-        // --------------------- FILMES LABEL -----------------------
-        filmesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        filmesLabel.setForeground(corFundoLabel);
-        filmesLabel.setBackground(corFundo);
-        filmesLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
-        filmesLabel.setOpaque(true);
-        // --------------------- FILMES LABEL -----------------------
+        // --------------------- PRODUTO EDITAR LABEL -----------------------
+        produtoEditarLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        produtoEditarLabel.setForeground(corFundoLabel);
+        produtoEditarLabel.setBackground(corFundo);
+        produtoEditarLabel.setFont(new Font("Georgia", Font.PLAIN, 80));
+        produtoEditarLabel.setOpaque(true);
+        // --------------------- PRODUTO EDITAR LABEL -----------------------
 
 
-        //----------------- BOTAO ADICIONAR -------------
-        adicionarButton = new RoundedButton("Adicionar", 20);
-        adicionarButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        adicionarButton.setBackground(corFundoComponentes);
-        adicionarButton.setForeground(corFonte); // texto
-        //----------------- BOTAO ADICIONAR -------------
+        // --------------------- PRODUTO ADICIONAR LABEL -----------------------
+        produtoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        produtoLabel.setForeground(corFontePreto);
+        produtoLabel.setBackground(corFundo);
+        produtoLabel.setFont(new Font("Georgia", Font.PLAIN, 80));
+        produtoLabel.setOpaque(true);
+        // --------------------- PRODUTO ADICIONAR LABEL -----------------------
 
+        // --------------------- PRODUTO EDITADO LABEL -----------------------
+        editadoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        editadoLabel.setForeground(corFontePreto);
+        editadoLabel.setBackground(corFundo);
+        editadoLabel.setFont(new Font("Georgia", Font.PLAIN, 80));
+        editadoLabel.setOpaque(true);
+        // --------------------- PRODUTO EDITADO LABEL -----------------------
 
-        //----------------- BOTAO EDITAR -------------
-        editarButton = new RoundedButton("Editar", 20);
-        editarButton.setFont(new Font("Georgia", Font.PLAIN, 35));
-        editarButton.setBackground(corFundoComponentes);
-        editarButton.setForeground(corFonte); // texto
-        //----------------- BOTAO EDITAR -------------
+        // Logo
+        ImageIcon vistoConfirmacaoIcon = new ImageIcon(getClass().getResource("/imagens/vistoConfirmacao.png"));
+        Image vistoConfirmacaoImg = vistoConfirmacaoIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+        vistoConfirmacaoLabel.setIcon(new ImageIcon(vistoConfirmacaoImg));
+
 
 
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
-        mainPanel.add(adminLabel, "x 500, y 40");
-        mainPanel.add(filmesLabel, "x 500, y 180");
-        mainPanel.add(adicionarButton, "x 250, y 380, w 800, h 100");
-        mainPanel.add(editarButton, "x 250, y 550, w 800, h 100");
-
+        mainPanel.add(adminLabel, "x 550, y 20");
+        mainPanel.add(produtoEditarLabel, "x 350, y 100");
+        mainPanel.add(produtoLabel, "x 350, y 320");
+        mainPanel.add(editadoLabel, "x 370, y 460");
+        mainPanel.add(vistoConfirmacaoLabel, "x 830, y 300");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -93,16 +100,9 @@ public class PaginaPrincipalFilmesAdmin {
         voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                app.mostrarAdmin();
+                app.mostrarPaginaPrincipalProdutosBarAdmin();
             }
         });
-
-        // Redirecionar para AdicionarFilme
-        adicionarButton.addActionListener(e -> app.mostrarAdicionarFilmes());
-
-        // Redirecionar para EditarFilme
-        editarButton.addActionListener(e -> app.mostrarEscolhaFilmeEditar());
-
     }
 
     public JPanel getMainPanel() {

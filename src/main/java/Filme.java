@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Filme implements Serializable{
     private String nome;
@@ -11,6 +12,7 @@ public class Filme implements Serializable{
     private String tipos;
     private Estado estado;
     private float precoCompra;
+    private boolean comSessao;
     private static final long serialVersionUID = 1L;
 
     public Filme(String nome, int duracao, String foto, Idioma idiomas, String idade, LinkedList<Genero> generos, String tipos, Estado estado, Float precoCompra) {
@@ -23,6 +25,7 @@ public class Filme implements Serializable{
         this.tipos = tipos;
         this.estado = estado;
         this.precoCompra = precoCompra;
+        this.comSessao = false;
     }
 
     public String getNome() {
@@ -61,6 +64,10 @@ public class Filme implements Serializable{
         return precoCompra;
     }
 
+    public boolean isComSessao() {
+        return comSessao;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -97,7 +104,34 @@ public class Filme implements Serializable{
         this.precoCompra = precoCompra;
     }
 
+    public void setComSessao(boolean comSessao) {
+        this.comSessao = comSessao;
+    }
+
     public int getPrecoBilhete() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Filme filme = (Filme) o;
+
+        return nome.equals(filme.nome)
+                && duracao == filme.duracao
+                && idiomas == filme.idiomas
+                && idade.equals(filme.idade)
+                && generos.equals(filme.generos)
+                && tipos.equals(filme.tipos)
+                && estado == filme.estado
+                && Float.compare(precoCompra, filme.precoCompra) == 0
+                && foto.equals(filme.foto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, duracao, idiomas, idade, generos, tipos, estado, precoCompra, foto);
     }
 }

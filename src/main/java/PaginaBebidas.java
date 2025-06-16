@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PaginaBebidas {
@@ -13,8 +15,13 @@ public class PaginaBebidas {
     private AppWindow app;
     private Map<String, Integer> carrinho = new HashMap<>();
 
+    //adicionado base de dados para tonar dinamico
+    private BaseDados bd;
+
     public PaginaBebidas(AppWindow app) {
         this.app = app;
+        this.bd = BaseDados.getInstance();
+
         mainPanel = new JPanel(null);
         mainPanel.setPreferredSize(new Dimension(800, 800));
         mainPanel.setBackground(new Color(255, 229, 180));
@@ -52,22 +59,19 @@ public class PaginaBebidas {
         bebidasLabel.setBounds(250, 100, 300, 40);
         mainPanel.add(bebidasLabel);
 
-        // Lista de bebidas
-        String[] bebidas = {"Coca Cola", "Sumol Ananás", "Iced tea Limão", "Água"};
-        String[] imagemPaths = {
-                "/imagens/produtos bar/cocaCola.png",
-                "/imagens/produtos bar/lataSumolAnanas.png",
-                "/imagens/produtos bar/icedTeaLimão.png",
-                "/imagens/produtos bar/agua.png"
-        };
+        // Lista de bebidas - corrigido, estava incompleto e sem a funcionar dinamicamente
+        java.util.List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.BEBIDA);
 
-        for (int i = 0; i < bebidas.length; i++) {
-            adicionarBebida(mainPanel, bebidas[i], imagemPaths[i], 60 + i * 180);
+        int i = 0;
+        for(Produto produto : produtos){
+            adicionarBebida(mainPanel, produto.getNome(), produto.getFoto(), 60 + i * 180, produto.getIdProduto());
+            i++;
         }
+        // fim da correção
 
         // Carrinho de compras
         JLabel carrinhoLabel = new JLabel();
-        ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho.png"));
+        ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
         Image carrinhoImg = carrinhoIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         carrinhoLabel.setIcon(new ImageIcon(carrinhoImg));
         carrinhoLabel.setBounds(700, 220, 50, 50);
@@ -80,13 +84,15 @@ public class PaginaBebidas {
         mainPanel.add(carrinhoLabel);
     }
 
-    private void adicionarBebida(JPanel panel, String nome, String imagemPath, int x) {
+    //adicionado o campo id produto para identifcar o produto a ser adicionado ao carrinho
+    private void adicionarBebida(JPanel panel, String nome, String imagemPath, int x,
+                                 int idProduto) {
         JLabel bebidaLabel = new JLabel(nome, JLabel.CENTER);
         bebidaLabel.setBounds(x, 310, 160, 30);
         panel.add(bebidaLabel);
 
         JLabel imagemLabel = new JLabel();
-        ImageIcon imgIcon = new ImageIcon(getClass().getResource(imagemPath));
+        ImageIcon imgIcon = new ImageIcon(imagemPath);
         Image img = imgIcon.getImage().getScaledInstance(80, 150, Image.SCALE_SMOOTH);
         imagemLabel.setIcon(new ImageIcon(img));
         imagemLabel.setBounds(x + 30, 160, 100, 150);
@@ -103,7 +109,19 @@ public class PaginaBebidas {
         addButton.addActionListener(e -> {
             int quantidade = (int) spinner.getValue();
             carrinho.put(nome, carrinho.getOrDefault(nome, 0) + quantidade);
+
+            //adicionar à base de dados - inicio correção
+            Produto produto = bd.getProdutobyID(idProduto);
+            ObjetoCarrinho objetoCarrinho = new ObjetoCarrinho(produto, quantidade);
+            bd.adicionarAoCarrinho(objetoCarrinho);
+
+            System.out.println(bd.getElementosCarrinho());
+            bd.gravarDados();
+            //fim de correção
+
             JOptionPane.showMessageDialog(null, nome + " adicionado ao carrinho!");
+
+
         });
         panel.add(addButton);
     }

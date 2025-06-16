@@ -1,16 +1,4 @@
-import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.List;
-
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -34,11 +22,6 @@ public class AppWindow extends JFrame {
     }
 
 
-    //public void mostrarPaginaAperitivos() {
-    //    PaginaAperitivos pagina = new PaginaAperitivos(this);
-    //    trocarPainel(pagina.getMainPanel());
-    //}
-
     public void mostrarPaginaPacks() {
         PaginaPacks pagina = new PaginaPacks(this);
         trocarPainel(pagina.getMainPanel());
@@ -49,17 +32,29 @@ public class AppWindow extends JFrame {
         trocarPainel(paginaInicial.getMainPanel());
     }
 
+    /// carrinho
     public void mostrarCarrinho() {
         Carrinho carrinho = new Carrinho(this);
         trocarPainel(carrinho.getMainPanel());
     }
+
+    public void mostrarCarrinhoPagamento(float total) {
+        CarrinhoPagamento pagamento = new CarrinhoPagamento(this, total);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+    public void mostrarConfirmacaoCarrinhoPagamento() {
+        ConfirmacaoCarrinhoPagamento pagamento = new ConfirmacaoCarrinhoPagamento(this);
+        trocarPainel(pagamento.getMainPanel());
+    }
+
+
 
     //-------------------------- BILHETEIRA -----------------------------
     public void mostrarBilheteira() {
         Bilheteira bilheteira = new Bilheteira(this);
         trocarPainel(bilheteira.getMainPanel());
     }
-/*
 
     //escolha filme bilheteira
     public void mostrarEscolhaFilmeBilhteira(Filme filme) {
@@ -91,7 +86,6 @@ public class AppWindow extends JFrame {
         EscolherLugarSalaVip filmes = new EscolherLugarSalaVip(this, sessao);
         trocarPainel(filmes.getMainPanel());
     }
-*/
 
     //-------------------------- BILHETEIRA -----------------------------
 
@@ -105,11 +99,13 @@ public class AppWindow extends JFrame {
         trocarPainel(est.getMainPanel());
     }
 
-    // --------------------------------------- MODO ADMIN --------------------------------------------------------
+// --------------------------------------- MODO ADMIN --------------------------------------------------------
     public void mostrarAdmin() {
         AdminPaginaPrincipal admin = new AdminPaginaPrincipal(this);
         trocarPainel(admin.getMainPanel());
     }
+
+
 
 
     //-------------------- FILMES ------------------
@@ -131,8 +127,28 @@ public class AppWindow extends JFrame {
         trocarPainel(filmes.getMainPanel());
     }
 
+    //escolher filme a editar
+    public void mostrarEscolhaFilmeEditar() {
+        PaginaEscolhaFilmeEditar filmes = new PaginaEscolhaFilmeEditar(this);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //editar filme
+    public void mostrarEditarFilmes(Filme filme) {
+        EditarFilme filmes = new EditarFilme(this, filme);
+        trocarPainel(filmes.getMainPanel());
+    }
+
+    //confirmar edicao filme
+    public void mostrarConfirmacaoEdicaoFilmes() {
+        ConfirmacaoEdicaoFilme filmes = new ConfirmacaoEdicaoFilme(this);
+        trocarPainel(filmes.getMainPanel());
+    }
 
     //-------------------- FILMES -------------------
+
+
+
 
 
     //-------------------- SALAS ------------------
@@ -163,8 +179,8 @@ public class AppWindow extends JFrame {
 
     // editar sala
     public void mostrarEditarSala(String nomeSala) {
-        EditarSala editarSala = new EditarSala(this, nomeSala);
-        trocarPainel(editarSala.getMainPanel());
+        EditarSala salas = new EditarSala(this, nomeSala);
+        trocarPainel(salas.getMainPanel());
     }
 
     // confirmar edição sala
@@ -214,6 +230,29 @@ public class AppWindow extends JFrame {
     }
     //-------------------- FIM BAR ------------------
 
+
+
+    public void mostrarPaginaAdicionarProduto() {
+        AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
+        trocarPainel(adicionarProdutoAdmin.getMainPanel());
+    }
+
+    // --- edicao produto ---
+    public void mostrarPaginaEscolherProdutoEditar() {
+        PaginaEscolherProdutoEditar paginaEscolherProdutoEditar = new PaginaEscolherProdutoEditar(this);
+        trocarPainel(paginaEscolherProdutoEditar.getMainPanel());
+    }
+
+    public void mostrarPaginaEditarProduto(Produto produto) {
+        EditarProduto editarProduto = new EditarProduto(this, produto);
+        trocarPainel(editarProduto.getMainPanel());
+    }
+
+    public void mostarConfirmacaoEditarProduto() {
+        ConfirmacaoEdicaoProduto confirmacaoEdicaoProduto = new ConfirmacaoEdicaoProduto(this);
+        trocarPainel(confirmacaoEdicaoProduto.getMainPanel());
+
+    }
 
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 

@@ -9,6 +9,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class AdicionarSala {
     private JPanel mainPanel = new JPanel();
@@ -24,8 +25,8 @@ public class AdicionarSala {
     private JComboBox <Object> comboBoxTipo = new JComboBox<>();
     private JComboBox<Object> comboBoxEstado = new JComboBox<>();
     private JButton adicionarButton = new JButton("Adicionar");
-    private JLabel erroLabel = new JLabel("Erro: Insira valores válidos.");
-    private ArrowIcon arrowIcon = new ArrowIcon(null);
+    private JLabel erroNumeroFilas = new JLabel();
+    private JLabel erroNumeroLugaresFila = new JLabel();
 
     private final AppWindow app;
 
@@ -40,6 +41,7 @@ public class AdicionarSala {
     private final Color corFundoSubMenu = Color.decode("#FBDC95");
     private final Color corBotaoSetaComboBox = Color.decode("#F2AF14");
     private final Color corHoverComboBox = Color.decode("#FCD373");
+    private BaseDados bd = BaseDados.getInstance();
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
@@ -117,6 +119,16 @@ public class AdicionarSala {
         numeroFilas.setFont(new Font("Georgia", Font.PLAIN, 35));
         numeroFilas.setText("Nº Filas");
         numeroFilas.setForeground(corFonte); // texto
+
+        // Erro label para mostrar mensagens de erro
+        erroNumeroFilas.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroNumeroFilas.setText("");
+        erroNumeroFilas.setBackground(corFundo);
+        erroNumeroFilas.setForeground(Color.RED);
+        erroNumeroFilas.setHorizontalAlignment(SwingConstants.CENTER);
+        erroNumeroFilas.setVisible(false);
+
+
         numeroFilas.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -137,16 +149,16 @@ public class AdicionarSala {
                 try {
                     int duracao = Integer.parseInt(input);
                     if (duracao <= 0) {
-                        erroLabel.setText("Insira um valor superior a 0.");
-                        erroLabel.setVisible(true);
+                        erroNumeroFilas.setText("Insira um valor superior a 0.");
+                        erroNumeroFilas.setVisible(true);
                         numeroFilas.setText("Nº Filas");
                         numeroFilas.setForeground(corFonte);
                     } else {
-                        erroLabel.setVisible(false); // valor válido
+                        erroNumeroFilas.setVisible(false); // valor válido
                     }
                 } catch (NumberFormatException ex) {
-                    erroLabel.setText("Insira um valor numérico válido.");
-                    erroLabel.setVisible(true);
+                    erroNumeroFilas.setText("Insira um valor numérico válido.");
+                    erroNumeroFilas.setVisible(true);
                     numeroFilas.setText("Nº Filas");
                     numeroFilas.setForeground(corFonte);
                 }
@@ -162,6 +174,15 @@ public class AdicionarSala {
         numeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 35));
         numeroLugaresFila.setText("Nº Lugares por Fila");
         numeroLugaresFila.setForeground(corFonte); // texto
+
+        // Erro label para mostrar mensagens de erro
+        erroNumeroLugaresFila.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroNumeroLugaresFila.setText("");
+        erroNumeroLugaresFila.setBackground(corFundo);
+        erroNumeroLugaresFila.setForeground(Color.RED);
+        erroNumeroLugaresFila.setHorizontalAlignment(SwingConstants.CENTER);
+        erroNumeroLugaresFila.setVisible(false);
+
         numeroLugaresFila.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -182,16 +203,16 @@ public class AdicionarSala {
                 try {
                     int duracao = Integer.parseInt(input);
                     if (duracao <= 0) {
-                        erroLabel.setText("Insira um valor superior a 0.");
-                        erroLabel.setVisible(true);
+                        erroNumeroLugaresFila.setText("Insira um valor superior a 0.");
+                        erroNumeroLugaresFila.setVisible(true);
                         numeroLugaresFila.setText("Nº Lugares por Fila");
                         numeroLugaresFila.setForeground(corFonte);
                     } else {
-                        erroLabel.setVisible(false); // valor válido
+                        erroNumeroLugaresFila.setVisible(false); // valor válido
                     }
                 } catch (NumberFormatException ex) {
-                    erroLabel.setText("Insira um valor numérico válido.");
-                    erroLabel.setVisible(true);
+                    erroNumeroLugaresFila.setText("Insira um valor numérico válido.");
+                    erroNumeroLugaresFila.setVisible(true);
                     numeroLugaresFila.setText("Nº Lugares por Fila");
                     numeroLugaresFila.setForeground(corFonte);
                 }
@@ -512,7 +533,8 @@ public class AdicionarSala {
         mainPanel.add(comboBoxTipo, "x 250, y 550, w 350, h 50");
         mainPanel.add(comboBoxEstado, "x 700, y 550, w 350, h 50");
         mainPanel.add(adicionarButton, "x 250, y 650, w 800, h 50");
-        mainPanel.add(erroLabel, "x 250, y 750, w 800, h 50");
+        mainPanel.add(erroNumeroFilas, "x 250, y 400, w 350, h 50");
+        mainPanel.add(erroNumeroLugaresFila, "x 700, y 400, w 350, h 50");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -535,12 +557,89 @@ public class AdicionarSala {
             String tipo = (String) comboBoxTipo.getSelectedItem();
             String estado = (String) comboBoxEstado.getSelectedItem();
 
-            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas") ||
-                lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null ||
-                acessibilidade == null || tipo == null || estado == null) {
-                erroLabel.setVisible(true);
+            // VALIDAÇÃO DOS CAMPOS
+            if (nome.isEmpty() || nome.equals("Designação") || filas.isEmpty() || filas.equals("Nº Filas")
+                    || lugares.isEmpty() || lugares.equals("Nº Lugares por Fila") || ecra == null
+                    || acessibilidade == null || tipo == null || estado == null) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                app.mostrarConfirmarCriacaoSala(nomeSala.getText());
+                try {
+
+                    int numFilas = Integer.parseInt(filas);
+                    int numLugaresFila = Integer.parseInt(lugares);
+
+                    // Transforma a acessibilidade e estado em enums
+                    Acessibilidade acessibilidadeEnum;
+                    if (acessibilidade.equalsIgnoreCase("Sim")) {
+                        acessibilidadeEnum = Acessibilidade.SIM;
+                    } else if (acessibilidade.equalsIgnoreCase("Não")) {
+                        acessibilidadeEnum = Acessibilidade.NAO;
+                    } else {
+                        throw new IllegalArgumentException("Valor de acessibilidade inválido: " + acessibilidade);
+                    }
+
+                    // Transformar o estado em enum
+                    Estado estadoEnum;
+                    if (estado.equalsIgnoreCase("Ativo")) {
+                        estadoEnum = Estado.ATIVO;
+                    } else if (estado.equalsIgnoreCase("Inativo")) {
+                        estadoEnum = Estado.INATIVO;
+                    } else {
+                        throw new IllegalArgumentException("Invalid estado value: " + estado);
+                    }
+
+                    // Criação da sala
+
+                    Sala salaCriada = new Sala(nome, numFilas, numLugaresFila, ecra, acessibilidadeEnum, tipo, estadoEnum);
+
+
+                    // -------- Verificar se já existe outra sala com o mesmo nome na base de dados ---------
+
+                    boolean salaDuplicada = false;
+                    for (Sala sala : bd.getSalas()) {
+                        if (sala.getDesignacao().equalsIgnoreCase(salaCriada.getDesignacao())) {
+                            salaDuplicada = true;
+                            break;
+                        }
+                    }
+
+                    if (salaDuplicada) {
+                        JOptionPane.showMessageDialog(null, "A sala já existe na base de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    } else {
+                        // Adicionar a sala à base de dados
+                        bd.adicionarSala(salaCriada);
+
+                        // Redirecionar para ConfirmarCriaçãoSala
+                        app.mostrarConfirmarCriacaoSala(nome);
+
+                        // Gravar a base de dados
+                        bd.gravarDados();
+
+                    }
+
+                    // ------ debug -----
+
+                    BaseDados bdVerificacao = BaseDados.carregarDados();
+                    List<Sala> salas = bdVerificacao.getSalas();
+                    if (bdVerificacao != null) {
+                        System.out.println("Base de dados carregada com sucesso.");
+                        for (Sala sala : salas) {
+                            if (sala.equals(salaCriada)) {
+                                System.out.println("Sala criada com sucesso: " + sala);
+                            }
+                        }
+                    } else {
+                        System.out.println("Erro ao carregar a base de dados.");
+                    }
+
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Formato inválido nos campos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao guardar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
             }
         });
     }

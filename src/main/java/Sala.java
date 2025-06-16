@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.LinkedList;
 
 public class Sala implements Serializable{
     private String designacao;
@@ -8,6 +9,10 @@ public class Sala implements Serializable{
     private Acessibilidade acessibilidade;
     private String tipo;
     private Estado estado;
+
+    private Lugar[][] lugares;
+
+
     private static final long serialVersionUID = 1L;
 
     public Sala(String designacao, int numFilas, int numLugaresFila, String ecra, Acessibilidade acessibilidade, String tipo, Estado estado) {
@@ -18,6 +23,17 @@ public class Sala implements Serializable{
         this.acessibilidade = acessibilidade;
         this.tipo = tipo;
         this.estado = estado;
+        this.lugares = new Lugar[numFilas][numLugaresFila];
+
+        if(acessibilidade.equals(Acessibilidade.SIM))
+        {
+            inicializarLugares(true);
+        }
+        else
+        {
+            inicializarLugares(false);
+        }
+
     }
 
     public String getDesignacao() {
@@ -38,6 +54,14 @@ public class Sala implements Serializable{
 
     public Acessibilidade getAcessibilidade() {
         return acessibilidade;
+    }
+
+    public boolean temAcessibilidade(){
+        if (getAcessibilidade().equals(Acessibilidade.SIM))
+        {
+            return true;
+        }
+        return false;
     }
 
     public String getTipo() {
@@ -78,5 +102,18 @@ public class Sala implements Serializable{
 
     public double getLotacao() {
         return (double) (numFilas * numLugaresFila);
+    }
+
+    public Lugar[][] getLugares() {
+        return lugares;
+    }
+
+    private void inicializarLugares(boolean acessibilidade) {
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numLugaresFila; j++) {
+                // Simples exemplo: cria todos livres e não acessíveis
+                lugares[i][j] = new Lugar(false, EstadoLugar.LIVRE);
+            }
+        }
     }
 }

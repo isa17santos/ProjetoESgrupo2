@@ -16,6 +16,8 @@ public class PaginaInicial {
     private JLabel cartLabel;
     private final AppWindow app; // referência à janela principal
 
+    private BaseDados bd;
+
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundo = Color.decode("#F9E6BB");
@@ -25,6 +27,7 @@ public class PaginaInicial {
     //construtor
     public PaginaInicial(AppWindow app) {
         this.app = app;
+        this.bd = BaseDados.getInstance();
         configurarComponentes();
     }
 
@@ -41,9 +44,15 @@ public class PaginaInicial {
 
 
         // Carrinho
-        ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
-        Image cartImg = cartIcon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
-        cartLabel.setIcon(new ImageIcon(cartImg));
+        if(bd.getElementosCarrinho().size() > 0){
+            ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_com_compras.png"));
+            Image cartImg = cartIcon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+            cartLabel.setIcon(new ImageIcon(cartImg));
+        }else {
+            ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
+            Image cartImg = cartIcon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+            cartLabel.setIcon(new ImageIcon(cartImg));
+        }
 
         //----------------- BOTAO BILHETEIRA -------------
         bilheteiraButton = new RoundedButton("Bilheteira", 20);
