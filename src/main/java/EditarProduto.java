@@ -188,11 +188,11 @@ public class EditarProduto {
 
         //adiciona o tipo de produto
         if(produtoEditar.getTipoProduto() == TipoProduto.BEBIDA){
-            comboBoxTipo.setSelectedItem(0);
+            comboBoxTipo.setSelectedIndex(0);
         }else if(produtoEditar.getTipoProduto() == TipoProduto.APERITIVO){
-            comboBoxTipo.setSelectedItem(1);
+            comboBoxTipo.setSelectedIndex(1);
         }else if(produtoEditar.getTipoProduto() == TipoProduto.PACK){
-            comboBoxTipo.setSelectedItem(2);
+            comboBoxTipo.setSelectedIndex(2);
         }
 
         comboBoxTipo.setUI(new BasicComboBoxUI() {
@@ -263,8 +263,8 @@ public class EditarProduto {
         comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
 
         if(produtoEditar.getEstado() == Estado.ATIVO){
-            comboBoxEstado.setSelectedItem(0);
-        }else comboBoxEstado.setSelectedItem(1);
+            comboBoxEstado.setSelectedIndex(0);
+        }else comboBoxEstado.setSelectedIndex(1);
 
         comboBoxEstado.setCursor(new Cursor(Cursor.HAND_CURSOR));
 

@@ -166,16 +166,16 @@ public class Carrinho {
             System.out.println(objetoCarrinho.getDesconto());
             if(objetoCarrinho.getDesconto() == 0.5){
                 //infantil
-                comboBoxDesconto.setSelectedItem(0);
+                comboBoxDesconto.setSelectedIndex(0);
             }else if(objetoCarrinho.getDesconto() == 0.3){
                 //estudante
-                comboBoxDesconto.setSelectedItem(1);
+                comboBoxDesconto.setSelectedIndex(1);
             } else if(objetoCarrinho.getDesconto() == 0.2){
                 //senior
-                comboBoxDesconto.setSelectedItem(2);
+                comboBoxDesconto.setSelectedIndex(2);
             }else if(objetoCarrinho.getDesconto() == 0.1){
                 //veterano
-                comboBoxDesconto.setSelectedItem(3);
+                comboBoxDesconto.setSelectedIndex(3);
             }else {
                 // Não selecionar nenhum item no início → mostra placeholder
                 comboBoxDesconto.setSelectedItem(null);
