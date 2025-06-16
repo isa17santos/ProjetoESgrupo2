@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class PaginaBebidas {
     private JPanel mainPanel;
+    private JLabel logoLabel = new JLabel();
+    private JLabel voltaLabel = new JLabel();
+    private JLabel adminLabel = new JLabel("Bar");
+    private JLabel sessoesLabel = new JLabel("Bebidas");
     private AppWindow app;
     private Map<String, Integer> carrinho = new HashMap<>();
 

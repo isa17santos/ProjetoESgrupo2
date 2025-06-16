@@ -142,6 +142,7 @@ public class AppWindow extends JFrame {
     //-------------------- SESSÃO ------------------
     //pagina principal
     public void mostrarPaginaPrincipalSessoesAdmin() {
+<<<<<<< Updated upstream
         PaginaPrincipalSessoesAdmin Sessao = new PaginaPrincipalSessoesAdmin(this);
         trocarPainel(Sessao.getMainPanel());
     }
@@ -175,9 +176,25 @@ public class AppWindow extends JFrame {
 
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
+=======
+            PaginaPrincipalSessoesAdmin sessoes = new PaginaPrincipalSessoesAdmin(this);
+            trocarPainel(sessoes.getMainPanel());
+        
+    }
+>>>>>>> Stashed changes
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);
     }
 
+    //adicionar sessao
+    public void mostrarAdicionarSessao(String designacao) {
+        CriarSessao sessaos = new CriarSessao(this);
+        trocarPainel(sessaos.getMainPanel());
+    }
+    // editar Sessao
+    public void mostrarEditarSessao(String nomeSessao) {
+        EditarSessao sessao = new EditarSessao(this, nomeSessao);
+        trocarPainel(sessao.getMainPanel());
+    }
 
 }
