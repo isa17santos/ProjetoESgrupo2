@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.LinkedList;
 
 public class AdicionarProdutoAdmin {
     private final AppWindow app;
@@ -675,12 +674,12 @@ public class AdicionarProdutoAdmin {
         voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                app.mostrarPaginaPrincipalBar();
+                // Redireciona para a página principal do bar
+                app.mostrarPaginaPrincipalProdutosBarAdmin();
             }
         });
 
     }
-
 
     public JPanel getMainPanel() {
         return mainPanel;
