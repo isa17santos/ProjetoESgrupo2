@@ -1,12 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import net.miginfocom.swing.MigLayout;
 
 public class Bar {
     private JPanel mainPanel;
+    private JLabel logoLabel;
+    private JLabel voltaLabel;
+    private JLabel titleLabel;
     private final AppWindow app;
+    private JButton aperitivosButton;
+    private JButton bebidasButton;
+    private JButton packsButton;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
@@ -15,74 +19,77 @@ public class Bar {
     private final Color corFonte = Color.decode("#6B3838");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
+    // Construtor
     public Bar(AppWindow app) {
         this.app = app;
         configurarComponentes();
     }
 
     private void configurarComponentes() {
+        // Inicializar componentes
         mainPanel = new JPanel();
-        mainPanel.setBackground(corFundo);
+        logoLabel = new JLabel();
+        voltaLabel = new JLabel();
+        titleLabel = new JLabel();
+
+        // Layout e fundo
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
+        mainPanel.setBackground(corFundo);
 
         // Logo
-        JLabel logoLabel = new JLabel();
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
-        Image logoImg = logoIcon.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+        Image logoImg = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
 
         // Seta voltar
-        JLabel voltarLabel = new JLabel();
         ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
-        Image setaImg = setaIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        voltarLabel.setIcon(new ImageIcon(setaImg));
-        voltarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        voltarLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        Image setaImg = setaIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
+        voltaLabel.setIcon(new ImageIcon(setaImg));
+        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        voltaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
                 app.mostrarPaginaInicial();
             }
         });
 
         // Título
-        JLabel tituloLabel = new JLabel("Bar");
-        tituloLabel.setFont(new Font("Georgia", Font.PLAIN, 70));
-        tituloLabel.setForeground(corFonte);
-        tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        tituloLabel.setForeground(corFundoLabel);
-        tituloLabel.setBackground(corFundo);
-        tituloLabel.setOpaque(true);
+        titleLabel.setText("Bar");
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(corFundoLabel);
+        titleLabel.setBackground(corFundo);
+        titleLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        titleLabel.setOpaque(true);
 
-        // Botões
-        JButton btnBebidas = new RoundedButton("Bebidas", 20);
-        btnBebidas.setFont(new Font("Georgia", Font.PLAIN, 35));
-        btnBebidas.setBackground(corFundoComponentes);
-        btnBebidas.setForeground(corFonte);
-        btnBebidas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnBebidas.addActionListener(e -> app.mostrarPaginaBebidas());
+        //Botoes
+        bebidasButton = new RoundedButton("Bebidas", 20);
+        bebidasButton.setFont(new Font("Georgia", Font.PLAIN, 50));
+        bebidasButton.setBackground(corFundoComponentes);
+        bebidasButton.setForeground(corFonte);
+        bebidasButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        bebidasButton.addActionListener(e -> app.mostrarPaginaBebidas());
 
-        JButton btnAperitivos = new RoundedButton("Aperitivos", 20);
-        btnAperitivos.setFont(new Font("Georgia", Font.PLAIN, 35));
-        btnAperitivos.setBackground(corFundoComponentes);
-        btnAperitivos.setForeground(corFonte);
-        btnAperitivos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        //btnAperitivos.addActionListener(e -> app.mostrarPaginaAperitivos());
+        aperitivosButton = new RoundedButton("Aperitivos", 20);
+        aperitivosButton.setFont(new Font("Georgia", Font.PLAIN, 50));
+        aperitivosButton.setBackground(corFundoComponentes);
+        aperitivosButton.setForeground(corFonte);
+        aperitivosButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        aperitivosButton.addActionListener(e -> app.mostrarPaginaAperitivos());
 
-        JButton btnPacks = new RoundedButton("Packs", 20);
-        btnPacks.setFont(new Font("Georgia", Font.PLAIN, 35));
-        btnPacks.setBackground(corFundoComponentes);
-        btnPacks.setForeground(corFonte);
-        btnPacks.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnPacks.addActionListener(e -> app.mostrarPaginaPacks());
+        packsButton = new RoundedButton("Packs", 20);
+        packsButton.setFont(new Font("Georgia", Font.PLAIN, 50));
+        packsButton.setBackground(corFundoComponentes);
+        packsButton.setForeground(corFonte);
+        packsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        packsButton.addActionListener(e -> app.mostrarPaginaPacks());
 
-        // Adiciona componentes com MigLayout (coordenadas ajustáveis)
-        mainPanel.add(logoLabel, "x 30, y 20, w 160, h 160");
-        mainPanel.add(voltarLabel, "x 50, y 200, w 50, h 50");
-        mainPanel.add(tituloLabel, "x 575, y 50");
-
-        // Botões centralizados
-        mainPanel.add(btnBebidas, "x 250, y 250, w 300, h 100");
-        mainPanel.add(btnAperitivos, "x 700, y 250, w 300, h 100");
-        mainPanel.add(btnPacks, "x 475, y 400, w 300, h 100");
+        // Adicionar ao painel
+        mainPanel.add(logoLabel, "x 20, y 10");
+        mainPanel.add(voltaLabel, "x 50, y 220, w 100, h 100");
+        mainPanel.add(titleLabel, "x 400, y 23, w 500, h 100");
+        mainPanel.add(bebidasButton, "x 150, y 350, w 400, h 140");
+        mainPanel.add(aperitivosButton, "x 800, y 350, w 400, h 140");
+        mainPanel.add(packsButton, "x 450, y 550, w 400, h 140");
     }
 
     public JPanel getMainPanel() {
