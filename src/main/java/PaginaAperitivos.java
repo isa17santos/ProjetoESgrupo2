@@ -1,63 +1,132 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class PaginaAperitivos {
     private JPanel mainPanel;
-    private final AppWindow app;
+    private JLabel logoLabel = new JLabel();
+    private JLabel voltaLabel = new JLabel();
+    private JLabel tituloPrincipalLabel = new JLabel("Bar");
+    private JLabel subtituloLabel = new JLabel("Aperitivos");
+    private AppWindow app;
+
+    private final Color corFundoComponentes = Color.decode("#FFC133");
+    private final Color corFundoLabel = Color.decode("#FBA720");
+    private final Color corFundo = Color.decode("#F9E6BB");
+    private final Color corFonte = Color.decode("#6B3838");
+    private final Color corFontePreto = Color.decode("#000000");
+    private final Color corBotaoLaranjaEscura = Color.decode("#FBA720");
+
+    private BaseDados bd;
 
     public PaginaAperitivos(AppWindow app) {
         this.app = app;
-        mainPanel = new JPanel();
-        mainPanel.setLayout(null);
-        mainPanel.setBackground(new Color(253, 227, 167));
+        this.bd = BaseDados.getInstance();
 
-        // Logo
-        JLabel logoLabel = new JLabel();
+        mainPanel = new JPanel(null);
+        mainPanel.setPreferredSize(new Dimension(1200, 700));
+        mainPanel.setBackground(corFundo);
+
+        // ---------------- LOGO ----------------
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
-        Image logoImg = logoIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        Image logoImg = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
-        logoLabel.setBounds(30, 20, 100, 100);
-        mainPanel.add(logoLabel);
+        logoLabel.setBounds(20, 10, 200, 200);
 
-        // Título
-        JLabel titulo = new JLabel("Aperitivos");
-        titulo.setFont(new Font("Arial", Font.BOLD, 36));
-        titulo.setBounds(300, 30, 250, 50);
-        mainPanel.add(titulo);
-
-        // Aperitivos
-        String[] aperitivos = {"Balde pequeno", "Balde médio", "Balde grande", "Nachos"};
-        int x = 80;
-        for (String snack : aperitivos) {
-            JLabel label = new JLabel(snack, JLabel.CENTER);
-            label.setBounds(x, 150, 100, 20);
-            mainPanel.add(label);
-
-            JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
-            spinner.setBounds(x, 180, 50, 25);
-            mainPanel.add(spinner);
-
-            JButton adicionar = new JButton("Adicionar");
-            adicionar.setBounds(x - 10, 220, 100, 25);
-            mainPanel.add(adicionar);
-
-            x += 150;
-        }
-
-        // Seta voltar
-        JLabel voltarLabel = new JLabel();
+        // ---------------- SETA VOLTAR ----------------
         ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
-        Image setaImg = setaIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        voltarLabel.setIcon(new ImageIcon(setaImg));
-        voltarLabel.setBounds(20, 250, 50, 50);
-        voltarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        voltarLabel.addMouseListener(new MouseAdapter() {
+        Image setaImg = setaIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
+        voltaLabel.setIcon(new ImageIcon(setaImg));
+        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        voltaLabel.setBounds(50, 220, 100, 100);
+        voltaLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 app.mostrarBar();
             }
         });
-        mainPanel.add(voltarLabel);
+
+        // ---------------- TITULO PRINCIPAL ----------------
+        tituloPrincipalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        tituloPrincipalLabel.setForeground(corFundoLabel);
+        tituloPrincipalLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        tituloPrincipalLabel.setOpaque(true);
+        tituloPrincipalLabel.setBackground(corFundo);
+        tituloPrincipalLabel.setBounds(400, 30, 500, 100);
+
+        // ---------------- SUBTITULO ----------------
+        subtituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        subtituloLabel.setForeground(corFundoLabel);
+        subtituloLabel.setFont(new Font("Georgia", Font.PLAIN, 75));
+        subtituloLabel.setBounds(400, 200, 500, 80);
+
+        // ---------------- CARRINHO ----------------
+        JLabel carrinhoLabel = new JLabel();
+        ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
+        Image carrinhoImg = carrinhoIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        carrinhoLabel.setIcon(new ImageIcon(carrinhoImg));
+        carrinhoLabel.setBounds(1100, 220, 100, 100);
+        carrinhoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        carrinhoLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                app.mostrarCarrinho();
+            }
+        });
+
+        // ---------------- LISTA DE APERITIVOS ----------------
+        List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.APERITIVO);
+        int numAperitivos = Math.min(produtos.size(), 4);
+        int espacamento = 300;
+        int xBase = 110;
+
+        for (int i = 0; i < numAperitivos; i++) {
+            Produto produto = produtos.get(i);
+            int x = xBase + i * espacamento;
+            adicionarAperitivo(mainPanel, produto.getNome(), produto.getFoto(), x, produto.getIdProduto());
+        }
+
+        // ---------------- ADIÇÃO AO PAINEL ----------------
+        mainPanel.add(logoLabel);
+        mainPanel.add(voltaLabel);
+        mainPanel.add(tituloPrincipalLabel);
+        mainPanel.add(subtituloLabel);
+        mainPanel.add(carrinhoLabel);
+    }
+
+    private void adicionarAperitivo(JPanel panel, String nome, String imagemPath, int x, int idProduto) {
+        JLabel imagemLabel = new JLabel();
+        ImageIcon imgIcon = new ImageIcon(imagemPath);
+        Image img = imgIcon.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+        imagemLabel.setIcon(new ImageIcon(img));
+        imagemLabel.setBounds(x - 20, 330, 140, 140);
+        panel.add(imagemLabel);
+
+        JLabel nomeLabel = new JLabel(nome, JLabel.CENTER);
+        nomeLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
+        nomeLabel.setBounds(x - 50, 490, 200, 30);
+        nomeLabel.setForeground(corFontePreto);
+        panel.add(nomeLabel);
+
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
+        spinner.setBounds(x, 530, 80, 35);
+        panel.add(spinner);
+
+        RoundedButton addButton = new RoundedButton("Adicionar", 20);
+        addButton.setBounds(x - 20, 590, 150, 40);
+        addButton.setBackground(corBotaoLaranjaEscura);
+        addButton.setForeground(Color.BLACK);
+        addButton.setFont(new Font("Georgia", Font.PLAIN, 25));
+        addButton.addActionListener(e -> {
+            int quantidade = (int) spinner.getValue();
+
+            Produto produto = bd.getProdutobyID(idProduto);
+            ObjetoCarrinho objetoCarrinho = new ObjetoCarrinho(produto, quantidade);
+            bd.adicionarAoCarrinho(objetoCarrinho);
+            bd.gravarDados();
+
+            JOptionPane.showMessageDialog(null, nome + " adicionado ao carrinho!");
+        });
+        panel.add(addButton);
     }
 
     public JPanel getMainPanel() {
