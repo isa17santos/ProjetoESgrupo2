@@ -288,11 +288,6 @@ public class BaseDados implements Serializable {
             sessao.getFilme().setComSessao(true);
         }
 
-        // vai atualizando o estado da sessao consoante a data atual
-        for (Sessao sessao : sessoes) {
-            sessao.atualizarEstadoConformeDataAtual();
-        }
-
     }
 
     public static BaseDados getInstance() {

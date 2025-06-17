@@ -107,20 +107,5 @@ public class Sessao implements Serializable{
     public void setLugaresOcupados(List<Integer> lugares) {
         this.lugaresOcupados = lugares;
     }
-
-    public void atualizarEstadoConformeDataAtual() {
-        // Data e hora da sessão
-        LocalDate sessaoData = LocalDate.of(ano, mes, dia);
-        LocalTime sessaoHora = LocalTime.of(hora, minuto);
-        LocalDateTime sessaoDateTime = LocalDateTime.of(sessaoData, sessaoHora);
-
-        LocalDateTime agora = LocalDateTime.now();
-
-        if (sessaoDateTime.isBefore(agora)) {
-            this.estado = Estado.INATIVO;
-        } else {
-            this.estado = Estado.ATIVO; // Ou manténs o estado atual? Depende do teu caso
-        }
-    }
-
+    
 }
