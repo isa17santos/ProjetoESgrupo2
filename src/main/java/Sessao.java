@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Sessao implements Serializable{
     private Filme filme;
     private Sala sala;
@@ -14,12 +18,13 @@ public class Sessao implements Serializable{
     private int hora;
     private int minuto;
     private int bilhetesVendidos;
+    private float precoBilhete;
 
     private List<Integer> lugaresOcupados;
 
     private static final long serialVersionUID = 1L;
 
-    public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto) {
+    public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto, float precoBilhete) {
         this.filme = filme;
         this.sala = sala;
         this.estado = estado;
@@ -29,6 +34,7 @@ public class Sessao implements Serializable{
         this.hora = hora;
         this.minuto = minuto;
         this.bilhetesVendidos = 0; // Inicializa bilhetes vendidos como 0
+        this.precoBilhete = precoBilhete;
 
         this.lugaresOcupados = new ArrayList<>();
     }
@@ -100,6 +106,21 @@ public class Sessao implements Serializable{
 
     public void setLugaresOcupados(List<Integer> lugares) {
         this.lugaresOcupados = lugares;
+    }
+
+    public void atualizarEstadoConformeDataAtual() {
+        // Data e hora da sessão
+        LocalDate sessaoData = LocalDate.of(ano, mes, dia);
+        LocalTime sessaoHora = LocalTime.of(hora, minuto);
+        LocalDateTime sessaoDateTime = LocalDateTime.of(sessaoData, sessaoHora);
+
+        LocalDateTime agora = LocalDateTime.now();
+
+        if (sessaoDateTime.isBefore(agora)) {
+            this.estado = Estado.INATIVO;
+        } else {
+            this.estado = Estado.ATIVO; // Ou manténs o estado atual? Depende do teu caso
+        }
     }
 
 }

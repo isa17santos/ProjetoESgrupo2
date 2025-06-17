@@ -95,7 +95,7 @@ public class PaginaEscolhaFilmeEditar {
         filmesLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         filmesLabel.setOpaque(true);
 
-        // ComboBox de Salas
+        // ComboBox de filmes
         filmesComboBox = new RoundedComboBox<>(opcoesFilmes.toArray(new String[0]), 20);
         // Não selecionar nenhum item no início → mostra placeholder
         filmesComboBox.setSelectedItem(null);

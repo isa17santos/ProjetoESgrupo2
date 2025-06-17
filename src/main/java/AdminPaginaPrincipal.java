@@ -111,7 +111,7 @@ public class AdminPaginaPrincipal {
         filmesButton.addActionListener(e -> app.mostrarPaginaPrincipalFilmesAdmin());
 
         // Redirecionar para PaginaPrincipalSessoesAdmin
-        sessoesButton.addActionListener(e -> app.mostrarPaginaPrincipalSessoesAdmin());
+        sessoesButton.addActionListener(e -> app.mostrarPaginaPrincipalSessaoAdmin());
 
         // Redirecionar para PaginaPrincipalProdutosBarAdmin
         produtosBarButton.addActionListener(e -> app.mostrarPaginaPrincipalProdutosBarAdmin());

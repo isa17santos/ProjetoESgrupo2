@@ -166,120 +166,120 @@ public class BaseDados implements Serializable {
 
         // ------------------------------------ criar sessoes -------------------------------------------
         //------- VAIANA 2 ----------
-        sessoes.add(new Sessao(filmes.get(0),salas.get(3),Estado.ATIVO,25,6,2025,12,0)); // filme Vaiana 2 VP 2D, Sala 4, dia 25-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(0),salas.get(3),Estado.ATIVO,25,6,2025,12,0, 4.50f)); // filme Vaiana 2 VP 2D, Sala 4, dia 25-6-2025, hora 12h00
 
-        sessoes.add(new Sessao(filmes.get(1),salas.get(7),Estado.ATIVO,25,6,2025,12,0)); // filme Vaiana 2 VP 5D, Sala 8, dia 25-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(1),salas.get(7),Estado.ATIVO,25,6,2025,12,0, 4.50f)); // filme Vaiana 2 VP 5D, Sala 8, dia 25-6-2025, hora 12h00
 
-        sessoes.add(new Sessao(filmes.get(2),salas.get(3),Estado.ATIVO,25,6,2025,15,30)); // filme Vaiana 2 VO 2D, Sala 4, dia 25-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(2),salas.get(3),Estado.ATIVO,25,6,2025,15,30, 4.50f)); // filme Vaiana 2 VO 2D, Sala 4, dia 25-6-2025, hora 15h30
 
-        sessoes.add(new Sessao(filmes.get(3),salas.get(7),Estado.ATIVO,25,6,2025,15,30)); // filme Vaiana 2 VO 5D, Sala 8, dia 25-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(3),salas.get(7),Estado.ATIVO,25,6,2025,15,30, 4.50f)); // filme Vaiana 2 VO 5D, Sala 8, dia 25-6-2025, hora 15h30
         //------- VAIANA 2 ----------
         
         //------- PADDINGTON ----------
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,12,0)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,15,30)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,18,50)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,21,30)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,12,0)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,15,30)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,18,50)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,21,30)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,12,0)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,15,30)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,18,50)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,21,30)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,15,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,22,6,2025,21,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 22-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,12,0, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,15,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,18,50, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,23,6,2025,21,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 23-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,12,0, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,15,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,18,50, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(4),salas.get(0),Estado.ATIVO,24,6,2025,21,30, 4.50f)); // filme Paddington VP 2D, Sala 1, dia 24-6-2025, hora 21h30
 
-        sessoes.add(new Sessao(filmes.get(5),salas.get(3),Estado.ATIVO,22,6,2025,12,0)); // filme Paddington VO 2D, Sala 4, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(5),salas.get(3),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme Paddington VO 2D, Sala 4, dia 22-6-2025, hora 12h00
         //------- PADDINGTON ----------
 
         //------- AQUAMAN 2 ----------
-        sessoes.add(new Sessao(filmes.get(6),salas.get(5),Estado.ATIVO,22,6,2025,12,0)); // filme Aquaman 2 VP 2D, Sala 6, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(6),salas.get(5),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme Aquaman 2 VP 2D, Sala 6, dia 22-6-2025, hora 12h00
 
-        sessoes.add(new Sessao(filmes.get(7),salas.get(7),Estado.ATIVO,22,6,2025,18,50)); // filme Aquaman 2 VP 5D, Sala 8, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(7),salas.get(7),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Aquaman 2 VP 5D, Sala 8, dia 22-6-2025, hora 18h50
 
-        sessoes.add(new Sessao(filmes.get(8),salas.get(5),Estado.ATIVO,22,6,2025,18,50)); // filme Aquaman 2 VO 2D, Sala 6, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(8),salas.get(5),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Aquaman 2 VO 2D, Sala 6, dia 22-6-2025, hora 18h50
 
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,12,0)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,15,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,18,50)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,21,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,12,0)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,15,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,18,50)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,21,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,12,0)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,15,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,18,50)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,21,30)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,15,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,22,6,2025,21,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 22-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,12,0, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,15,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,18,50, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,23,6,2025,21,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 23-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,12,0, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,15,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,18,50, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(9),salas.get(4),Estado.ATIVO,24,6,2025,21,30, 4.50f)); // filme Aquaman 2 VO 5D, Sala 5, dia 24-6-2025, hora 21h30
         //------- AQUAMAN 2 ----------
 
         //------- Minecraft ----------
-        sessoes.add(new Sessao(filmes.get(10),salas.get(3),Estado.ATIVO,22,6,2025,21,30)); // filme Minecraft VP 2D, Sala 4, dia 22-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(10),salas.get(3),Estado.ATIVO,22,6,2025,21,30, 4.50f)); // filme Minecraft VP 2D, Sala 4, dia 22-6-2025, hora 21h30
 
-        sessoes.add(new Sessao(filmes.get(11),salas.get(3),Estado.ATIVO,22,6,2025,18,50)); // filme Minecraft VO 2D, Sala 4, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(11),salas.get(3),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Minecraft VO 2D, Sala 4, dia 22-6-2025, hora 18h50
 
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,12,0)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,15,30)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,18,50)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,21,30)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,12,0)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,15,30)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,18,50)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,21,30)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,12,0)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,15,30)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,18,50)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,21,30)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,15,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,22,6,2025,21,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 22-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,12,0, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,15,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,18,50, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,23,6,2025,21,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 23-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,12,0, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,15,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,18,50, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(11),salas.get(1),Estado.ATIVO,24,6,2025,21,30, 4.50f)); // filme Minecraft VO 2D, Sala 2, dia 24-6-2025, hora 21h30
         //------- Minecraft ----------
 
         //------- A SEMENTE DO MAL ----------
-        sessoes.add(new Sessao(filmes.get(12),salas.get(6),Estado.ATIVO,22,6,2025,12,0)); // filme A Semente do mal VP 2D, Sala 7, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(12),salas.get(6),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme A Semente do mal VP 2D, Sala 7, dia 22-6-2025, hora 12h00
 
-        sessoes.add(new Sessao(filmes.get(13),salas.get(6),Estado.ATIVO,22,6,2025,15,30)); // filme A Semente do mal VP 3D, Sala 7, dia 22-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(13),salas.get(6),Estado.ATIVO,22,6,2025,15,30, 4.50f)); // filme A Semente do mal VP 3D, Sala 7, dia 22-6-2025, hora 15h30
 
-        sessoes.add(new Sessao(filmes.get(14),salas.get(6),Estado.ATIVO,22,6,2025,18,50)); // filme A Semente do mal VO 2D, Sala 7, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(14),salas.get(6),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme A Semente do mal VO 2D, Sala 7, dia 22-6-2025, hora 18h50
 
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,12,0)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,15,30)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,18,50)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,21,30)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,12,0)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,15,30)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,18,50)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,21,30)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 21h30
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,12,0)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 12h00
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,15,30)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 15h30
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,18,50)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 18h50
-        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,21,30)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,12,0, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,15,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,18,50, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,22,6,2025,21,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 22-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,12,0, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,15,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,18,50, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,23,6,2025,21,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 23-6-2025, hora 21h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,12,0, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,15,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 15h30
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,18,50, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 18h50
+        sessoes.add(new Sessao(filmes.get(15),salas.get(2),Estado.ATIVO,24,6,2025,21,30, 4.50f)); // filme A Semente do mal VO 3D, Sala 3, dia 24-6-2025, hora 21h30
         //------- A SEMENTE DO MAL ----------
 
         //------- CONCLAVE ----------
-        sessoes.add(new Sessao(filmes.get(17),salas.get(0),Estado.ATIVO,25,6,2025,12,0)); // filme Conclave VO 2D, Sala 1, dia 25-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(17),salas.get(0),Estado.ATIVO,25,6,2025,12,0, 4.50f)); // filme Conclave VO 2D, Sala 1, dia 25-6-2025, hora 12h00
         //------- CONCLAVE ----------
 
         //------- BRANCA DE NEVE ----------
-        sessoes.add(new Sessao(filmes.get(18),salas.get(2),Estado.ATIVO,25,6,2025,12,0)); // filme Branca de Neve VP 2D, Sala 3, dia 25-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(18),salas.get(2),Estado.ATIVO,25,6,2025,12,0, 4.50f)); // filme Branca de Neve VP 2D, Sala 3, dia 25-6-2025, hora 12h00
         //------- BRANCA DE NEVE ----------
 
         //------- JOKER ----------
-        sessoes.add(new Sessao(filmes.get(21),salas.get(1),Estado.ATIVO,25,6,2025,12,0)); // filme Joker: Loucura a dois VO 2D, Sala 2, dia 25-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(21),salas.get(1),Estado.ATIVO,25,6,2025,12,0, 4.50f)); // filme Joker: Loucura a dois VO 2D, Sala 2, dia 25-6-2025, hora 12h00
         //------- JOKER ----------
 
         //------- DIVERTIDAMENTE 2 ----------
-        sessoes.add(new Sessao(filmes.get(22),salas.get(3),Estado.ATIVO,28,6,2025,12,0)); // filme Divertidamente 2 VP 2D, Sala 4, dia 28-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(22),salas.get(3),Estado.ATIVO,28,6,2025,12,0, 4.50f)); // filme Divertidamente 2 VP 2D, Sala 4, dia 28-6-2025, hora 12h00
         //------- DIVERTIDAMENTE 2 ----------
 
 
         //------- SONIC 2 ----------
-        sessoes.add(new Sessao(filmes.get(25),salas.get(5),Estado.ATIVO,28,6,2025,12,0)); // filme Sonic 2 VO 2D, Sala 6, dia 28-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(25),salas.get(5),Estado.ATIVO,28,6,2025,12,0, 4.50f)); // filme Sonic 2 VO 2D, Sala 6, dia 28-6-2025, hora 12h00
         //------- SONIC 2 ----------
 
         //------- A FAMILIA ADDAMS ----------
-        sessoes.add(new Sessao(filmes.get(26),salas.get(2),Estado.ATIVO,28,6,2025,12,0)); // filme A Familia Addams VP 2D, Sala 3, dia 28-6-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(26),salas.get(2),Estado.ATIVO,28,6,2025,12,0, 4.50f)); // filme A Familia Addams VP 2D, Sala 3, dia 28-6-2025, hora 12h00
         //------- A FAMILIA ADDAMS ----------
 
         //------- GRU MALDISPOSTO 4 ----------
-        sessoes.add(new Sessao(filmes.get(28),salas.get(0),Estado.ATIVO,1,7,2025,12,0)); // filme Gru Maldisposto 4 VP 2D, Sala 1, dia 1-7-2025, hora 12h00
+        sessoes.add(new Sessao(filmes.get(28),salas.get(0),Estado.ATIVO,1,7,2025,12,0, 4.50f)); // filme Gru Maldisposto 4 VP 2D, Sala 1, dia 1-7-2025, hora 12h00
         //------- GRU MALDISPOSTO 4 ----------
         // ------------------------------------ criar sessoes -------------------------------------------
 
@@ -287,6 +287,12 @@ public class BaseDados implements Serializable {
         for(Sessao sessao : sessoes) {
             sessao.getFilme().setComSessao(true);
         }
+
+        // vai atualizando o estado da sessao consoante a data atual
+        for (Sessao sessao : sessoes) {
+            sessao.atualizarEstadoConformeDataAtual();
+        }
+
     }
 
     public static BaseDados getInstance() {
@@ -371,6 +377,21 @@ public class BaseDados implements Serializable {
         }
 
         return tiposSala;
+    }
+
+    public boolean existeSessao(Filme filme, Sala sala, int dia, int mes, int ano, int hora, int minuto) {
+        for (Sessao s : sessoes) {
+            if (s.getFilme().equals(filme) &&
+                    s.getSala().equals(sala) &&
+                    s.getDia() == dia &&
+                    s.getMes() == mes &&
+                    s.getAno() == ano &&
+                    s.getHora() == hora &&
+                    s.getMinuto() == minuto) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
