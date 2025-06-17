@@ -297,13 +297,8 @@ public class BaseDados implements Serializable {
     public static BaseDados carregarDados() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_DADOS))) {
             return (BaseDados) ois.readObject();
-        } catch (NotSerializableException e) {
-            System.err.println("⚠️ Not serializable: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ficheiro não encontrado ou erro ao carregar: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
