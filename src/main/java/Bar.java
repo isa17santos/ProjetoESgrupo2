@@ -65,7 +65,7 @@ public class Bar {
         btnAperitivos.setBackground(corFundoComponentes);
         btnAperitivos.setForeground(corFonte);
         btnAperitivos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        //btnAperitivos.addActionListener(e -> app.mostrarPaginaAperitivos());
+        btnAperitivos.addActionListener(e -> app.mostrarPaginaAperitivos());
 
         JButton btnPacks = new RoundedButton("Packs", 20);
         btnPacks.setFont(new Font("Georgia", Font.PLAIN, 35));
