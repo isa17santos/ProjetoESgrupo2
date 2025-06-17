@@ -79,6 +79,14 @@ public class Sessao implements Serializable{
         return bilhetesVendidos;
     }
 
+    public float getPrecoBilhete() {
+        return precoBilhete;
+    }
+
+    public void setPrecoBilhete(float precoBilhete) {
+        this.precoBilhete = precoBilhete;
+    }
+
     public void venderBilhete() {
         this.bilhetesVendidos++;
     }

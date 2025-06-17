@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.util.List;
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -209,16 +208,27 @@ public class AppWindow extends JFrame {
         trocarPainel(pagina.getMainPanel());
     }
 
-
-    public void mostrarEditarSessaoAdmin() {
-        EditarSessaoAdmin pagina = new EditarSessaoAdmin(this);
-        trocarPainel(pagina.getMainPanel());
-    }
-
-    public void mostrarConformacaoCriacaoSessaoAdmin() {
+    public void mostrarConfirmacaoCriacaoSessaoAdmin() {
         ConfirmacaoCriacaoSessao pagina = new ConfirmacaoCriacaoSessao(this);
         trocarPainel(pagina.getMainPanel());
     }
+
+
+    public void mostrarEscolherEditarSessaoAdmin() {
+        EscolherEditarSessaoAdmin pagina = new EscolherEditarSessaoAdmin(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+    public void mostrarEditarSessaoAdmin(Sessao sessaoAEditar) {
+        EditarSessaoAdmin pagina = new EditarSessaoAdmin(this,sessaoAEditar);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+    public void mostrarConfirmacaoEdicaoSessaoAdmin() {
+        ConfirmacaoEdicaoSessao pagina = new ConfirmacaoEdicaoSessao(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
 
 
     //-------------------- BAR ------------------

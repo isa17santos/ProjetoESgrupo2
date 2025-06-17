@@ -99,7 +99,7 @@ public class PaginaPrincipalSessoesAdmin {
         adicionarButton.addActionListener(e -> app.mostrarCriacaoSessaoAdmin());
 
         // Redirecionar para EditarFilme
-        editarButton.addActionListener(e -> app.mostrarEditarSessaoAdmin());
+        editarButton.addActionListener(e -> app.mostrarEscolherEditarSessaoAdmin());
     }
 
     public JPanel getMainPanel() {

@@ -1,3 +1,4 @@
+import com.formdev.flatlaf.FlatLightLaf;
 import net.miginfocom.swing.MigLayout;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -8,39 +9,33 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.List;
 
-import com.formdev.flatlaf.FlatLightLaf;
-
-public class CriarSessaoAdmin {
+public class EscolherEditarSessaoAdmin {
     private JPanel mainPanel;
     private JLabel logoLabel = new JLabel();
     private JLabel voltaLabel = new JLabel();
     private JLabel adminLabel = new JLabel("Admin");
-    private JLabel sessoesLabel = new JLabel("Sessões - Criação");
+    private JLabel sessoesLabel = new JLabel("Sessões - Editar");
+    private JLabel textoLabel = new JLabel("Qual a sessão que deseja editar?");
     private JComboBox <Object> filmesComboBox = new JComboBox<>();
     private JComboBox <Object> salasComboBox = new JComboBox<>();
-    private JComboBox comboBoxEstado;
     private JDatePickerImpl datePicker;
     private JSpinner horaSpinner;
-    private JTextField precoCompraField;
-    private JLabel erroPrecoCompraLabel = new JLabel();
-    private final String placeholder = "Preço do bilhete(€)";
-    private JButton criarButton;
+    private JButton editarButton;
 
     private BaseDados bd = BaseDados.getInstance();
 
     private final AppWindow app;
-
-    private String input = null;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
@@ -55,64 +50,56 @@ public class CriarSessaoAdmin {
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     //construtor
-    public CriarSessaoAdmin(AppWindow app) {
+    public EscolherEditarSessaoAdmin(AppWindow app) {
         this.app = app;
         configurarComponentes();
     }
 
 
     private void configurarComponentes() {
+        // todas as sessoes existentes
+        List<Sessao> sessoes = bd.getSessoes();
 
-        //todos os filmes existentes
+        List<Sessao> sessoesSemBilhetesVendidos = new ArrayList<>();
+
+        for (Sessao sessao : sessoes) {
+            if(sessao.getBilhetesVendidos() == 0)
+            {
+                sessoesSemBilhetesVendidos.add(sessao);
+            }
+        }
+
+        System.out.println("Sessoes Selecionados: " + sessoesSemBilhetesVendidos.size());
+
+        // filmes existentes
         List<Filme> filmes = bd.getFilmes();
 
-        System.out.println("Total filmes existentes: " + filmes.size());
+        List<String> filmesSelecionados = new ArrayList<>();
 
-        // filmes ativos
-        List<Filme> filmesAtivos = new ArrayList<>();
-
-        //apenas filmes que estejam ativos
-        for (Filme filme : filmes) {
-            if(filme.getEstado() == Estado.ATIVO) {
-                filmesAtivos.add(filme);
+        for(Sessao sessao : sessoesSemBilhetesVendidos) {
+            for(Filme filme : filmes) {
+                if(sessao.getFilme() == filme && !filmesSelecionados.contains(filme.getNome() + " " + filme.getIdiomas() + " " + filme.getTipos())) {
+                    filmesSelecionados.add(filme.getNome() + " " + filme.getIdiomas() + " " + filme.getTipos());
+                }
             }
         }
 
-        System.out.println("Total filmes ativos: " + filmesAtivos.size());
+        System.out.println("Filmes Selecionados: " + filmesSelecionados.size());
 
-        //------ configura string filmes --------
-        List<String> opcoesFilmes = new ArrayList<>();
-        for(Filme filme : filmesAtivos) {
-            opcoesFilmes.add(filme.getNome() + " " + filme.getIdiomas() + " " + filme.getTipos());
-        }
-
-        System.out.println("Total opcoes filmes: " + opcoesFilmes.size());
-
-
-        //todas as salas
+        //salas existentes
         List<Sala> salas = bd.getSalas();
 
-        System.out.println("Total salas existentes: " + salas.size());
+        List<String> salasSelecionados = new ArrayList<>();
 
-        // salas ativas
-        List<Sala> salasAtivas = new ArrayList<>();
-
-        // apenas salas que estejam ativas
-        for (Sala sala : salas) {
-            if(sala.getEstado() == Estado.ATIVO) {
-                salasAtivas.add(sala);
+        for (Sessao sessao : sessoesSemBilhetesVendidos) {
+            for(Sala sala : salas) {
+                if(sessao.getSala() == sala && !salasSelecionados.contains(sala.getDesignacao() + " (" + sala.getTipo() + ")")) {
+                    salasSelecionados.add(sala.getDesignacao() + " (" + sala.getTipo() + ")");
+                }
             }
         }
 
-        System.out.println("Total salas ativos: " + salasAtivas.size());
-
-        //------ configura string salas
-        List<String> opcoesSalas = new ArrayList<>();
-        for(Sala sala : salasAtivas) {
-            opcoesSalas.add(sala.getDesignacao() + " (" + sala.getTipo() + ")");
-        }
-
-        System.out.println("Total opcoes salas: " + opcoesSalas.size());
+        System.out.println("Salas Selecionados: " + salasSelecionados.size());
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
@@ -146,10 +133,18 @@ public class CriarSessaoAdmin {
         // --------------------- SALAS LABEL -----------------------
 
 
+        //----------------- TEXTO LABEL -------------------
+        textoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        textoLabel.setForeground(corFontePreto);
+        textoLabel.setBackground(corFundo);
+        textoLabel.setFont(new Font("Georgia", Font.PLAIN, 40));
+        textoLabel.setOpaque(true);
+        //----------------- TEXTO LABEL -------------------
+
 
         // --------------------- COMBOBOX FILMES -------------------------
         // ComboBox de filmes
-        filmesComboBox = new RoundedComboBox<>(opcoesFilmes.toArray(new String[0]), 20);
+        filmesComboBox = new RoundedComboBox<>(filmesSelecionados.toArray(new String[0]), 20);
         // Não selecionar nenhum item no início → mostra placeholder
         filmesComboBox.setSelectedItem(null);
         filmesComboBox.setUI(new BasicComboBoxUI() {
@@ -224,7 +219,7 @@ public class CriarSessaoAdmin {
 
 
         // --------------------- COMBOBOX SALAS -------------------------
-        salasComboBox = new RoundedComboBox<>(opcoesSalas.toArray(new String[0]), 20);
+        salasComboBox = new RoundedComboBox<>(salasSelecionados.toArray(new String[0]), 20);
         // Não selecionar nenhum item no início → mostra placeholder
         salasComboBox.setSelectedItem(null);
         salasComboBox.setMaximumRowCount(5);                    // Show scroll if more than 5
@@ -295,84 +290,6 @@ public class CriarSessaoAdmin {
         salasComboBox.setEditable(false);
         salasComboBox.setFocusable(false);
         // --------------------- COMBOBOX SALAS -------------------------
-
-
-        // -------------------- ComboBox Estado --------------------------
-        String[] opcoesEstado = {"Ativo", "Inativo"};
-        comboBoxEstado = new RoundedComboBox<>(opcoesEstado, 20);
-
-        // Não selecionar nenhum item no início → mostra placeholder
-        comboBoxEstado.setSelectedItem(null);
-
-        comboBoxEstado.setUI(new BasicComboBoxUI() {
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup popup = new BasicComboPopup(comboBox) {
-                    @Override
-                    public void show() {
-                        // Tira a borda preta
-                        setBorder(BorderFactory.createEmptyBorder());
-                        setOpaque(false);
-                        super.show();
-                    }
-
-                    @Override
-                    public void paintComponent(Graphics g) {
-                        Graphics2D g2 = (Graphics2D) g.create();
-                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        g2.setColor(corFundoSubMenu);
-                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                        g2.dispose();
-                    }
-                };
-
-                popup.setBorder(BorderFactory.createEmptyBorder());
-                popup.setOpaque(false);
-
-                return popup;
-            }
-
-            @Override
-            protected JButton createArrowButton() {
-                return new JButton(new AdicionarFilme.ArrowIcon(comboBox)) {{
-                    setBackground(corBotaoSetaComboBox);
-                    setBorder(BorderFactory.createEmptyBorder());
-                }};
-            }
-        });
-
-        // Custom renderer com placeholder
-        comboBoxEstado.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-                // Placeholder (quando nada está selecionado)
-                if (value == null) {
-                    label.setText("Estado");
-                    label.setForeground(corFonte);
-                    comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
-                } else {
-                    label.setForeground(corFontePreto);
-                }
-
-                if (index == -1) label.setBackground(corFundoComponentes);
-                else if (isSelected) label.setBackground(corHoverComboBox);
-                else label.setBackground(corFundoSubMenu);
-
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                label.setOpaque(true);
-                return label;
-            }
-        });
-
-        comboBoxEstado.setFont(new Font("Georgia", Font.PLAIN, 25));
-        comboBoxEstado.setForeground(corFontePreto);
-        comboBoxEstado.setBackground(corFundoComponentes);
-
-
-        comboBoxEstado.setEditable(false);
-        // -------------------- ComboBox Estado --------------------------
 
 
         //--------------------- DataPicker ---------------------------
@@ -504,104 +421,36 @@ public class CriarSessaoAdmin {
         // ----------------------- HORA ------------------------
 
 
-        // --------------------- PRECO BILHETE ----------------
-        precoCompraField = new RoundedTextField(1,20);
-        precoCompraField.setText(placeholder);
-        precoCompraField.setForeground(corFonte);
-        precoCompraField.setHorizontalAlignment(SwingConstants.CENTER);
-        precoCompraField.setBackground(corFundoComponentes);
-        precoCompraField.setFont(new Font("Georgia", Font.PLAIN, 25));
-
-        erroPrecoCompraLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
-        erroPrecoCompraLabel.setText("");
-        erroPrecoCompraLabel.setForeground(Color.RED);
-        erroPrecoCompraLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        erroPrecoCompraLabel.setVisible(false);
-
-        precoCompraField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (precoCompraField.getText().equals(placeholder)) {
-                    precoCompraField.setText("");
-                    precoCompraField.setForeground(corFontePreto);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                String textoBruto = precoCompraField.getText().trim();
-                String textoLimpo = textoBruto.replace("€", "").replace(",", ".").replaceAll("[^\\d.-]", "");
-
-                if (textoLimpo.isEmpty() || textoLimpo.equals("-") || textoLimpo.equals(".")) {
-                    erroPrecoCompraLabel.setText("Insira um valor válido em euros.");
-                    erroPrecoCompraLabel.setVisible(true);
-                    precoCompraField.setText(placeholder);
-                    precoCompraField.setForeground(corFonte);
-                    return;
-                }
-
-                try {
-                    double valor = Double.parseDouble(textoLimpo);
-                    if (valor <= 0) {
-                        erroPrecoCompraLabel.setText("Insira um valor superior a 0 em euros.");
-                        erroPrecoCompraLabel.setVisible(true);
-                        precoCompraField.setText(placeholder);
-                        precoCompraField.setForeground(corFonte);
-                    } else {
-                        String valorFormatado = String.format("%.2f €", valor).replace(".", ",");
-                        precoCompraField.setText(valorFormatado);
-                        precoCompraField.setForeground(corFontePreto);
-                        erroPrecoCompraLabel.setVisible(false);
-                    }
-                } catch (NumberFormatException ex) {
-                    erroPrecoCompraLabel.setText("Insira um valor válido em euros.");
-                    erroPrecoCompraLabel.setVisible(true);
-                    precoCompraField.setText(placeholder);
-                    precoCompraField.setForeground(corFonte);
-                }
-            }
-        });
-        // --------------------- PRECO BILHETE ----------------
-
-        //----------------- BOTAO CRIAR -------------
-        criarButton = new RoundedButton("Criar", 20);
-        criarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
-        criarButton.setBackground(corFundoLabel);
-        criarButton.setForeground(corFontePreto); // texto
-        criarButton.addActionListener(e -> {
-
+        //----------------- BOTAO EDITAR -------------
+        editarButton = new RoundedButton("Editar", 20);
+        editarButton.setFont(new Font("Georgia", Font.PLAIN, 25));
+        editarButton.setBackground(corFundoLabel);
+        editarButton.setForeground(corFontePreto); // texto
+        editarButton.addActionListener(e -> {
             Date dataSelecionada = (Date) datePicker.getModel().getValue();
-            String precoTexto = precoCompraField.getText().trim();
 
-            // Validações iniciais
             if (filmesComboBox.getSelectedItem() == null || filmesComboBox.getSelectedItem().toString().equals("Filme") ||
                     salasComboBox.getSelectedItem() == null || salasComboBox.getSelectedItem().toString().equals("Sala") ||
-                    comboBoxEstado.getSelectedItem() == null || comboBoxEstado.getSelectedItem().toString().equals("Estado") ||
-                    dataSelecionada == null ||
-                    precoCompraField.getText().equals("Preço do bilhete(€)") || precoTexto.isEmpty()) {
+                    dataSelecionada == null) {
 
-                JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-
-
-            String estadoTexto = (String) comboBoxEstado.getSelectedItem();
-            Estado estadoSelecionado;
-
-            if (estadoTexto.equalsIgnoreCase("Ativo")) {
-                estadoSelecionado = Estado.ATIVO;
-            } else if (estadoTexto.equalsIgnoreCase("Inativo")) {
-                estadoSelecionado = Estado.INATIVO;
-            } else {
-                JOptionPane.showMessageDialog(null, "Selecione um estado válido", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-
+            // Obter filme selecionado
             String textoSelecionado = (String) filmesComboBox.getSelectedItem();
-            Filme filmeSelecionado = null;
 
+            List<Filme> filmesAtivos = new ArrayList<>();
+
+            for(Sessao sessao : sessoesSemBilhetesVendidos){
+                for (Filme f : filmes){
+                    if (sessao.getFilme().getNome().equals(f.getNome())){
+                        filmesAtivos.add(f);
+                    }
+                }
+            }
+
+            Filme filmeSelecionado = null;
             for (Filme f : filmesAtivos) {
                 String opcao = f.getNome() + " " + f.getIdiomas() + " " + f.getTipos();
                 if (opcao.equals(textoSelecionado)) {
@@ -610,14 +459,20 @@ public class CriarSessaoAdmin {
                 }
             }
 
-            if (filmeSelecionado == null) {
-                JOptionPane.showMessageDialog(null, "Filme selecionado inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
+            // Obter sala selecionada
+            String salaSelecionadaTexto = (String) salasComboBox.getSelectedItem();
+
+            List<Sala> salasAtivas = new ArrayList<>();
+
+            for(Sessao sessao : sessoesSemBilhetesVendidos){
+                for (Sala s : salas){
+                    if (sessao.getSala().getDesignacao().equals(s.getDesignacao())){
+                        salasAtivas.add(s);
+                    }
+                }
             }
 
-            String salaSelecionadaTexto = (String) salasComboBox.getSelectedItem();
             Sala salaSelecionada = null;
-
             for (Sala s : salasAtivas) {
                 String opcao = s.getDesignacao() + " (" + s.getTipo() + ")";
                 if (opcao.equals(salaSelecionadaTexto)) {
@@ -626,108 +481,64 @@ public class CriarSessaoAdmin {
                 }
             }
 
-            if (salaSelecionada == null) {
-                JOptionPane.showMessageDialog(null, "Selecione uma sala válida.", "Erro", JOptionPane.ERROR_MESSAGE);
+            if (filmeSelecionado == null || salaSelecionada == null) {
+                JOptionPane.showMessageDialog(null, "Filme ou sala inválida", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-
-            // Compatibilidade tipo filme <-> tipo sala
-            String tipoFilme = filmeSelecionado.getTipos();
-            String tipoSala = salaSelecionada.getTipo();
-            boolean tipoCompativel = (tipoSala.equalsIgnoreCase("normal") && (tipoFilme.equalsIgnoreCase("2D") || tipoFilme.equalsIgnoreCase("3D")))
-                    || (tipoSala.equalsIgnoreCase("5D") && tipoFilme.equalsIgnoreCase("5D"))
-                    || (tipoSala.equalsIgnoreCase("vip") && tipoFilme.equalsIgnoreCase("2D"));
-
-            if (!tipoCompativel) {
-                JOptionPane.showMessageDialog(null, "Tipo de filme não compatível com tipo de sala.", "Erro", JOptionPane.ERROR_MESSAGE);
-
-                return;
-            }
-
-            // Obter hora e minutos do spinner corretamente
+            // Obter hora do spinner
             Date horaData = (Date) horaSpinner.getValue();
             Calendar calHora = Calendar.getInstance();
             calHora.setTime(horaData);
             int hora = calHora.get(Calendar.HOUR_OF_DAY);
             int minutos = calHora.get(Calendar.MINUTE);
 
-            LocalTime horaSelecionada = LocalTime.of(hora, minutos);
-            if (horaSelecionada.isBefore(LocalTime.of(12, 0)) || horaSelecionada.isAfter(LocalTime.of(22, 30))) {
-                JOptionPane.showMessageDialog(null, "A hora deve estar entre as 12:00 e as 22:30.", "Erro", JOptionPane.ERROR_MESSAGE);
-
-                return;
-            }
-
-            // Converter Date para LocalDate para facilitar a comparação
+            // Converter data
             Instant instant = dataSelecionada.toInstant();
             ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
             LocalDate data = zdt.toLocalDate();
-
-
-
-            // Validar sobreposição de sessões
-            if (existeSobreposicao(salaSelecionada, data, hora, minutos, filmeSelecionado)) {
-                JOptionPane.showMessageDialog(null, "Já existe uma sessão nesta sala neste horário.", "Erro", JOptionPane.ERROR_MESSAGE);
-
-                return;
-            }
-
-            // Verificar se sessão exatamente igual já existe
-            for (Sessao sessao : bd.getSessoes()) {
-                if (sessao.getFilme().equals(filmeSelecionado)
-                        && sessao.getSala().equals(salaSelecionada)
-                        && sessao.getAno() == data.getYear()
-                        && sessao.getMes() == data.getMonthValue()
-                        && sessao.getDia() == data.getDayOfMonth()
-                        && sessao.getHora() == hora
-                        && sessao.getMinuto() == minutos) {
-
-                    JOptionPane.showMessageDialog(null, "Já existe uma sessão com os mesmos dados.", "Erro", JOptionPane.ERROR_MESSAGE);
-
-                    return;
-                }
-            }
-
-            // Converter precoTexto para float com tratamento de possíveis vírgulas e espaços
-            float preco;
-            try {
-                precoTexto = precoTexto.replace("€", "").replace(",", ".").replaceAll("\\s+", "");
-                preco = Float.parseFloat(precoTexto);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Preço inválido", "Erro", JOptionPane.ERROR_MESSAGE);
-
-                return;
-            }
 
             int dia = data.getDayOfMonth();
             int mes = data.getMonthValue();
             int ano = data.getYear();
 
-            // Criar e guardar a nova sessão
-            Sessao novaSessao = new Sessao(filmeSelecionado, salaSelecionada, estadoSelecionado, dia, mes, ano, hora, minutos, preco);
-            bd.getSessoes().add(novaSessao);
-            filmeSelecionado.setComSessao(true);
-            bd.gravarDados();
+            // Verificar se existe sessão correspondente
+            Sessao sessaoParaEditar = null;
+            for (Sessao s : sessoesSemBilhetesVendidos) {
+                if (s.getFilme().equals(filmeSelecionado)
+                        && s.getSala().equals(salaSelecionada)
+                        && s.getAno() == ano
+                        && s.getMes() == mes
+                        && s.getDia() == dia
+                        && s.getHora() == hora
+                        && s.getMinuto() == minutos) {
+                    sessaoParaEditar = s;
+                    break;
+                }
+            }
 
-            app.mostrarConfirmacaoCriacaoSessaoAdmin();
+            if (sessaoParaEditar != null) {
+                // Redirecionar para a página de edição com a sessão encontrada
+                app.mostrarEditarSessaoAdmin(sessaoParaEditar);
+            } else {
+                JOptionPane.showMessageDialog(null, "A sessão selecionada é inválida ou já tem bilhetes vendidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
-        //----------------- BOTAO CRIAR -------------
+        //----------------- BOTAO EDITAR -------------
+
 
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 550, y 20");
-        mainPanel.add(sessoesLabel, "x 450, y 160");
-        mainPanel.add(filmesComboBox, "x 100, y 340, w 300, h 40");
-        mainPanel.add(salasComboBox, "x 600, y 340, w 300, h 40");
-        mainPanel.add(comboBoxEstado, "x 950, y 340, w 200, h 10");
-        mainPanel.add(datePicker, "x 100, y 490, w " + largura + ", h " + altura);
-        mainPanel.add(horaSpinner, "x 430, y 490, w 200, h 50");
-        mainPanel.add(precoCompraField, "x 750, y 490, w 400, h 50");
-        mainPanel.add(erroPrecoCompraLabel, "x 750, y 540, w 200, h 50");
-        mainPanel.add(criarButton, "x 100, y 610, w 1050, h 50");
+        mainPanel.add(sessoesLabel, "x 390, y 160");
+        mainPanel.add(textoLabel, "x 390, y 290");
+        mainPanel.add(filmesComboBox, "x 200, y 390, w 300, h 40");
+        mainPanel.add(salasComboBox, "x 760, y 390, w 300, h 40");
+        mainPanel.add(datePicker, "x 335, y 500, w " + largura + ", h " + altura);
+        mainPanel.add(horaSpinner, "x 760, y 500, w 300, h 50");
+        mainPanel.add(editarButton, "x 200, y 600, w 860, h 50");
 
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Pagina Principal Admin
@@ -742,35 +553,7 @@ public class CriarSessaoAdmin {
 
     }
 
-    // Metodo para verificar sobreposição
-    private boolean existeSobreposicao(Sala sala, LocalDate data, int horaInicio, int minutoInicio, Filme filmeNovo) {
-        LocalTime inicioNovaSessao = LocalTime.of(horaInicio, minutoInicio);
-        LocalTime fimNovaSessao = inicioNovaSessao.plusMinutes(filmeNovo.getDuracao());
-
-        for (Sessao sessao : bd.getSessoes()) {
-            if (!sessao.getSala().equals(sala)) continue;
-
-            if (sessao.getAno() == data.getYear() &&
-                    sessao.getMes() == data.getMonthValue() &&
-                    sessao.getDia() == data.getDayOfMonth()) {
-
-                LocalTime inicioSessaoExistente = LocalTime.of(sessao.getHora(), sessao.getMinuto());
-                LocalTime fimSessaoExistente = inicioSessaoExistente.plusMinutes(sessao.getFilme().getDuracao());
-
-                // Verifica se os intervalos se sobrepõem
-                boolean sobrepoe = !fimNovaSessao.isBefore(inicioSessaoExistente) && !inicioNovaSessao.isAfter(fimSessaoExistente);
-                if (sobrepoe) return true;
-            }
-        }
-        return false;
-    }
-
     public JPanel getMainPanel() {
         return mainPanel;
     }
 }
-
-
-
-
-

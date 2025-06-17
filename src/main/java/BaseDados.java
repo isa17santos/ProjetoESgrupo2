@@ -389,6 +389,11 @@ public class BaseDados implements Serializable {
         return false;
     }
 
+    public void atualizarSessao(Sessao sessao, float precoBilhete, Estado estado) {
+        sessao.setPrecoBilhete(precoBilhete);
+        sessao.setEstado(estado);
+    }
+
 
     // ------------------- ESTATÍSTICAS -------------------
 

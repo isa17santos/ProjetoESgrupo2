@@ -1,24 +1,17 @@
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
-
-public class ConfirmacaoCriacaoSessao {
+public class ConfirmacaoEdicaoSessao {
     private JPanel mainPanel = new JPanel();
     private JLabel logoLabel = new JLabel();
     private JLabel voltaLabel = new JLabel();
     private JLabel adminLabel = new JLabel("Admin");
-    private JLabel sessoesLabel = new JLabel("Sessões - Criação");
-    private JLabel adicionadoLabel = new JLabel("Sessão criada");
+    private JLabel sessoesLabel = new JLabel("Sessões - Editar");
+    private JLabel adicionadoLabel = new JLabel("Sessão editada");
     private JLabel sucessoLabel = new JLabel("com sucesso");
     private JLabel vistoConfirmacaoLabel = new JLabel();
 
@@ -41,7 +34,7 @@ public class ConfirmacaoCriacaoSessao {
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     //construtor
-    public ConfirmacaoCriacaoSessao(AppWindow app) {
+    public ConfirmacaoEdicaoSessao(AppWindow app) {
         this.app = app;
         configurarComponentes();
     }
@@ -131,5 +124,3 @@ public class ConfirmacaoCriacaoSessao {
         return mainPanel;
     }
 }
-
-
