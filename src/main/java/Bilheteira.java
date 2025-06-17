@@ -67,6 +67,14 @@ public class Bilheteira {
         //todas as sessões existentes
         List<Sessao> listaSessoes = bd.getSessoes();
 
+        // Dados dos filmes
+        for(Sessao sessao : listaSessoes) {
+            sessao.getFilme().setComSessao(true);
+        }
+
+        List<Filme> filmes = BaseDados.getInstance().getFilmes();
+        List<Filme> filmesSemSessao = new ArrayList<>();
+
         for (Filme f : filmesExistentes) {
             // vai procurar todos os filmes com sessao
             if (f.isComSessao()) {
