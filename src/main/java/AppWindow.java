@@ -213,7 +213,6 @@ public class AppWindow extends JFrame {
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
         ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
         trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
-
     }
 
     public void mostrarPaginaAdicionarProduto() {
