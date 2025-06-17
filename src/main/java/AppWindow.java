@@ -225,33 +225,34 @@ public class AppWindow extends JFrame {
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
         ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
         trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
-    }
 
     //-------------------- BAR ------------------
     //adicionar paginabar
-    public void mostrarBarAdmin () {
+    public void mostrarBarAdmin() {
         BarAdmin bar = new BarAdmin(this);
         trocarPainel(bar.getMainPanel());
     }
     //-------------------- FIM BAR ------------------
 
-    public void mostrarPaginaAdicionarProduto () {
+
+
+    public void mostrarPaginaAdicionarProduto() {
         AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
         trocarPainel(adicionarProdutoAdmin.getMainPanel());
     }
 
     // --- edicao produto ---
-    public void mostrarPaginaEscolherProdutoEditar () {
+    public void mostrarPaginaEscolherProdutoEditar() {
         PaginaEscolherProdutoEditar paginaEscolherProdutoEditar = new PaginaEscolherProdutoEditar(this);
         trocarPainel(paginaEscolherProdutoEditar.getMainPanel());
     }
 
-    public void mostrarPaginaEditarProduto (Produto produto){
+    public void mostrarPaginaEditarProduto(Produto produto) {
         EditarProduto editarProduto = new EditarProduto(this, produto);
         trocarPainel(editarProduto.getMainPanel());
     }
 
-    public void mostarConfirmacaoEditarProduto () {
+    public void mostarConfirmacaoEditarProduto() {
         ConfirmacaoEdicaoProduto confirmacaoEdicaoProduto = new ConfirmacaoEdicaoProduto(this);
         trocarPainel(confirmacaoEdicaoProduto.getMainPanel());
 
@@ -259,7 +260,9 @@ public class AppWindow extends JFrame {
 
 // --------------------------------------- MODO ADMIN --------------------------------------------------------
 
-    public static void main (String[]args){
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(AppWindow::new);
     }
+
+
 }
