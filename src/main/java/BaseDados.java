@@ -282,6 +282,11 @@ public class BaseDados implements Serializable {
         sessoes.add(new Sessao(filmes.get(28),salas.get(0),Estado.ATIVO,1,7,2025,12,0)); // filme Gru Maldisposto 4 VP 2D, Sala 1, dia 1-7-2025, hora 12h00
         //------- GRU MALDISPOSTO 4 ----------
         // ------------------------------------ criar sessoes -------------------------------------------
+
+        // Dados dos filmes
+        for(Sessao sessao : sessoes) {
+            sessao.getFilme().setComSessao(true);
+        }
     }
 
     public static BaseDados getInstance() {
