@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.util.LinkedList;
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -16,6 +15,16 @@ public class AppWindow extends JFrame {
         setContentPane(novoPainel);
         revalidate();
         repaint();
+    }
+    public void mostrarPaginaBebidas() {
+        PaginaBebidas pagina = new PaginaBebidas(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+
+    public void mostrarPaginaPacks() {
+        PaginaPacks pagina = new PaginaPacks(this);
+        trocarPainel(pagina.getMainPanel());
     }
 
     public void mostrarPaginaInicial() {
@@ -79,6 +88,11 @@ public class AppWindow extends JFrame {
     }
 
     //-------------------------- BILHETEIRA -----------------------------
+
+    public void mostrarBar() {
+        Bar bar = new Bar(this);
+        trocarPainel(bar.getMainPanel());
+    }
 
     public void mostrarEstatisticas() {
         Estatisticas est = new Estatisticas(this);
@@ -206,10 +220,6 @@ public class AppWindow extends JFrame {
         EditarSessaoAI1 sessao = new EditarSessaoAI1(this);
         trocarPainel(sessao.getMainPanel());
     }
-    private LinkedList<Sessao> sessoes = new LinkedList<>();
-    public void adicionarSessao(Sessao sessao) {
-        sessoes.add(sessao);
-    }
     //-------------------- FIM SESSÃO ------------------
 
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
@@ -217,29 +227,12 @@ public class AppWindow extends JFrame {
         trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
     }
 
-
     //-------------------- BAR ------------------
-
-    public void mostrarBar () {
-        Bar bar = new Bar(this);
+    //adicionar paginabar
+    public void mostrarBarAdmin () {
+        BarAdmin bar = new BarAdmin(this);
         trocarPainel(bar.getMainPanel());
     }
-
-    public void mostrarPaginaBebidas() {
-        PaginaBebidas pagina = new PaginaBebidas(this);
-        trocarPainel(pagina.getMainPanel());
-    }
-
-    public void mostrarPaginaPacks() {
-        PaginaPacks pagina = new PaginaPacks(this);
-        trocarPainel(pagina.getMainPanel());
-    }
-
-    public void mostrarPaginaAperitivos() {
-        PaginaAperitivos pagina = new PaginaAperitivos(this);
-        trocarPainel(pagina.getMainPanel());
-    }
-
     //-------------------- FIM BAR ------------------
 
     public void mostrarPaginaAdicionarProduto () {

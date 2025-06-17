@@ -105,7 +105,7 @@ public class PaginaInicial {
         bilheteiraButton.addActionListener(e -> app.mostrarBilheteira());
 
         // Redirecionar para Bar
-        barButton.addActionListener(e -> app.mostrarBar());
+        barButton.addActionListener(e -> app.mostrarBarAdmin());
 
         // Redirecionar para Estatísticas
         estatisticasButton.addActionListener(e -> app.mostrarEstatisticas());
