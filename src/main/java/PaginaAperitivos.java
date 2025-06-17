@@ -1,17 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class PaginaBebidas {
+public class PaginaAperitivos {
     private JPanel mainPanel;
     private JLabel logoLabel = new JLabel();
     private JLabel voltaLabel = new JLabel();
     private JLabel tituloPrincipalLabel = new JLabel("Bar");
-    private JLabel subtituloLabel = new JLabel("Bebidas");
+    private JLabel subtituloLabel = new JLabel("Aperitivos");
     private AppWindow app;
-    private Map<String, Integer> carrinho = new HashMap<>();
 
     private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundoLabel = Color.decode("#FBA720");
@@ -22,7 +20,7 @@ public class PaginaBebidas {
 
     private BaseDados bd;
 
-    public PaginaBebidas(AppWindow app) {
+    public PaginaAperitivos(AppWindow app) {
         this.app = app;
         this.bd = BaseDados.getInstance();
 
@@ -31,13 +29,10 @@ public class PaginaBebidas {
         mainPanel.setBackground(corFundo);
 
         // ---------------- LOGO ----------------
-        mainPanel.setLayout(null);
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
         Image logoImg = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
         logoLabel.setBounds(20, 10, 200, 200);
-        mainPanel.add(logoLabel);
-
 
         // ---------------- SETA VOLTAR ----------------
         ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
@@ -51,20 +46,19 @@ public class PaginaBebidas {
             }
         });
 
-        // ---------------- TITULO PRINCIPAL (Bar) ----------------
+        // ---------------- TITULO PRINCIPAL ----------------
         tituloPrincipalLabel.setHorizontalAlignment(SwingConstants.CENTER);
         tituloPrincipalLabel.setForeground(corFundoLabel);
-        tituloPrincipalLabel.setBackground(corFundo);
         tituloPrincipalLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         tituloPrincipalLabel.setOpaque(true);
+        tituloPrincipalLabel.setBackground(corFundo);
         tituloPrincipalLabel.setBounds(400, 30, 500, 100);
 
-        // ---------------- SUBTITULO (Bebidas) ----------------
+        // ---------------- SUBTITULO ----------------
         subtituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
         subtituloLabel.setForeground(corFundoLabel);
         subtituloLabel.setFont(new Font("Georgia", Font.PLAIN, 75));
         subtituloLabel.setBounds(400, 200, 500, 80);
-
 
         // ---------------- CARRINHO ----------------
         JLabel carrinhoLabel = new JLabel();
@@ -75,21 +69,20 @@ public class PaginaBebidas {
         carrinhoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         carrinhoLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // Usa o método mostrarCarrinho() da AppWindow em vez do método local
                 app.mostrarCarrinho();
             }
         });
 
-        // ---------------- LISTA DE BEBIDAS ----------------
-        java.util.List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.BEBIDA);
-        int numBebidas = Math.min(produtos.size(), 4);
+        // ---------------- LISTA DE APERITIVOS ----------------
+        List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.APERITIVO);
+        int numAperitivos = Math.min(produtos.size(), 4);
         int espacamento = 300;
-        int xBase = 110; // Mais próximo do centro
-        int totalLargura = numBebidas * 120 + (numBebidas - 1) * (espacamento - 120);
-        for (int i = 0; i < numBebidas; i++) {
+        int xBase = 110;
+
+        for (int i = 0; i < numAperitivos; i++) {
             Produto produto = produtos.get(i);
             int x = xBase + i * espacamento;
-            adicionarBebida(mainPanel, produto.getNome(), produto.getFoto(), x, produto.getIdProduto());
+            adicionarAperitivo(mainPanel, produto.getNome(), produto.getFoto(), x, produto.getIdProduto());
         }
 
         // ---------------- ADIÇÃO AO PAINEL ----------------
@@ -100,33 +93,31 @@ public class PaginaBebidas {
         mainPanel.add(carrinhoLabel);
     }
 
-    private void adicionarBebida(JPanel panel, String nome, String imagemPath, int x, int idProduto) {
+    private void adicionarAperitivo(JPanel panel, String nome, String imagemPath, int x, int idProduto) {
         JLabel imagemLabel = new JLabel();
         ImageIcon imgIcon = new ImageIcon(imagemPath);
-        Image img = imgIcon.getImage().getScaledInstance(81, 221, Image.SCALE_SMOOTH);
+        Image img = imgIcon.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
         imagemLabel.setIcon(new ImageIcon(img));
-        imagemLabel.setBounds(x, 315, 70, 220);
+        imagemLabel.setBounds(x - 20, 330, 140, 140);
         panel.add(imagemLabel);
 
         JLabel nomeLabel = new JLabel(nome, JLabel.CENTER);
         nomeLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
-        nomeLabel.setBounds(x - 50, 550, 200, 30);
+        nomeLabel.setBounds(x - 50, 490, 200, 30);
         nomeLabel.setForeground(corFontePreto);
         panel.add(nomeLabel);
 
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
-        spinner.setBounds(x, 600, 80, 35);
+        spinner.setBounds(x, 530, 80, 35);
         panel.add(spinner);
 
-        // Usando RoundedButton com radius 20 (por exemplo)
         RoundedButton addButton = new RoundedButton("Adicionar", 20);
-        addButton.setBounds(x - 20, 660, 150, 40);
+        addButton.setBounds(x - 20, 590, 150, 40);
         addButton.setBackground(corBotaoLaranjaEscura);
         addButton.setForeground(Color.BLACK);
         addButton.setFont(new Font("Georgia", Font.PLAIN, 25));
         addButton.addActionListener(e -> {
             int quantidade = (int) spinner.getValue();
-            carrinho.put(nome, carrinho.getOrDefault(nome, 0) + quantidade);
 
             Produto produto = bd.getProdutobyID(idProduto);
             ObjetoCarrinho objetoCarrinho = new ObjetoCarrinho(produto, quantidade);
@@ -142,4 +133,3 @@ public class PaginaBebidas {
         return mainPanel;
     }
 }
-
