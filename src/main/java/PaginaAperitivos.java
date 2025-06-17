@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PaginaPacks {
+public class PaginaAperitivos {
     private JPanel mainPanel;
     private final AppWindow app;
 
-    public PaginaPacks(AppWindow app) {
+    public PaginaAperitivos(AppWindow app) {
         this.app = app;
         mainPanel = new JPanel();
         mainPanel.setLayout(null);
@@ -21,16 +21,16 @@ public class PaginaPacks {
         mainPanel.add(logoLabel);
 
         // Título
-        JLabel titulo = new JLabel("Bebidas");
+        JLabel titulo = new JLabel("Aperitivos");
         titulo.setFont(new Font("Arial", Font.BOLD, 36));
-        titulo.setBounds(300, 30, 200, 50);
+        titulo.setBounds(300, 30, 250, 50);
         mainPanel.add(titulo);
 
-        // Bebidas
-        String[] bebidas = {"Pack Grande", "Pack Medio", "Pack Pequeno", "Pack Nachos"};
+        // Aperitivos
+        String[] aperitivos = {"Balde pequeno", "Balde médio", "Balde grande", "Nachos"};
         int x = 80;
-        for (String bebida : bebidas) {
-            JLabel label = new JLabel(bebida, JLabel.CENTER);
+        for (String snack : aperitivos) {
+            JLabel label = new JLabel(snack, JLabel.CENTER);
             label.setBounds(x, 150, 100, 20);
             mainPanel.add(label);
 

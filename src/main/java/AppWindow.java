@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.List;
 
 public class AppWindow extends JFrame {
     public AppWindow() {
@@ -21,6 +22,11 @@ public class AppWindow extends JFrame {
         trocarPainel(pagina.getMainPanel());
     }
 
+
+    public void mostrarPaginaAperitivos() {
+        PaginaAperitivos pagina = new PaginaAperitivos(this);
+        trocarPainel(pagina.getMainPanel());
+    }
 
     public void mostrarPaginaPacks() {
         PaginaPacks pagina = new PaginaPacks(this);
@@ -106,8 +112,6 @@ public class AppWindow extends JFrame {
     }
 
 
-
-
     //-------------------- FILMES ------------------
     //pagina principal
     public void mostrarPaginaPrincipalFilmesAdmin() {
@@ -148,9 +152,6 @@ public class AppWindow extends JFrame {
     //-------------------- FILMES -------------------
 
 
-
-
-
     //-------------------- SALAS ------------------
 
     //pagina principal
@@ -179,8 +180,8 @@ public class AppWindow extends JFrame {
 
     // editar sala
     public void mostrarEditarSala(String nomeSala) {
-        EditarSala salas = new EditarSala(this, nomeSala);
-        trocarPainel(salas.getMainPanel());
+        EditarSala editarSala = new EditarSala(this, nomeSala);
+        trocarPainel(editarSala.getMainPanel());
     }
 
     // confirmar edição sala
@@ -192,49 +193,28 @@ public class AppWindow extends JFrame {
 
 
 
+    //-------------------- SESSÃO ------------------
+    public void mostrarPaginaPrincipalSessoesAdmin() {
+        Criarsessao criarSessao = new Criarsessao(this);
+        trocarPainel(criarSessao.getMainPanel());
+    }
 
-
+    //-------------------- BAR ------------------
     public void mostrarPaginaPrincipalProdutosBarAdmin() {
         PaginaPrincipalProdutosBarAdmin produtos = new PaginaPrincipalProdutosBarAdmin(this);
         trocarPainel(produtos.getMainPanel());
     }
 
-    //-------------------- SESSÃO ------------------
-    //pagina principal
-    public void mostrarPaginaPrincipalSessoesAdmin() {
-        PaginaPrincipalSessoesAdmin Sessao = new PaginaPrincipalSessoesAdmin(this);
-        trocarPainel(Sessao.getMainPanel());
+    public void mostrarPaginaPrincipalBar() {
+        PaginaPrincipalProdutosBarAdmin paginaPrincipalProdutosBarAdmin = new PaginaPrincipalProdutosBarAdmin(this);
+        trocarPainel(paginaPrincipalProdutosBarAdmin.getMainPanel());
     }
-    //adicionar sessao
-    public void mostrarAdicionarSessao() {
-        CriarSessao sessao = new CriarSessao(this);
-        trocarPainel(sessao.getMainPanel());
-    }
-    // editar sessao
-    public void mostrarEditarSessao(String nomeSessao) {
-        EditarSessao sessao = new EditarSessao(this, nomeSessao);
-        trocarPainel(sessao.getMainPanel());
-    }
-    // editar sala seleção
-    public void mostrarEditarSessaoAI() {
-        EditarSessaoAI1 sessao = new EditarSessaoAI1(this);
-        trocarPainel(sessao.getMainPanel());
-    }
-    //-------------------- FIM SESSÃO ------------------
 
     public void mostrarPaginaConfirmacaoAdicaoProduto() {
         ConfirmacaoAdicaoProduto confirmacaoAdicaoProduto = new ConfirmacaoAdicaoProduto(this);
         trocarPainel(confirmacaoAdicaoProduto.getMainPanel());
 
-    //-------------------- BAR ------------------
-    //adicionar paginabar
-    public void mostrarBarAdmin() {
-        BarAdmin bar = new BarAdmin(this);
-        trocarPainel(bar.getMainPanel());
     }
-    //-------------------- FIM BAR ------------------
-
-
 
     public void mostrarPaginaAdicionarProduto() {
         AdicionarProdutoAdmin adicionarProdutoAdmin = new AdicionarProdutoAdmin(this);
