@@ -47,7 +47,9 @@ public class PaginaBebidas {
         voltaLabel.setBounds(50, 220, 100, 100);
         voltaLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                app.mostrarBar();
+
+               app.mostrarBar(); // Chama o método da AppWindow
+
             }
         });
 

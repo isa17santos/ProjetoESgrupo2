@@ -35,7 +35,7 @@ public class Bilheteira {
     private JButton botaoFiltrar;
 
 
-    private BaseDados bd;
+    private BaseDados bd  = BaseDados.getInstance();
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
@@ -52,7 +52,6 @@ public class Bilheteira {
     //construtor
     public Bilheteira(AppWindow app) {
         this.app = app;
-        this.bd = BaseDados.getInstance();
         configurarComponentes();
     }
 
@@ -66,6 +65,12 @@ public class Bilheteira {
 
         //todas as sessões existentes
         List<Sessao> listaSessoes = bd.getSessoes();
+
+        // Dados dos filmes
+        for(Sessao sessao : listaSessoes) {
+            sessao.getFilme().setComSessao(true);
+        }
+
 
         for (Filme f : filmesExistentes) {
             // vai procurar todos os filmes com sessao

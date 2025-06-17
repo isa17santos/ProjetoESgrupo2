@@ -1,9 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import net.miginfocom.swing.MigLayout;
 
 public class PaginaInicial {
@@ -34,7 +31,7 @@ public class PaginaInicial {
     private void configurarComponentes() {
 
         // pagina principal
-        mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
+        mainPanel.setLayout(new net.miginfocom.swing.MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
 
         // Logo
@@ -94,9 +91,9 @@ public class PaginaInicial {
         // ------------------- REDIRECIONAMENTOS -------------------
         // Redirecionar para Carrinho
         cartLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        cartLabel.addMouseListener(new MouseAdapter() {
+        cartLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
                 app.mostrarCarrinho();
             }
         });
