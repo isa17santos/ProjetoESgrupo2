@@ -81,8 +81,8 @@ public class AppWindow extends JFrame {
     }
 
     //escolha lugar bilheteira
-    public void mostrarEscolherLugar(Sessao sessao, boolean comSala) {
-        EscolherLugar filmes = new EscolherLugar(this, sessao, comSala);
+    public void mostrarEscolherLugar(Sessao sessao, boolean comSala, boolean filtragem) {
+        EscolherLugar filmes = new EscolherLugar(this, sessao, comSala, filtragem);
         trocarPainel(filmes.getMainPanel());
     }
 

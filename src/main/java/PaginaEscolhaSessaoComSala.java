@@ -58,7 +58,23 @@ public class PaginaEscolhaSessaoComSala {
 
         //sessoes associadas àquele filme
         List<Sessao> sessoes = new ArrayList<>();
-        for(Sessao s : bd.getSessoes()) {
+
+        //todas as sessões existentes
+        List<Sessao> listaSessoes = bd.getSessoes();
+
+        // lista de sessoes que queremos mostrar na bilheteira
+        List<Sessao> listaSessoesAtivas = new ArrayList<>();
+
+        // Dados dos filmes
+        for(Sessao sessao : listaSessoes) {
+            if(sessao.getEstado() == Estado.ATIVO)
+            {
+                listaSessoesAtivas.add(sessao);
+            }
+
+        }
+
+        for(Sessao s : listaSessoesAtivas) {
             if(filme.getNome().equals(s.getFilme().getNome()) && filme.getIdiomas().equals(s.getFilme().getIdiomas()) && filme.getTipos().equals(s.getFilme().getTipos())) {
                 sessoes.add(s);
             }
@@ -275,7 +291,7 @@ public class PaginaEscolhaSessaoComSala {
                     botao.addActionListener(e -> app.mostrarEscolherLugarSalaVip(sessao));
                 }
                 else{
-                    botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, true));
+                    botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, true, false));
                 }
 
                 gbc.gridx = col++;

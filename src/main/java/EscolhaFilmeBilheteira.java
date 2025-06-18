@@ -58,7 +58,22 @@ public class EscolhaFilmeBilheteira {
 
         List<Sessao> sessoesDoFilme = new ArrayList<>();
 
-        for (Sessao sessao : bd.getSessoes())
+        //todas as sessões existentes
+        List<Sessao> listaSessoes = bd.getSessoes();
+
+        // lista de sessoes que queremos mostrar na bilheteira
+        List<Sessao> listaSessoesAtivas = new ArrayList<>();
+
+        // Dados dos filmes
+        for(Sessao sessao : listaSessoes) {
+            if(sessao.getEstado() == Estado.ATIVO)
+            {
+                listaSessoesAtivas.add(sessao);
+            }
+
+        }
+
+        for (Sessao sessao : listaSessoesAtivas)
         {
             for (Filme f: filmeSelecionado)
             {

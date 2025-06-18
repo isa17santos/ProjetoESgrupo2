@@ -52,9 +52,25 @@ public class PaginaEscolhaSessao {
 
     private void configurarComponentes(Filme filme) {
 
+        // sessoes do filme escolhido
         List<Sessao> sessoes = new ArrayList<>();
 
-        for(Sessao s : bd.getSessoes()) {
+        //todas as sessões existentes
+        List<Sessao> listaSessoes = bd.getSessoes();
+
+        // lista de sessoes que queremos mostrar na bilheteira
+        List<Sessao> listaSessoesAtivas = new ArrayList<>();
+
+        // Dados dos filmes
+        for(Sessao sessao : listaSessoes) {
+            if(sessao.getEstado() == Estado.ATIVO)
+            {
+                listaSessoesAtivas.add(sessao);
+            }
+
+        }
+
+        for(Sessao s : listaSessoesAtivas) {
             // vai procurar todos os filmes com aquele nome
             if(filme.getNome().equals(s.getFilme().getNome()) && filme.getIdiomas().equals(s.getFilme().getIdiomas()) && filme.getTipos().equals(s.getFilme().getTipos())) {
                 sessoes.add(s);
@@ -249,7 +265,7 @@ public class PaginaEscolhaSessao {
                     if (vendidos >= lugaresDisponiveis) {
                         erroLabel.setVisible(true);
                     } else {
-                        app.mostrarEscolherLugar(sessao, false);
+                        app.mostrarEscolherLugar(sessao, false, false);
                     }
                 });
 

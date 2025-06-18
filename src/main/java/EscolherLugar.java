@@ -31,6 +31,7 @@ public class EscolherLugar {
 
 
     private boolean comSala;
+    private boolean filtragem;
 
 
     private BaseDados bd = BaseDados.getInstance();
@@ -54,9 +55,10 @@ public class EscolherLugar {
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     //construtor
-    public EscolherLugar(AppWindow app, Sessao sessao, boolean comSala) {
+    public EscolherLugar(AppWindow app, Sessao sessao, boolean comSala, boolean filtragem) {
         this.app = app;
         this.comSala = comSala;
+        this.filtragem = filtragem;
         configurarComponentes(sessao);
     }
 
@@ -268,13 +270,20 @@ public class EscolherLugar {
         voltaLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(comSala)
+                if(filtragem)
                 {
-                    app.mostrarPaginaSessoesSalaEscolhida(sessao.getFilme(), sessao.getSala().getTipo());
+                    app.mostrarBilheteira();
                 }
                 else{
-                    app.mostrarPaginaSessoes(sessao.getFilme());
+                    if(comSala)
+                    {
+                        app.mostrarPaginaSessoesSalaEscolhida(sessao.getFilme(), sessao.getSala().getTipo());
+                    }
+                    else{
+                        app.mostrarPaginaSessoes(sessao.getFilme());
+                    }
                 }
+
 
             }
         });

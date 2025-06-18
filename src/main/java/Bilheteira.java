@@ -26,6 +26,8 @@ public class Bilheteira {
     private JComboBox comboBoxSessoes;
     private JDatePickerImpl datePicker;
     private JComboBox comboBoxGenero;
+    private JComboBox comboBoxIdioma;
+    private JComboBox comboBoxTipo;
     private JComboBox comboBoxIdade;
     private JComboBox salasComboBox;
     private JLabel limparFiltrosLabel;
@@ -33,6 +35,9 @@ public class Bilheteira {
     private JScrollPane scrollPaneCartazes;
     private JPanel cartazPanel;
     private JButton botaoFiltrar;
+
+
+    private Sessao sessaoSelecionadaParaRedirecionamento = null;
 
 
     private BaseDados bd  = BaseDados.getInstance();
@@ -66,21 +71,38 @@ public class Bilheteira {
         //todas as sessões existentes
         List<Sessao> listaSessoes = bd.getSessoes();
 
+        // lista de sessoes que queremos mostrar na bilheteira
+        List<Sessao> listaSessoesAtivas = new ArrayList<>();
+
         // Dados dos filmes
         for(Sessao sessao : listaSessoes) {
+            if(sessao.getEstado() == Estado.ATIVO)
+            {
+                listaSessoesAtivas.add(sessao);
+            }
+
+        }
+
+
+        for(Sessao sessao : listaSessoesAtivas) {
             sessao.getFilme().setComSessao(true);
         }
 
+        for (Sessao s: listaSessoesAtivas) {
+            for (Filme f : filmesExistentes) {
 
-        for (Filme f : filmesExistentes) {
-            // vai procurar todos os filmes com sessao
-            if (f.isComSessao()) {
-                if (!nomesAdicionados.contains(f.getNome())) {
-                    listaFilmesComSessao.add(f);
-                    nomesAdicionados.add(f.getNome());
+                //filme pertence a sessao
+                if(s.getFilme().getNome() == f.getNome())
+                {
+                    if (!nomesAdicionados.contains(f.getNome())) {
+                        listaFilmesComSessao.add(f);
+                        nomesAdicionados.add(f.getNome());
+                    }
                 }
+
             }
         }
+
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
@@ -179,7 +201,7 @@ public class Bilheteira {
             }
         });
 
-        comboBoxSessoes.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxSessoes.setFont(new Font("Georgia", Font.PLAIN, 20));
         comboBoxSessoes.setForeground(corFontePreto);
         comboBoxSessoes.setBackground(corFundoComponentes);
         comboBoxSessoes.setEditable(false);
@@ -241,7 +263,7 @@ public class Bilheteira {
         // Obter o tamanho ideal do calendário
         Dimension calendarPreferredSize = datePanel.getPreferredSize();
         int largura = calendarPreferredSize.width;
-        int altura = 50; // Altura desejada para a caixa de texto
+        int altura = 40; // Altura desejada para a caixa de texto
 
         // Aplicar tamanhos consistentes
         datePicker.setPreferredSize(new Dimension(largura, altura));
@@ -325,11 +347,11 @@ public class Bilheteira {
                 // Verifica se é o item visível (index == -1) e se não há valor selecionado
                 if (value == null && index == -1) {
                     label.setText("Género");
-                    label.setFont(new Font("Georgia", Font.PLAIN, 35));
+                    label.setFont(new Font("Georgia", Font.PLAIN, 20));
                     label.setForeground(corFonte);
                 } else {
                     label.setText(value != null ? value.toString() : ""); // garantir texto
-                    label.setFont(new Font("Georgia", Font.PLAIN, 25));
+                    label.setFont(new Font("Georgia", Font.PLAIN, 20));
                     label.setForeground(corFontePreto);
                 }
 
@@ -348,12 +370,165 @@ public class Bilheteira {
         });
 
 
-        comboBoxGenero.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxGenero.setFont(new Font("Georgia", Font.PLAIN, 20));
         comboBoxGenero.setForeground(corFontePreto);
         comboBoxGenero.setBackground(corFundoComponentes);
         comboBoxGenero.setEditable(false);
         // -------------------- ComboBox Genero --------------------------
 
+
+        // -------------------- ComboBox idioma --------------------------
+        String[] opcoesIdioma = {"VP", "VO"};
+        comboBoxIdioma = new RoundedComboBox<>(opcoesIdioma, 20);
+
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxIdioma.setSelectedItem(null);
+
+        comboBoxIdioma.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBox) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new AdicionarFilme.ArrowIcon(comboBox)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxIdioma.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Idioma");
+                    label.setForeground(corFonte);
+                    comboBoxIdioma.setFont(new Font("Georgia", Font.PLAIN, 20));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+
+        comboBoxIdioma.setFont(new Font("Georgia", Font.PLAIN, 20));
+        comboBoxIdioma.setForeground(corFontePreto);
+        comboBoxIdioma.setBackground(corFundoComponentes);
+
+        comboBoxIdioma.setEditable(false);
+        // -------------------- ComboBox idioma --------------------------
+
+
+        // -------------------- ComboBox tipo --------------------------
+        String[] opcoesTipo = {"2D", "3D", "5D"};
+        comboBoxTipo = new RoundedComboBox<>(opcoesTipo, 20);
+
+        // Não selecionar nenhum item no início → mostra placeholder
+        comboBoxTipo.setSelectedItem(null);
+
+        comboBoxTipo.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = new BasicComboPopup(comboBox) {
+                    @Override
+                    public void show() {
+                        // Tira a borda preta
+                        setBorder(BorderFactory.createEmptyBorder());
+                        setOpaque(false);
+                        super.show();
+                    }
+
+                    @Override
+                    public void paintComponent(Graphics g) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setColor(corFundoSubMenu);
+                        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+                        g2.dispose();
+                    }
+                };
+
+                popup.setBorder(BorderFactory.createEmptyBorder());
+                popup.setOpaque(false);
+
+                return popup;
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                return new JButton(new AdicionarFilme.ArrowIcon(comboBox)) {{
+                    setBackground(corBotaoSetaComboBox);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }};
+            }
+        });
+
+        // Custom renderer com placeholder
+        comboBoxTipo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                // Placeholder (quando nada está selecionado)
+                if (value == null) {
+                    label.setText("Tipo");
+                    label.setForeground(corFonte);
+                    comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 20));
+                } else {
+                    label.setForeground(corFontePreto);
+                }
+
+                if (index == -1) label.setBackground(corFundoComponentes);
+                else if (isSelected) label.setBackground(corHoverComboBox);
+                else label.setBackground(corFundoSubMenu);
+
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setOpaque(true);
+                return label;
+            }
+        });
+
+        comboBoxTipo.setFont(new Font("Georgia", Font.PLAIN, 20));
+        comboBoxTipo.setForeground(corFontePreto);
+        comboBoxTipo.setBackground(corFundoComponentes);
+
+        comboBoxTipo.setEditable(false);
+        // -------------------- ComboBox tipo --------------------------
 
         // -------------------- ComboBox idade --------------------------
         String[] opcoes = {"6+", "12+", "16+", "18+"};
@@ -409,7 +584,7 @@ public class Bilheteira {
                 if (value == null) {
                     label.setText("Idade");
                     label.setForeground(corFonte);
-                    comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 25));
+                    comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 20));
                 } else {
                     label.setForeground(corFontePreto);
                 }
@@ -424,7 +599,7 @@ public class Bilheteira {
             }
         });
 
-        comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 25));
+        comboBoxIdade.setFont(new Font("Georgia", Font.PLAIN, 20));
         comboBoxIdade.setForeground(corFontePreto);
         comboBoxIdade.setBackground(corFundoComponentes);
 
@@ -492,7 +667,7 @@ public class Bilheteira {
                 if (value == null) {
                     label.setText("Sala");
                     label.setForeground(corFontePreto);
-                    salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 25));
+                    salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 20));
                 } else {
                     label.setForeground(corFontePreto);
                 }
@@ -507,7 +682,7 @@ public class Bilheteira {
             }
         });
 
-        salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 25));
+        salasComboBox.setFont(new Font("Georgia", Font.PLAIN, 20));
         salasComboBox.setBackground(corFundoComponentes);
         salasComboBox.setForeground(corFontePreto);
         salasComboBox.setEditable(false);
@@ -543,19 +718,15 @@ public class Bilheteira {
             public void mouseClicked(MouseEvent e) {
                 comboBoxSessoes.setSelectedIndex(-1);
                 comboBoxGenero.setSelectedIndex(-1);
+                comboBoxIdioma.setSelectedIndex(-1);
+                comboBoxTipo.setSelectedIndex(-1);
                 comboBoxIdade.setSelectedIndex(-1);
                 salasComboBox.setSelectedIndex(-1);
                 datePicker.getModel().setValue(null); // limpa a data
 
                 limparFiltrosLabel.setVisible(false);
 
-                // Voltar a mostrar todos os filmes com sessão
-                Set<String> nomes = new HashSet<>();
-                List<Filme> filmesTodos = bd.getFilmes().stream()
-                        .filter(f -> f.isComSessao() && nomes.add(f.getNome()))
-                        .collect(Collectors.toList());
-
-                desenharCartazes(filmesTodos);
+                desenharCartazes(listaFilmesComSessao);
             }
         });
         //----------------------- LABEL LIMPAR FILTRO -------------------------------------------
@@ -563,7 +734,7 @@ public class Bilheteira {
         //------------------------------- BOTAO FILTRAR ---------------------------------------
         botaoFiltrar = new JButton();
         botaoFiltrar = new RoundedButton("Filtrar", 20);
-        botaoFiltrar.setFont(new Font("Georgia", Font.PLAIN, 25));
+        botaoFiltrar.setFont(new Font("Georgia", Font.PLAIN, 20));
         botaoFiltrar.setBackground(corFundoLabel);
         botaoFiltrar.setForeground(corFontePreto);
         botaoFiltrar.setFocusPainted(false);
@@ -575,6 +746,10 @@ public class Bilheteira {
             if (comboBoxSessoes.getSelectedIndex() < 0) sessaoSel = null;
             String generoSel = (String) comboBoxGenero.getSelectedItem();
             if (comboBoxGenero.getSelectedIndex() < 0) generoSel = null;
+            String idiomaSel = (String) comboBoxIdioma.getSelectedItem();
+            if (comboBoxIdioma.getSelectedIndex() < 0) idiomaSel = null;
+            String tipoSel = (String) comboBoxTipo.getSelectedItem();
+            if (comboBoxTipo.getSelectedIndex() < 0) tipoSel = null;
             String idadeSel = (String) comboBoxIdade.getSelectedItem();
             if (comboBoxIdade.getSelectedIndex() < 0) idadeSel = null;
             String salaSel = (String) salasComboBox.getSelectedItem();
@@ -588,7 +763,11 @@ public class Bilheteira {
             List<Filme> filmesFiltrados = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-            for (Sessao sessao : bd.getSessoes()) {
+
+            // Variável para guardar a sessão selecionada para redirecionamento especial
+            sessaoSelecionadaParaRedirecionamento = null;
+
+            for (Sessao sessao : listaSessoesAtivas) {
                 Filme f = sessao.getFilme();
                 boolean ok = true;
 
@@ -604,6 +783,14 @@ public class Bilheteira {
                     }
                 }
 
+                if (idiomaSel != null && !idiomaSel.isEmpty()) {
+                    Idioma idiomaSelecionado = Idioma.valueOf(NormalizarEnum.normalizarEnum(idiomaSel));
+                    if (!f.getIdiomas().equals(idiomaSelecionado)) ok = false;
+                }
+
+                if(tipoSel != null && !tipoSel.isEmpty()) {
+                    if(!f.getTipos().equalsIgnoreCase(tipoSel)) ok = false;
+                }
 
                 if (idadeSel != null && !idadeSel.isEmpty()) {
                     if (!f.getIdade().equalsIgnoreCase(idadeSel)) ok = false;
@@ -629,7 +816,19 @@ public class Bilheteira {
                     if (!sessaoData.equals(sdf.format(dataSel))) ok = false;
                 }
 
-                if (ok && !filmesFiltrados.contains(f)) filmesFiltrados.add(f);
+                if (ok) {
+                    if (!filmesFiltrados.contains(f)) {
+                        filmesFiltrados.add(f);
+                    }
+
+                    // Só guarda a sessão para redirecionamento se TODOS os filtros relevantes estiverem selecionados
+                    boolean todosFiltrosPreenchidos = sessaoSel != null && dataSel != null && idiomaSel != null
+                            && tipoSel != null && salaSel != null;
+
+                    if (todosFiltrosPreenchidos && sessaoSelecionadaParaRedirecionamento == null) {
+                        sessaoSelecionadaParaRedirecionamento = sessao;
+                    }
+                }
             }
 
             desenharCartazes(filmesFiltrados);
@@ -643,14 +842,16 @@ public class Bilheteira {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(bilheteiraLabel, "x 510, y 30");
-        mainPanel.add(comboBoxSessoes, "x 80, y 255, w 195, h 50");
-        mainPanel.add(datePicker, "x 290, y 257, w " + largura + ", h " + altura);
-        mainPanel.add(comboBoxGenero, "x 507, y 257, w 195, h 50");
-        mainPanel.add(comboBoxIdade, "x 757, y 257, w 175, h 50");
-        mainPanel.add(salasComboBox, "x 945, y 257, w 180, h 50");
+        mainPanel.add(comboBoxSessoes, "x 20, y 265, w 140, h 40");
+        mainPanel.add(datePicker, "x 175, y 267, w " + largura + ", h " + altura);
+        mainPanel.add(comboBoxGenero, "x 390, y 267, w 195, h 40");
+        mainPanel.add(comboBoxIdioma, "x 595, y 267, w 125, h 40");
+        mainPanel.add(comboBoxTipo, "x 733, y 267, w 125, h 40");
+        mainPanel.add(comboBoxIdade, "x 870, y 267, w 130, h 40");
+        mainPanel.add(salasComboBox, "x 1010, y 267, w 140, h 40");
         mainPanel.add(scrollPaneCartazes, "x 50, y 335, w 1190, h 390");
-        mainPanel.add(botaoFiltrar, "x 1150, y 257, w 100, h 48");
-        mainPanel.add(limparFiltrosLabel, "x 1100, y 210, w 200, h 30");
+        mainPanel.add(botaoFiltrar, "x 1160, y 267, w 100, h 40");
+        mainPanel.add(limparFiltrosLabel, "x 1115, y 215, w 200, h 30");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -735,6 +936,7 @@ public class Bilheteira {
             if (!nomesAdicionados.contains(filme.getNome())) {
                 nomesAdicionados.add(filme.getNome());
 
+
                 JLabel cartaz = new JLabel();
                 ImageIcon cartazIcon = new ImageIcon(getClass().getResource("/imagens/cartazes/" + filme.getFoto()));
                 Image cartazImg = cartazIcon.getImage().getScaledInstance(265, 390, Image.SCALE_SMOOTH);
@@ -747,7 +949,11 @@ public class Bilheteira {
                 cartaz.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        app.mostrarEscolhaFilmeBilhteira(filme);
+                        if (sessaoSelecionadaParaRedirecionamento != null) {
+                            app.mostrarEscolherLugar(sessaoSelecionadaParaRedirecionamento, false, true);
+                        } else {
+                            app.mostrarEscolhaFilmeBilhteira(filme);
+                        }
                     }
                 });
 
