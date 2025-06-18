@@ -307,7 +307,7 @@ public class BaseDados implements Serializable {
             System.out.println("Ficheiro não encontrado ou erro ao carregar: " + e.getMessage());
             return null;
         }
-
+    }
         public void gravarDados() {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FICHEIRO_DADOS))) {
                 oos.writeObject(this);

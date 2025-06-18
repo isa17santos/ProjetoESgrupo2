@@ -7,10 +7,7 @@ import java.util.Map;
 
 public class PaginaPacks {
     private JPanel mainPanel;
-    private JLabel logoLabel = new JLabel();
-    private JLabel voltaLabel = new JLabel();
-    private JLabel tituloPrincipalLabel = new JLabel("Bar");
-    private JLabel subtituloLabel = new JLabel("Packs");
+    private JPanel contentPanel;
     private AppWindow app;
     private Map<String, Integer> carrinho = new HashMap<>();
 
@@ -26,10 +23,13 @@ public class PaginaPacks {
     public PaginaPacks(AppWindow app) {
         this.app = app;
         this.bd = BaseDados.getInstance();
+        configurarComponentes();
+    }
 
-        // Painel com scroll para conteúdo dinâmico
-        JPanel contentPanel = new JPanel(null);
-        contentPanel.setPreferredSize(new Dimension(1200, 1000)); // Altura maior para scroll
+    private void configurarComponentes() {
+        contentPanel = new JPanel(null);
+        contentPanel.setPreferredSize(new Dimension(1200, 1000));
+        contentPanel.setBackground(corFundo);
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(corFundo);
@@ -38,18 +38,27 @@ public class PaginaPacks {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(null);
+
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        contentPanel.setBackground(corFundo);
+        configurarLogo();
+        configurarSetaVoltar();
+        configurarTitulos();
+        configurarCarrinho();
+        configurarListaDePacks();
+    }
 
-        // Logo
+    private void configurarLogo() {
+        JLabel logoLabel = new JLabel();
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
         Image logoImg = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
         logoLabel.setBounds(20, 10, 200, 200);
         contentPanel.add(logoLabel);
+    }
 
-        // Voltar
+    private void configurarSetaVoltar() {
+        JLabel voltaLabel = new JLabel();
         ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
         Image setaImg = setaIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
         voltaLabel.setIcon(new ImageIcon(setaImg));
@@ -61,24 +70,25 @@ public class PaginaPacks {
             }
         });
         contentPanel.add(voltaLabel);
+    }
 
-        // Título principal
-        tituloPrincipalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    private void configurarTitulos() {
+        JLabel tituloPrincipalLabel = new JLabel("Bar", SwingConstants.CENTER);
         tituloPrincipalLabel.setForeground(corFundoLabel);
         tituloPrincipalLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
-        tituloPrincipalLabel.setBounds(400, 30, 500, 100);
         tituloPrincipalLabel.setOpaque(true);
         tituloPrincipalLabel.setBackground(corFundo);
+        tituloPrincipalLabel.setBounds(400, 30, 500, 100);
         contentPanel.add(tituloPrincipalLabel);
 
-        // Subtítulo
-        subtituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel subtituloLabel = new JLabel("Packs", SwingConstants.CENTER);
         subtituloLabel.setForeground(corFundoLabel);
         subtituloLabel.setFont(new Font("Georgia", Font.PLAIN, 75));
         subtituloLabel.setBounds(400, 200, 500, 80);
         contentPanel.add(subtituloLabel);
+    }
 
-        // Carrinho
+    private void configurarCarrinho() {
         JLabel carrinhoLabel = new JLabel();
         ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
         Image carrinhoImg = carrinhoIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
@@ -87,13 +97,13 @@ public class PaginaPacks {
         carrinhoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         carrinhoLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // Usa o método mostrarCarrinho() da AppWindow em vez do método local
                 app.mostrarCarrinho();
             }
         });
         contentPanel.add(carrinhoLabel);
+    }
 
-        // Listagem dinâmica dos packs
+    private void configurarListaDePacks() {
         List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.PACK);
         int colunas = 4;
         int espacamentoX = 270;
@@ -153,4 +163,3 @@ public class PaginaPacks {
         return mainPanel;
     }
 }
-

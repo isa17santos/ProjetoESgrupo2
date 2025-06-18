@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class PaginaBebidas {
     private JPanel mainPanel;
-    private JLabel logoLabel = new JLabel();
-    private JLabel voltaLabel = new JLabel();
-    private JLabel tituloPrincipalLabel = new JLabel("Bar");
-    private JLabel subtituloLabel = new JLabel("Bebidas");
+    private JLabel logoLabel;
+    private JLabel voltaLabel;
+    private JLabel tituloPrincipalLabel;
+    private JLabel subtituloLabel;
     private AppWindow app;
     private Map<String, Integer> carrinho = new HashMap<>();
 
@@ -25,21 +25,32 @@ public class PaginaBebidas {
     public PaginaBebidas(AppWindow app) {
         this.app = app;
         this.bd = BaseDados.getInstance();
+        configurarComponentes();
+    }
 
+    private void configurarComponentes() {
         mainPanel = new JPanel(null);
         mainPanel.setPreferredSize(new Dimension(1200, 700));
         mainPanel.setBackground(corFundo);
 
-        // ---------------- LOGO ----------------
-        mainPanel.setLayout(null);
+        configurarLogo();
+        configurarSetaVoltar();
+        configurarTitulos();
+        configurarCarrinho();
+        configurarListaDeBebidas();
+    }
+
+    private void configurarLogo() {
+        logoLabel = new JLabel();
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
         Image logoImg = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
         logoLabel.setBounds(20, 10, 200, 200);
         mainPanel.add(logoLabel);
+    }
 
-
-        // ---------------- SETA VOLTAR ----------------
+    private void configurarSetaVoltar() {
+        voltaLabel = new JLabel();
         ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
         Image setaImg = setaIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
         voltaLabel.setIcon(new ImageIcon(setaImg));
@@ -47,28 +58,29 @@ public class PaginaBebidas {
         voltaLabel.setBounds(50, 220, 100, 100);
         voltaLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-
-               app.mostrarBar(); // Chama o método da AppWindow
-
+                app.mostrarBar();
             }
         });
+        mainPanel.add(voltaLabel);
+    }
 
-        // ---------------- TITULO PRINCIPAL (Bar) ----------------
-        tituloPrincipalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    private void configurarTitulos() {
+        tituloPrincipalLabel = new JLabel("Bar", SwingConstants.CENTER);
         tituloPrincipalLabel.setForeground(corFundoLabel);
         tituloPrincipalLabel.setBackground(corFundo);
         tituloPrincipalLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         tituloPrincipalLabel.setOpaque(true);
         tituloPrincipalLabel.setBounds(400, 30, 500, 100);
+        mainPanel.add(tituloPrincipalLabel);
 
-        // ---------------- SUBTITULO (Bebidas) ----------------
-        subtituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        subtituloLabel = new JLabel("Bebidas", SwingConstants.CENTER);
         subtituloLabel.setForeground(corFundoLabel);
         subtituloLabel.setFont(new Font("Georgia", Font.PLAIN, 75));
         subtituloLabel.setBounds(400, 200, 500, 80);
+        mainPanel.add(subtituloLabel);
+    }
 
-
-        // ---------------- CARRINHO ----------------
+    private void configurarCarrinho() {
         JLabel carrinhoLabel = new JLabel();
         ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
         Image carrinhoImg = carrinhoIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
@@ -77,29 +89,23 @@ public class PaginaBebidas {
         carrinhoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         carrinhoLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // Usa o método mostrarCarrinho() da AppWindow em vez do método local
                 app.mostrarCarrinho();
             }
         });
+        mainPanel.add(carrinhoLabel);
+    }
 
-        // ---------------- LISTA DE BEBIDAS ----------------
+    private void configurarListaDeBebidas() {
         java.util.List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.BEBIDA);
         int numBebidas = Math.min(produtos.size(), 4);
         int espacamento = 300;
-        int xBase = 110; // Mais próximo do centro
-        int totalLargura = numBebidas * 120 + (numBebidas - 1) * (espacamento - 120);
+        int xBase = 110;
+
         for (int i = 0; i < numBebidas; i++) {
             Produto produto = produtos.get(i);
             int x = xBase + i * espacamento;
             adicionarBebida(mainPanel, produto.getNome(), produto.getFoto(), x, produto.getIdProduto());
         }
-
-        // ---------------- ADIÇÃO AO PAINEL ----------------
-        mainPanel.add(logoLabel);
-        mainPanel.add(voltaLabel);
-        mainPanel.add(tituloPrincipalLabel);
-        mainPanel.add(subtituloLabel);
-        mainPanel.add(carrinhoLabel);
     }
 
     private void adicionarBebida(JPanel panel, String nome, String imagemPath, int x, int idProduto) {
@@ -120,7 +126,6 @@ public class PaginaBebidas {
         spinner.setBounds(x, 600, 80, 35);
         panel.add(spinner);
 
-        // Usando RoundedButton com radius 20 (por exemplo)
         RoundedButton addButton = new RoundedButton("Adicionar", 20);
         addButton.setBounds(x - 20, 660, 150, 40);
         addButton.setBackground(corBotaoLaranjaEscura);
@@ -144,4 +149,3 @@ public class PaginaBebidas {
         return mainPanel;
     }
 }
-
