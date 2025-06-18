@@ -24,6 +24,7 @@ public class PaginaEscolhaSessao {
     private JLabel nomeFilmeLabel = new JLabel("");
     private JLabel duracaoLabel = new JLabel("");
     private JLabel tipoFilmeLabel = new JLabel("");
+    private JLabel erroLabel = new JLabel("ERRO! A sessão que escolheu está esgotada!");
 
     private Filme filme;
 
@@ -137,6 +138,11 @@ public class PaginaEscolhaSessao {
         //--------------------- TIPO -------------------------
 
 
+        erroLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroLabel.setForeground(Color.RED);
+        erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        erroLabel.setVisible(false);
+
         //--------------------- TABELA SESSOES -------------------------
 
         Map<LocalDate, List<Sessao>> sessoesPorData = new TreeMap<>();
@@ -157,6 +163,8 @@ public class PaginaEscolhaSessao {
 
 
 
+
+
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
@@ -167,6 +175,7 @@ public class PaginaEscolhaSessao {
         mainPanel.add(duracaoLabel, "x 455, y 364");
         mainPanel.add(tipoFilmeLabel, "x 695, y 364");
         mainPanel.add(tabela, "x 455, y 405, w 755, h 290");
+        mainPanel.add(erroLabel, "x 545, y 720, w 305, h 60");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -233,7 +242,17 @@ public class PaginaEscolhaSessao {
                 botao.setHorizontalAlignment(SwingConstants.CENTER);
                 botao.setVerticalAlignment(SwingConstants.CENTER);
 
-                botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, false));
+                botao.addActionListener(e -> {
+                    int lugaresDisponiveis = (int) sessao.getSala().getLotacao(); // ou getNumFilas() * getNumLugaresFila()
+                    int vendidos = sessao.getBilhetesVendidos();
+
+                    if (vendidos >= lugaresDisponiveis) {
+                        erroLabel.setVisible(true);
+                    } else {
+                        app.mostrarEscolherLugar(sessao, false);
+                    }
+                });
+
 
                 gbc.gridx = col++;
                 horariosPanel.add(botao, gbc);
