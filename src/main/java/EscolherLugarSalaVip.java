@@ -121,21 +121,6 @@ public class EscolherLugarSalaVip {
         ecraLabel.setOpaque(true);
         // --------------------- ECRA LABEL -----------------------
 
-        // icon zona vip
-        ImageIcon zonaVipIcon = new ImageIcon(getClass().getResource("/imagens/imagemEcra.png"));
-        Image zonaVipImg = zonaVipIcon.getImage().getScaledInstance(1100, 45, Image.SCALE_SMOOTH);
-        zonaVipIconLabel.setIcon(new ImageIcon(zonaVipImg));
-
-
-        // --------------------- ECRA LABEL -----------------------
-        zonaVipLabel.setText("Zona Vip");
-        zonaVipLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        zonaVipLabel.setForeground(corFontePreto);
-        zonaVipLabel.setBackground(corFundo);
-        zonaVipLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
-        zonaVipLabel.setOpaque(true);
-        // --------------------- ECRA LABEL -----------------------
-
 
         // ---------------------- BOTAO CONFIRMAR ------------------
         confirmarButton = new RoundedButton("Confirmar", 20);
@@ -170,54 +155,88 @@ public class EscolherLugarSalaVip {
 
 
         //---------------- GRID LUGARES ----------------------
+        Set<Point> lugaresAcessiveis = new HashSet<>();
+
         JPanel painelLugares = new JPanel();
         painelLugares.setLayout(new BoxLayout(painelLugares, BoxLayout.Y_AXIS));
-        painelLugares.setOpaque(false);
+        painelLugares.setOpaque(true);
+        painelLugares.setBackground(corFundo);
+
+        int larguraBotao = 60;
+        int alturaBotao = 60;
+        int espacamentoHorizontal = 25;
+        int espacamentoVertical = 10;
+        int larguraCorredor = 80;
 
         int numFilas = sessao.getSala().getNumFilas();
         int lugaresPorFila = sessao.getSala().getNumLugaresFila();
+
         List<Integer> lugaresOcupados = sessao.getLugaresOcupados();
 
         int filaCentralStart = numFilas / 2 - 1;
         int[] filasAcessiveis = {filaCentralStart, filaCentralStart + 1};
 
         ImageIcon iconAcessivel = new ImageIcon(getClass().getResource("/imagens/cadeira-de-rodas.png"));
-        Image imgEscalada = iconAcessivel.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image imgEscalada = iconAcessivel.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
         iconAcessivel = new ImageIcon(imgEscalada);
 
         botoesLugares.clear();
         int indiceLugarGlobal = 0;
         boolean salaTemAcessibilidade = sessao.getSala().temAcessibilidade();
 
+        int primeiraVip = (int) (numFilas * 0.75);
+        boolean zonaVipAdicionada = false;
+
         for (int fila = 0; fila < numFilas; fila++) {
-            JPanel linhaFila = new JPanel(new GridLayout(1, lugaresPorFila + 1, 35, 20));
-            linhaFila.setOpaque(false);
+            if (fila == primeiraVip && !zonaVipAdicionada) {
+                JPanel zonaVipPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+                zonaVipPanel.setOpaque(false);
 
-            // Espaçamento extra acima da última fila
-            int espacoSuperior = (fila == numFilas - 1) ? 50 : 16;
-            linhaFila.setBorder(BorderFactory.createEmptyBorder(espacoSuperior, 0, 0, 0));
+                JLabel zonaVipLabel = new JLabel("Zona Vip");
+                zonaVipLabel.setForeground(corFontePreto);
+                zonaVipLabel.setBackground(corFundo);
+                zonaVipLabel.setFont(new Font("Georgia", Font.PLAIN, 25));
+                zonaVipLabel.setOpaque(true);
 
+                JLabel zonaVipIconLabel = new JLabel();
+                ImageIcon zonaVipIcon = new ImageIcon(getClass().getResource("/imagens/imagemEcra.png"));
+                Image zonaVipImg = zonaVipIcon.getImage().getScaledInstance(1170, 45, Image.SCALE_SMOOTH);
+                zonaVipIconLabel.setIcon(new ImageIcon(zonaVipImg));
+
+                zonaVipPanel.add(zonaVipLabel);
+                zonaVipPanel.add(Box.createHorizontalStrut(10));
+                zonaVipPanel.add(zonaVipIconLabel);
+
+                painelLugares.add(zonaVipPanel);
+                zonaVipAdicionada = true;
+            }
+
+            JPanel filaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, espacamentoHorizontal, espacamentoVertical));
+            filaPanel.setOpaque(false);
 
             int colunaReal = 0;
             for (int lugar = 0; lugar < lugaresPorFila + 1; lugar++) {
                 if (lugar == lugaresPorFila / 2) {
-                    linhaFila.add(Box.createHorizontalStrut(30)); // corredor central
+                    filaPanel.add(Box.createRigidArea(new Dimension(larguraCorredor, alturaBotao)));
                     continue;
                 }
 
-                final boolean isUltimaFila = (fila == numFilas - 1);
-                boolean tempAcessivel = false;
+                final boolean isVip = (fila >= primeiraVip);
 
+                boolean tempAcessivel = false;
                 if (salaTemAcessibilidade) {
                     tempAcessivel =
-                            (fila == filasAcessiveis[0] && (colunaReal == 0 || colunaReal == lugaresPorFila - 1)) ||
-                                    (fila == filasAcessiveis[1] && (colunaReal == 0 || colunaReal == lugaresPorFila - 1)) ||
-                                    (isUltimaFila && (colunaReal == 0 || colunaReal == lugaresPorFila - 1));
+                            (fila == filasAcessiveis[0] && (colunaReal == 0 || colunaReal == lugaresPorFila)) ||
+                                    (fila == filasAcessiveis[1] && (colunaReal == 0 || colunaReal == lugaresPorFila)) ||
+                                    (isVip && (lugar == 0 || lugar == lugaresPorFila));
                 }
 
                 final boolean isAcessivel = tempAcessivel;
+
                 JButton lugarBtn = new RoundedButton("", 35);
-                lugarBtn.setPreferredSize(new Dimension(20, 40));
+                lugarBtn.setPreferredSize(new Dimension(larguraBotao, alturaBotao));
+                lugarBtn.setMinimumSize(new Dimension(larguraBotao, alturaBotao));
+                lugarBtn.setMaximumSize(new Dimension(larguraBotao, alturaBotao));
                 lugarBtn.setOpaque(false);
                 lugarBtn.setContentAreaFilled(false);
                 lugarBtn.setFocusPainted(false);
@@ -225,7 +244,7 @@ public class EscolherLugarSalaVip {
 
                 boolean isOcupado = lugaresOcupados.contains(indiceLugarGlobal);
 
-                if (!isUltimaFila) {
+                if (!isVip) {
                     lugarBtn.setBackground(corLugarBloqueado);
                     lugarBtn.setEnabled(false);
                 } else {
@@ -244,7 +263,6 @@ public class EscolherLugarSalaVip {
                                 lugarBtn.setBackground(corLugarSelecionado);
                                 lugaresSelecionados.add(lugarBtn);
                             }
-
                             confirmarButton.setVisible(!lugaresSelecionados.isEmpty());
                         });
                     }
@@ -255,14 +273,22 @@ public class EscolherLugarSalaVip {
                 }
 
                 botoesLugares.add(lugarBtn);
-                linhaFila.add(lugarBtn);
+                filaPanel.add(lugarBtn);
                 colunaReal++;
                 indiceLugarGlobal++;
             }
 
-            painelLugares.add(linhaFila);
+            painelLugares.add(filaPanel);
         }
 
+        JScrollPane scrollPaneLugares = new JScrollPane(painelLugares);
+        scrollPaneLugares.setBorder(BorderFactory.createEmptyBorder());
+        scrollPaneLugares.setOpaque(false);
+        scrollPaneLugares.getViewport().setOpaque(false);
+        scrollPaneLugares.setVerticalScrollBarPolicy(numFilas > 4 ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPaneLugares.setHorizontalScrollBarPolicy(lugaresPorFila > 10 ? JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED : JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneLugares.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPaneLugares.getHorizontalScrollBar().setUnitIncrement(16);
 //---------------- GRID LUGARES ----------------------
 
 
@@ -277,9 +303,8 @@ public class EscolherLugarSalaVip {
         mainPanel.add(ecraIconLabel, "x 140, y 305");
         mainPanel.add(ecraLabel, "x 90, y 310");
         mainPanel.add(confirmarButton, "x 1050, y 185, w 100, h 40");
-        mainPanel.add(painelLugares, "x 150, y 360, w 1050, h 365");
-        mainPanel.add(zonaVipIconLabel, "x 140, y 615");
-        mainPanel.add(zonaVipLabel, "x 27, y 620");
+        mainPanel.add(scrollPaneLugares, "x 35, y 360, w 1170, h 365");
+
 
 
 

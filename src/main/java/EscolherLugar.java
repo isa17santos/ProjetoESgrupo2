@@ -152,16 +152,17 @@ public class EscolherLugar {
                 app.mostrarCarrinho(); // redireciona para o carrinho
             }
         });
-// ---------------------- BOTAO CONFIRMAR ------------------
+        // ---------------------- BOTAO CONFIRMAR ------------------
 
 
 
-//---------------- GRID LUGARES ----------------------
+        //---------------- GRID LUGARES ----------------------
         Set<Point> lugaresAcessiveis = new HashSet<>();
 
+        // Painel principal com BoxLayout vertical (uma linha por fila)
         JPanel painelLugares = new JPanel();
-        painelLugares.setLayout(new GridLayout(sessao.getSala().getNumFilas(), sessao.getSala().getNumLugaresFila() + 1, 25, 25));
-        painelLugares.setOpaque(false);
+        painelLugares.setLayout(new BoxLayout(painelLugares, BoxLayout.Y_AXIS));
+        painelLugares.setOpaque(true);
         painelLugares.setBackground(corFundo);
 
         int numFilas = sessao.getSala().getNumFilas();
@@ -182,29 +183,37 @@ public class EscolherLugar {
         boolean salaTemAcessibilidade = sessao.getSala().temAcessibilidade();
 
         for (int fila = 0; fila < numFilas; fila++) {
-            int colunaReal = 0;
+            // Painel para cada fila, com FlowLayout horizontal
+            JPanel filaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // gaps horizontais 10px, verticais 5px
+            filaPanel.setOpaque(false);
 
             for (int lugar = 0; lugar < lugaresPorFila + 1; lugar++) {
                 if (lugar == lugaresPorFila / 2) {
-                    painelLugares.add(Box.createHorizontalStrut(30)); // corredor central
+                    // Corridore central: adiciona um espaçador fixo, mesmo visual que o Box.createHorizontalStrut(30)
+                    filaPanel.add(Box.createRigidArea(new Dimension(100, 40)));
                     continue;
                 }
 
                 boolean tempAcessivel = false;
                 if (salaTemAcessibilidade) {
                     tempAcessivel =
-                            (fila == filasAcessiveis[0] && (colunaReal == 0 || colunaReal == lugaresPorFila - 1)) ||
-                                    (fila == filasAcessiveis[1] && (colunaReal == 0 || colunaReal == lugaresPorFila - 1));
+                            (fila == filasAcessiveis[0] && (lugar == 0 || lugar == lugaresPorFila)) ||
+                                    (fila == filasAcessiveis[1] && (lugar == 0 || lugar == lugaresPorFila));
 
                     if (tempAcessivel) {
-                        lugaresAcessiveis.add(new Point(fila, colunaReal));
+                        lugaresAcessiveis.add(new Point(fila, lugar));
                     }
                 }
 
                 final boolean isAcessivel = tempAcessivel;
 
                 JButton lugarBtn = new RoundedButton("", 35);
-                lugarBtn.setPreferredSize(new Dimension(20, 40));
+
+                // ** Importante: fixar tamanho dos botões **
+                lugarBtn.setPreferredSize(new Dimension(60, 60));
+                lugarBtn.setMinimumSize(new Dimension(60, 60));
+                lugarBtn.setMaximumSize(new Dimension(60, 60));
+
                 lugarBtn.setOpaque(false);
                 lugarBtn.setContentAreaFilled(false);
                 lugarBtn.setFocusPainted(false);
@@ -240,13 +249,42 @@ public class EscolherLugar {
                 }
 
                 botoesLugares.add(lugarBtn);
-                painelLugares.add(lugarBtn);
+                filaPanel.add(lugarBtn);
 
-                colunaReal++;
                 indiceLugarGlobal++;
             }
+
+            painelLugares.add(filaPanel);
         }
-//---------------- GRID LUGARES ----------------------
+
+        // Depois, criar o JScrollPane que envolve o painelLugares, com scroll condicional
+        JScrollPane scrollPaneLugares = new JScrollPane(painelLugares);
+        scrollPaneLugares.setBorder(BorderFactory.createEmptyBorder());
+
+        if (numFilas > 4) {
+            scrollPaneLugares.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPaneLugares.setBackground(corFundo);
+            scrollPaneLugares.getViewport().setBackground(corFundo);
+
+        } else {
+            scrollPaneLugares.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            scrollPaneLugares.setBackground(corFundo);
+            scrollPaneLugares.getViewport().setBackground(corFundo);
+
+        }
+
+        if (lugaresPorFila > 10) {
+            scrollPaneLugares.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPaneLugares.setBackground(corFundo);
+            scrollPaneLugares.getViewport().setBackground(corFundo);
+
+        } else {
+            scrollPaneLugares.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollPaneLugares.setBackground(corFundo);
+            scrollPaneLugares.getViewport().setBackground(corFundo);
+
+        }
+        //---------------- GRID LUGARES ----------------------
 
 
 
@@ -260,7 +298,7 @@ public class EscolherLugar {
         mainPanel.add(ecraIconLabel, "x 140, y 305");
         mainPanel.add(ecraLabel, "x 90, y 310");
         mainPanel.add(confirmarButton, "x 1050, y 185, w 100, h 40");
-        mainPanel.add(painelLugares, "x 150, y 390, w 1050, h 300");
+        mainPanel.add(scrollPaneLugares, "x 150, y 375, w 1050, h 350");
 
 
 
