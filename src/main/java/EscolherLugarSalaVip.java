@@ -138,14 +138,20 @@ public class EscolherLugarSalaVip {
 
                     int index = botoesLugares.indexOf(btn);
                     if (index != -1) {
-                        sessao.ocuparLugar(index); // atualiza lugares ocupados
+                        int fila = index / sessao.getSala().getNumLugaresFila();
+                        int lugar = index % sessao.getSala().getNumLugaresFila();
+                        String rotuloLugar = "F" + (fila + 1) + "-L" + (lugar + 1); // atenção: +1 porque o utilizador vê a partir do 1
+
+                        Bilhete bilhete = new Bilhete(sessao, rotuloLugar);
+
+                        ObjetoCarrinho objeto = new ObjetoCarrinho(bilhete, 1);
+                        bd.adicionarAoCarrinho(objeto);
                     }
                 }
 
                 lugaresSelecionados.clear(); // limpa seleção
                 confirmarButton.setVisible(false);
 
-                bd.gravarDados(); // guarda dados atualizados
                 app.mostrarCarrinho(); // redireciona para o carrinho
             }
         });

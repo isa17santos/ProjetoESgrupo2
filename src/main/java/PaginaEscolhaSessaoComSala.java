@@ -26,6 +26,7 @@ public class PaginaEscolhaSessaoComSala {
     private JLabel duracaoLabel = new JLabel("");
     private JLabel tipoFilmeLabel = new JLabel("");
     private JLabel tipoSalaLabel = new JLabel("");
+    private JLabel erroLabel = new JLabel("ERRO! A sessão que escolheu está esgotada!");
 
     private Filme filme;
 
@@ -188,6 +189,13 @@ public class PaginaEscolhaSessaoComSala {
         //--------------------- TIPO SALA -------------------------
 
 
+        erroLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
+        erroLabel.setForeground(Color.RED);
+        erroLabel.setBackground(corFundo);
+        erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        erroLabel.setVisible(false);
+
+
         //--------------------- TABELA SESSOES -------------------------
 
         Map<LocalDate, List<Sessao>> sessoesPorData = new TreeMap<>();
@@ -219,6 +227,7 @@ public class PaginaEscolhaSessaoComSala {
         mainPanel.add(tipoFilmeLabel, "x 820, y 364");
         mainPanel.add(tipoSalaLabel, "x 1085, y 364");
         mainPanel.add(tabela, "x 455, y 405, w 755, h 290");
+        mainPanel.add(erroLabel, "x 665, y 685, w 305, h 60");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -265,7 +274,7 @@ public class PaginaEscolhaSessaoComSala {
             JPanel horariosPanel = new JPanel(new GridBagLayout());
             horariosPanel.setBackground(corFundoSubMenu);
 
-// constraints para centralizar os botões com espaçamento horizontal
+            // constraints para centralizar os botões com espaçamento horizontal
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.CENTER;
@@ -288,10 +297,52 @@ public class PaginaEscolhaSessaoComSala {
 
                 if(tipoSala.equalsIgnoreCase("VIP"))
                 {
-                    botao.addActionListener(e -> app.mostrarEscolherLugarSalaVip(sessao));
+                    System.out.println("estou na sala vip");
+
+                    botao.addActionListener(e ->{
+                        int numFilas = sessao.getSala().getNumFilas();
+                        int lugaresPorFila = sessao.getSala().getNumLugaresFila();
+                        int lugaresDisponiveis = (int) (numFilas * 0.25) * lugaresPorFila; // ou getNumFilas() * getNumLugaresFila()
+                        int vendidos = sessao.getBilhetesVendidos();
+
+                        System.out.println("lugares disponiveis: " + lugaresDisponiveis);
+                        System.out.println("vendidos: " + vendidos);
+
+                        if (vendidos >= lugaresDisponiveis) {
+                            erroLabel.setVisible(true);
+                            mainPanel.revalidate();
+                            mainPanel.repaint();
+
+                            System.out.println("sessao esgotada");
+                        } else {
+                            System.out.println("sessao livre");
+                            app.mostrarEscolherLugarSalaVip(sessao);
+                        }
+                    });
+
                 }
                 else{
-                    botao.addActionListener(e -> app.mostrarEscolherLugar(sessao, true, false));
+                    System.out.println("estou na sala normal");
+
+                    botao.addActionListener(e -> {
+                        int lugaresDisponiveis = (int) sessao.getSala().getLotacao(); // ou getNumFilas() * getNumLugaresFila()
+                        int vendidos = sessao.getBilhetesVendidos();
+
+                        System.out.println("lugares disponiveis: " + lugaresDisponiveis);
+                        System.out.println("vendidos: " + vendidos);
+
+                        if (vendidos >= lugaresDisponiveis) {
+                            erroLabel.setVisible(true);
+                            mainPanel.revalidate();
+                            mainPanel.repaint();
+
+                            System.out.println("sessao esgotada");
+                        } else {
+                            System.out.println("sessao livre");
+                            app.mostrarEscolherLugar(sessao, true, false);
+                        }
+                    });
+
                 }
 
                 gbc.gridx = col++;
