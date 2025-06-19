@@ -156,6 +156,7 @@ public class PaginaEscolhaSessao {
 
         erroLabel.setFont(new Font("Georgia", Font.PLAIN, 18));
         erroLabel.setForeground(Color.RED);
+        erroLabel.setBackground(corFundo);
         erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
         erroLabel.setVisible(false);
 
@@ -191,7 +192,7 @@ public class PaginaEscolhaSessao {
         mainPanel.add(duracaoLabel, "x 455, y 364");
         mainPanel.add(tipoFilmeLabel, "x 695, y 364");
         mainPanel.add(tabela, "x 455, y 405, w 755, h 290");
-        mainPanel.add(erroLabel, "x 545, y 720, w 305, h 60");
+        mainPanel.add(erroLabel, "x 665, y 685, w 305, h 60");
 
 
         // ------------------- REDIRECIONAMENTOS -------------------
@@ -264,6 +265,8 @@ public class PaginaEscolhaSessao {
 
                     if (vendidos >= lugaresDisponiveis) {
                         erroLabel.setVisible(true);
+                        mainPanel.revalidate();
+                        mainPanel.repaint();
                     } else {
                         app.mostrarEscolherLugar(sessao, false, false);
                     }

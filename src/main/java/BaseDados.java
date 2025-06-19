@@ -808,6 +808,8 @@ public class BaseDados implements Serializable {
                 int index = fila * lugaresPorFila + lugar;
 
                 sessao.ocuparLugar(index); // aqui grava na base de dados real
+                sessao.venderBilhete();
+
             }
         }
 
