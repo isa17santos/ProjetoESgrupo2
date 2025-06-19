@@ -18,7 +18,6 @@ import java.time.*;
 import java.util.*;
 import java.util.List;
 
-import com.formdev.flatlaf.FlatLightLaf;
 
 public class CriarSessaoAdmin {
     private JPanel mainPanel;
@@ -465,42 +464,26 @@ public class CriarSessaoAdmin {
 
 
         // ----------------------- HORA ------------------------
-        // Configurar modelo de hora
-        SpinnerDateModel modelHora = new SpinnerDateModel();
-        modelHora.setCalendarField(Calendar.MINUTE);
-        horaSpinner = new JSpinner(modelHora);
+        horaSpinner = new JSpinner(new SpinnerDateModel());
+        horaSpinner.setPreferredSize(new Dimension(130, 50));
+        horaSpinner.setFont(new Font("Georgia", Font.PLAIN, 25));
+        horaSpinner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        horaSpinner.setOpaque(true); // permite fundo personalizado
 
-        // Editor para mostrar no formato HH:mm
+        // Editor personalizado com formato HH:mm
         JSpinner.DateEditor editor = new JSpinner.DateEditor(horaSpinner, "HH:mm");
         horaSpinner.setEditor(editor);
 
-        // Mudar a cor de fundo do campo de texto
+        // Aceder ao campo de texto interno do spinner e aplicar cor e fonte
         JComponent editorComp = horaSpinner.getEditor();
         if (editorComp instanceof JSpinner.DefaultEditor) {
             JTextField textFieldHora = ((JSpinner.DefaultEditor) editorComp).getTextField();
-            textFieldHora.setHorizontalAlignment(SwingConstants.CENTER);
+            textFieldHora.setBackground(Color.decode("#FFC133")); // fundo do campo
             textFieldHora.setFont(new Font("Georgia", Font.PLAIN, 25));
-            textFieldHora.setBackground(Color.decode("#FFC133"));
+            textFieldHora.setForeground(Color.BLACK); // texto preto (opcional)
+            textFieldHora.setCaretColor(Color.BLACK); // cursor preto
         }
 
-        // Mudar cor dos botões (setas)
-        for (Component comp : horaSpinner.getComponents()) {
-            if (comp instanceof JButton) {
-                comp.setBackground(Color.decode("#FAFAFA"));
-            }
-        }
-
-        try {
-            // Ativar FlatLaf
-            UIManager.setLookAndFeel(new FlatLightLaf());
-
-            // Customizar cores do Spinner com FlatLaf
-            UIManager.put("Spinner.background", new Color(0xFFC133));
-            UIManager.put("Spinner.editorBackground", new Color(0xFFC133));
-            UIManager.put("Spinner.arrowButtonBackground", new Color(0xFFC133));
-        } catch (Exception ex) {
-            System.err.println("Falha ao carregar FlatLaf.");
-        }
         // ----------------------- HORA ------------------------
 
 
