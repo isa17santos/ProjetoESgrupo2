@@ -16,28 +16,14 @@ public class AppWindow extends JFrame {
         revalidate();
         repaint();
     }
-    public void mostrarPaginaBebidas() {
-        PaginaBebidas pagina = new PaginaBebidas(this);
-        trocarPainel(pagina.getMainPanel());
-    }
 
-
-    public void mostrarPaginaAperitivos() {
-        PaginaAperitivos pagina = new PaginaAperitivos(this);
-        trocarPainel(pagina.getMainPanel());
-    }
-
-    public void mostrarPaginaPacks() {
-        PaginaPacks pagina = new PaginaPacks(this);
-        trocarPainel(pagina.getMainPanel());
-    }
 
     public void mostrarPaginaInicial() {
         PaginaInicial paginaInicial = new PaginaInicial(this);
         trocarPainel(paginaInicial.getMainPanel());
     }
 
-    /// carrinho
+    // ---------------------- CARRINHO ------------------------
     public void mostrarCarrinho() {
         Carrinho carrinho = new Carrinho(this);
         trocarPainel(carrinho.getMainPanel());
@@ -52,7 +38,7 @@ public class AppWindow extends JFrame {
         ConfirmacaoCarrinhoPagamento pagamento = new ConfirmacaoCarrinhoPagamento(this);
         trocarPainel(pagamento.getMainPanel());
     }
-
+    // ---------------------- CARRINHO ------------------------
 
 
     //-------------------------- BILHETEIRA -----------------------------
@@ -96,10 +82,29 @@ public class AppWindow extends JFrame {
 
 
 
+    //----------------------------- BAR ---------------------------
     public void mostrarBar() {
         Bar bar = new Bar(this);
         trocarPainel(bar.getMainPanel());
     }
+
+    public void mostrarPaginaBebidas() {
+        PaginaBebidas pagina = new PaginaBebidas(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+
+    public void mostrarPaginaAperitivos() {
+        PaginaAperitivos pagina = new PaginaAperitivos(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+    public void mostrarPaginaPacks() {
+        PaginaPacks pagina = new PaginaPacks(this);
+        trocarPainel(pagina.getMainPanel());
+    }
+
+    //----------------------------- BAR ---------------------------
 
     public void mostrarEstatisticas() {
         Estatisticas est = new Estatisticas(this);

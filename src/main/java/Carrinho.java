@@ -251,13 +251,11 @@ public class Carrinho {
         pagamentoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 
-        //estetica
         // Adiciona componentes com posicionamento personalizado
         mainPanel.add(logoLabel, "x 30, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(carrinhoLabel, "x 500, y 20");
         mainPanel.add(infoSemCompras, "x 530, y 400");
-
         mainPanel.add(aplicarButton, "x 1000, y 205, w 70, h 50");
         mainPanel.add(comboBoxDesconto, "x 300, y 205, w 600, h 30");
         mainPanel.add(scrollPaneCarrinho, "x 50, y 290, w 1190, h 310");
@@ -312,8 +310,26 @@ public class Carrinho {
 
             if (objecto.getObjeto() instanceof Produto) {
                 ImageIcon icon = new ImageIcon(((Produto) objecto.getObjeto()).getFoto());
-                Image produtoImg = icon.getImage().getScaledInstance(100, 200, Image.SCALE_DEFAULT);
-                imagem.setIcon(new ImageIcon(produtoImg));
+
+                //-------- personalizar tamanho das fotos consoante o tipo de produto --------
+                if(((Produto) objecto.getObjeto()).getTipoProduto() == TipoProduto.BEBIDA)
+                {
+                    Image produtoImg = icon.getImage().getScaledInstance(70, 190, Image.SCALE_DEFAULT);
+                    imagem.setIcon(new ImageIcon(produtoImg));
+                }
+                if(((Produto) objecto.getObjeto()).getTipoProduto() == TipoProduto.APERITIVO)
+                {
+                    Image produtoImg = icon.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT);
+                    imagem.setIcon(new ImageIcon(produtoImg));
+                }
+                if(((Produto) objecto.getObjeto()).getTipoProduto() == TipoProduto.PACK)
+                {
+                    Image produtoImg = icon.getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT);
+                    imagem.setIcon(new ImageIcon(produtoImg));
+                }
+
+                //-------- personalizar tamanho das fotos consoante o tipo de produto --------
+
 
                 nome.setText(((Produto) objecto.getObjeto()).getNome());
                 nome.setFont(new Font("Georgia", Font.PLAIN, 20));

@@ -13,7 +13,7 @@ public class PaginaInicial {
     private JLabel cartLabel;
     private final AppWindow app; // referência à janela principal
 
-    private BaseDados bd;
+    private BaseDados bd = BaseDados.getInstance();
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
     private final Color corFundoComponentes = Color.decode("#FFC133");
@@ -24,7 +24,6 @@ public class PaginaInicial {
     //construtor
     public PaginaInicial(AppWindow app) {
         this.app = app;
-        this.bd = BaseDados.getInstance();
         configurarComponentes();
     }
 

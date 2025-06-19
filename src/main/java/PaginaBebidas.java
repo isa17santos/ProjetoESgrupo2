@@ -1,139 +1,191 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import net.miginfocom.swing.MigLayout;
 
 public class PaginaBebidas {
     private JPanel mainPanel;
-    private AppWindow app;
-    private Map<String, Integer> carrinho = new HashMap<>();
+    private JLabel logoLabel = new JLabel();
+    private JLabel voltaLabel = new JLabel();
+    private JLabel barLabel = new JLabel("Bar");
+    private JLabel bebidasLabel = new JLabel("Bebidas");
+    private JLabel cartLabel = new JLabel();
 
-    //adicionado base de dados para tonar dinamico
-    private BaseDados bd;
+    private BaseDados bd = BaseDados.getInstance();
+
+    private final AppWindow app;
+
+    //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
+    private final Color corFundoComponentes = Color.decode("#FFC133");
+    private final Color corFundoLabel = Color.decode("#FBA720");
+    private final Color corFundo = Color.decode("#F9E6BB");
+    private final Color corFonte = Color.decode("#6B3838");
+    private final Color corFontePreto = Color.decode("#000000");
+    //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
+
 
     public PaginaBebidas(AppWindow app) {
         this.app = app;
-        this.bd = BaseDados.getInstance();
+        configurarComponentes();
+    }
 
-        mainPanel = new JPanel(null);
-        mainPanel.setPreferredSize(new Dimension(800, 800));
-        mainPanel.setBackground(new Color(255, 229, 180));
+    private void configurarComponentes() {
+        mainPanel = new JPanel();
+        mainPanel.setBackground(corFundo);
+        mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
 
         // Logo
-        JLabel logoLabel = new JLabel();
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/imagens/cinemagic_logo.png"));
-        Image logoImg = logoIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        Image logoImg = logoIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(logoImg));
-        logoLabel.setBounds(30, 20, 100, 100);
-        mainPanel.add(logoLabel);
 
-        // Seta voltar
-        JLabel voltarLabel = new JLabel();
-        ImageIcon setaIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
-        Image setaImg = setaIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        voltarLabel.setIcon(new ImageIcon(setaImg));
-        voltarLabel.setBounds(20, 250, 50, 50);
-        voltarLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        voltarLabel.addMouseListener(new MouseAdapter() {
+
+        // seta andar para atras
+        ImageIcon cartIcon = new ImageIcon(getClass().getResource("/imagens/setaAndarParaAtras.png"));
+        Image cartImg = cartIcon.getImage().getScaledInstance(60, 65, Image.SCALE_SMOOTH);
+        voltaLabel.setIcon(new ImageIcon(cartImg));
+
+        // --------------------- BAR LABEL -----------------------
+        barLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        barLabel.setForeground(corFundoLabel);
+        barLabel.setBackground(corFundo);
+        barLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
+        barLabel.setOpaque(true);
+        // --------------------- BAR LABEL -----------------------
+
+        // --------------------- PACKS LABEL -----------------------
+        bebidasLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        bebidasLabel.setForeground(corFundoLabel);
+        bebidasLabel.setBackground(corFundo);
+        bebidasLabel.setFont(new Font("Georgia", Font.PLAIN, 70));
+        bebidasLabel.setOpaque(true);
+        // --------------------- PACKS LABEL -----------------------
+
+        // Carrinho
+        if(bd.getElementosCarrinho().size() > 0){
+            ImageIcon carIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_com_compras.png"));
+            Image carImg = carIcon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+            cartLabel.setIcon(new ImageIcon(carImg));
+        }else {
+            ImageIcon carIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
+            Image carImg = carIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            cartLabel.setIcon(new ImageIcon(carImg));
+        }
+
+        // Lista de bebidas
+        List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.BEBIDA);
+
+        List<Produto> produtosAtivos = new ArrayList<>();
+
+        for(Produto p: produtos){
+            if (p.getEstado().equals(Estado.ATIVO)){
+                produtosAtivos.add(p);
+            }
+        }
+
+        adicionarProdutos(produtosAtivos);
+
+        // Adiciona componentes com posicionamento personalizado
+        mainPanel.add(logoLabel, "x 20, y 10");
+        mainPanel.add(voltaLabel, "x 30, y 200");
+        mainPanel.add(barLabel, "x 590, y 30");
+        mainPanel.add(bebidasLabel, "x 545, y 190");
+        mainPanel.add(cartLabel, "x 1100, y 180");
+
+        // ------------------- REDIRECIONAMENTOS -------------------
+        // Redirecionar para Pagina Principal Admin
+        voltaLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        voltaLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-                app.mostrarBar(); // Chama o método da AppWindow
+                app.mostrarBar();
             }
         });
-        mainPanel.add(voltarLabel);
 
-        // Título e subtítulo
-        JLabel titulo = new JLabel("Bar", JLabel.CENTER);
-        titulo.setFont(new Font("Serif", Font.BOLD, 40));
-        titulo.setBounds(250, 40, 300, 50);
-        mainPanel.add(titulo);
-
-        JLabel bebidasLabel = new JLabel("Bebidas", JLabel.CENTER);
-        bebidasLabel.setFont(new Font("Serif", Font.BOLD, 30));
-        bebidasLabel.setBounds(250, 100, 300, 40);
-        mainPanel.add(bebidasLabel);
-
-        // Lista de bebidas - corrigido, estava incompleto e sem a funcionar dinamicamente
-        java.util.List<Produto> produtos = bd.getProdutosPorTipo(TipoProduto.BEBIDA);
-
-        int i = 0;
-        for(Produto produto : produtos){
-            adicionarBebida(mainPanel, produto.getNome(), produto.getFoto(), 60 + i * 180, produto.getIdProduto());
-            i++;
-        }
-        // fim da correção
-
-        // Carrinho de compras
-        JLabel carrinhoLabel = new JLabel();
-        ImageIcon carrinhoIcon = new ImageIcon(getClass().getResource("/imagens/carrinho_sem_compras.png"));
-        Image carrinhoImg = carrinhoIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-        carrinhoLabel.setIcon(new ImageIcon(carrinhoImg));
-        carrinhoLabel.setBounds(700, 220, 50, 50);
-        carrinhoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        carrinhoLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                mostrarCarrinho();
+        // Redirecionar para Carrinho
+        cartLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        cartLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                app.mostrarCarrinho();
             }
         });
-        mainPanel.add(carrinhoLabel);
     }
 
-    //adicionado o campo id produto para identifcar o produto a ser adicionado ao carrinho
-    private void adicionarBebida(JPanel panel, String nome, String imagemPath, int x,
-                                 int idProduto) {
-        JLabel bebidaLabel = new JLabel(nome, JLabel.CENTER);
-        bebidaLabel.setBounds(x, 310, 160, 30);
-        panel.add(bebidaLabel);
+    private void adicionarProdutos(List<Produto> produtos) {
+        JPanel produtosPanel = new JPanel(new GridLayout(0, 4, 40, 40));
+        produtosPanel.setBackground(corFundo);
 
-        JLabel imagemLabel = new JLabel();
-        ImageIcon imgIcon = new ImageIcon(imagemPath);
-        Image img = imgIcon.getImage().getScaledInstance(80, 150, Image.SCALE_SMOOTH);
-        imagemLabel.setIcon(new ImageIcon(img));
-        imagemLabel.setBounds(x + 30, 160, 100, 150);
-        panel.add(imagemLabel);
+        for (Produto produto : produtos) {
+            JPanel itemPanel = new JPanel();
+            itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+            itemPanel.setBackground(corFundo);
 
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
-        spinner.setBounds(x + 40, 350, 50, 30);
-        panel.add(spinner);
+            // Imagem
+            JLabel imagemLabel = new JLabel();
+            ImageIcon imgIcon = new ImageIcon(produto.getFoto());
+            Image img = imgIcon.getImage().getScaledInstance(110, 240, Image.SCALE_SMOOTH);
+            imagemLabel.setIcon(new ImageIcon(img));
+            imagemLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton addButton = new JButton("Adicionar");
-        addButton.setBounds(x + 10, 390, 120, 30);
-        addButton.setBackground(new Color(255, 165, 0));
-        addButton.setForeground(Color.BLACK);
-        addButton.addActionListener(e -> {
-            int quantidade = (int) spinner.getValue();
-            carrinho.put(nome, carrinho.getOrDefault(nome, 0) + quantidade);
+            // Nome
+            JLabel nomeLabel = new JLabel(produto.getNome());
+            nomeLabel.setFont(new Font("Georgia", Font.PLAIN, 20));
+            nomeLabel.setForeground(corFontePreto);
+            nomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            nomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-            //adicionar à base de dados - inicio correção
-            Produto produto = bd.getProdutobyID(idProduto);
-            ObjetoCarrinho objetoCarrinho = new ObjetoCarrinho(produto, quantidade);
-            bd.adicionarAoCarrinho(objetoCarrinho);
+            // Spinner quantidade
+            JSpinner spinner = new JSpinner(new SpinnerNumberModel(1, 1, produto.getStock(), 1));
+            spinner.setMaximumSize(new Dimension(80, 30));
+            spinner.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            System.out.println(bd.getElementosCarrinho());
-            bd.gravarDados();
-            //fim de correção
+            // Botão "Adicionar"
+            JButton addBtn;
+            addBtn = new RoundedButton("Adicionar", 20);
+            addBtn.setFont(new Font("Georgia", Font.PLAIN, 18));
+            addBtn.setBackground(corFundoLabel);
+            addBtn.setForeground(corFontePreto);
+            addBtn.setFocusPainted(false);
+            addBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            addBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JOptionPane.showMessageDialog(null, nome + " adicionado ao carrinho!");
+            addBtn.addActionListener(e -> {
+                int qtd = (int) spinner.getValue();
+                ObjetoCarrinho obj = new ObjetoCarrinho(produto, qtd);
+                bd.adicionarAoCarrinho(obj);
+                bd.gravarDados();
+                app.mostrarPaginaBebidas(); // refresh (opcional)
+            });
 
+            // Espaçamento e composição
+            itemPanel.add(imagemLabel);
+            itemPanel.add(Box.createVerticalStrut(15));
+            itemPanel.add(nomeLabel);
+            itemPanel.add(Box.createVerticalStrut(15));
+            itemPanel.add(spinner);
+            itemPanel.add(Box.createVerticalStrut(15));
+            itemPanel.add(addBtn);
 
-        });
-        panel.add(addButton);
-    }
-
-    private void mostrarCarrinho() {
-        if (carrinho.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "O carrinho está vazio.");
-            return;
+            produtosPanel.add(itemPanel);
         }
 
-        StringBuilder mensagem = new StringBuilder("Carrinho:\n");
-        for (Map.Entry<String, Integer> entry : carrinho.entrySet()) {
-            mensagem.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-        }
-        JOptionPane.showMessageDialog(null, mensagem.toString());
+        JScrollPane scrollPane = new JScrollPane(produtosPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getViewport().setBackground(corFundo);
+
+        mainPanel.add(scrollPane, "x 100, y 320, w 1100, h 400");
     }
+
+
 
     public JPanel getMainPanel() {
         return mainPanel;
