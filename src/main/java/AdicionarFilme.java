@@ -9,6 +9,10 @@ import javax.imageio.ImageIO;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -148,6 +152,45 @@ public class AdicionarFilme {
         nomeFilme.setFont(new Font("Georgia", Font.PLAIN, 35));
         nomeFilme.setText("Nome filme");
         nomeFilme.setForeground(corFonte); // texto
+
+        //NAO PERMITE ESCREVER MAIS DO QUE 35 CARACTERES NO CAMPO
+        ((AbstractDocument) nomeFilme.getDocument()).setDocumentFilter(new DocumentFilter() {
+            private final int MAX_LENGTH = 35;
+
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string == null) return;
+
+                int currentLength = fb.getDocument().getLength();
+                if (currentLength + string.length() <= MAX_LENGTH) {
+                    super.insertString(fb, offset, string, attr);
+                } else {
+                    int allowed = MAX_LENGTH - currentLength;
+                    if (allowed > 0) {
+                        super.insertString(fb, offset, string.substring(0, allowed), attr);
+                    }
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text == null) return;
+
+                int currentLength = fb.getDocument().getLength();
+                int newLength = currentLength - length + text.length();
+
+                if (newLength <= MAX_LENGTH) {
+                    super.replace(fb, offset, length, text, attrs);
+                } else {
+                    int allowed = MAX_LENGTH - (currentLength - length);
+                    if (allowed > 0) {
+                        super.replace(fb, offset, length, text.substring(0, allowed), attrs);
+                    }
+                }
+            }
+        });
+
+
         nomeFilme.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {

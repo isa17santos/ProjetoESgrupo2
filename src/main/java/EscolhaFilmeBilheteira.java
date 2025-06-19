@@ -122,7 +122,7 @@ public class EscolhaFilmeBilheteira {
         nomeFilmeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nomeFilmeLabel.setForeground(corFontePreto);
         nomeFilmeLabel.setBackground(corFundo);
-        nomeFilmeLabel.setFont(new Font("Georgia", Font.PLAIN, 55));
+        nomeFilmeLabel.setFont(new Font("Georgia", Font.PLAIN, 40));
         nomeFilmeLabel.setOpaque(true);
         //--------------------- NOME FILME -------------------------
 
