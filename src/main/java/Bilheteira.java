@@ -37,7 +37,7 @@ public class Bilheteira {
     private JButton botaoFiltrar;
 
 
-    private Sessao sessaoSelecionadaParaRedirecionamento = null;
+    private boolean sessaoSelecionadaParaRedirecionamento = false;
 
 
     private BaseDados bd  = BaseDados.getInstance();
@@ -705,7 +705,7 @@ public class Bilheteira {
         //------------------------------- Cartezes filmes ----------------------------------
 
         //Assim, mostra todos os filmes com sessão quando a página abre.
-        desenharCartazes(listaFilmesComSessao);
+        desenharCartazes(listaFilmesComSessao, new ArrayList<>());
 
         //----------------------- LABEL LIMPAR FILTRO -------------------------------------------
         limparFiltrosLabel = new JLabel("<html><u>Limpar filtragem</u></html>");
@@ -726,7 +726,7 @@ public class Bilheteira {
 
                 limparFiltrosLabel.setVisible(false);
 
-                desenharCartazes(listaFilmesComSessao);
+                desenharCartazes(listaFilmesComSessao, new ArrayList<>());
             }
         });
         //----------------------- LABEL LIMPAR FILTRO -------------------------------------------
@@ -761,11 +761,9 @@ public class Bilheteira {
             }
 
             List<Filme> filmesFiltrados = new ArrayList<>();
+            List<Sessao> sessoesFiltradas = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-
-            // Variável para guardar a sessão selecionada para redirecionamento especial
-            sessaoSelecionadaParaRedirecionamento = null;
 
             for (Sessao sessao : listaSessoesAtivas) {
                 Filme f = sessao.getFilme();
@@ -825,13 +823,14 @@ public class Bilheteira {
                     boolean todosFiltrosPreenchidos = sessaoSel != null && dataSel != null && idiomaSel != null
                             && tipoSel != null && salaSel != null;
 
-                    if (todosFiltrosPreenchidos && sessaoSelecionadaParaRedirecionamento == null) {
-                        sessaoSelecionadaParaRedirecionamento = sessao;
+                    if (todosFiltrosPreenchidos) {
+                        sessoesFiltradas.add(sessao);
+                        sessaoSelecionadaParaRedirecionamento = true;
                     }
                 }
             }
 
-            desenharCartazes(filmesFiltrados);
+            desenharCartazes(filmesFiltrados, sessoesFiltradas);
         });
         //------------------------------- BOTAO FILTRAR ---------------------------------------
 
@@ -926,7 +925,7 @@ public class Bilheteira {
     }
 
 
-    private void desenharCartazes(List<Filme> filmes) {
+    private void desenharCartazes(List<Filme> filmes, List<Sessao> sessoesFiltradas) {
         cartazPanel.removeAll();
 
         Set<String> nomesAdicionados = new HashSet<>();
@@ -949,8 +948,19 @@ public class Bilheteira {
                 cartaz.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (sessaoSelecionadaParaRedirecionamento != null) {
-                            app.mostrarEscolherLugar(sessaoSelecionadaParaRedirecionamento, false, true);
+                        //houve a filtragem adequada - sessao, data, idioma, tipo e sala
+                        if (sessaoSelecionadaParaRedirecionamento) {
+                            for(Sessao s: sessoesFiltradas){
+                                if(s.getFilme().getNome().equals(filme.getNome())){
+                                    if(s.getSala().getTipo().equalsIgnoreCase("vip"))
+                                    {
+                                        app.mostrarEscolherLugarSalaVip(s,true);
+                                    }
+                                    else {
+                                        app.mostrarEscolherLugar(s, false, true);
+                                    }
+                                }
+                            }
                         } else {
                             app.mostrarEscolhaFilmeBilhteira(filme);
                         }

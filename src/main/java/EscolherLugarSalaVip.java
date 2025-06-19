@@ -31,6 +31,7 @@ public class EscolherLugarSalaVip {
 
     private JButton confirmarButton;
 
+    private boolean filtragem;
 
     private BaseDados bd = BaseDados.getInstance();
 
@@ -53,8 +54,9 @@ public class EscolherLugarSalaVip {
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 
     //construtor
-    public EscolherLugarSalaVip(AppWindow app, Sessao sessao) {
+    public EscolherLugarSalaVip(AppWindow app, Sessao sessao, boolean filtragem) {
         this.app = app;
+        this.filtragem = filtragem;
         configurarComponentes(sessao);
     }
 
@@ -320,7 +322,13 @@ public class EscolherLugarSalaVip {
         voltaLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                app.mostrarPaginaSessoesSalaEscolhida(sessao.getFilme(),"VIP");
+                if(filtragem)
+                {
+                    app.mostrarBilheteira();
+                }
+                else {
+                    app.mostrarPaginaSessoesSalaEscolhida(sessao.getFilme(), "VIP");
+                }
             }
         });
     }

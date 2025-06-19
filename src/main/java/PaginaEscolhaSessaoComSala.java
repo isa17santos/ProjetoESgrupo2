@@ -316,7 +316,7 @@ public class PaginaEscolhaSessaoComSala {
                             System.out.println("sessao esgotada");
                         } else {
                             System.out.println("sessao livre");
-                            app.mostrarEscolherLugarSalaVip(sessao);
+                            app.mostrarEscolherLugarSalaVip(sessao, false);
                         }
                     });
 
