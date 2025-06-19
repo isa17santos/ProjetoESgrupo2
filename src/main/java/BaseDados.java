@@ -721,11 +721,40 @@ public class BaseDados implements Serializable {
             }
         }
 
-        //caso seja novo na lista
-        if(!flagObjetoExiste){
-            carrinho.add(objeto);
+        carrinho.add(objeto);
+
+    }
+
+    public void removerDoCarrinho(ObjetoCarrinho objetoParaRemover) {
+        Iterator<ObjetoCarrinho> iterator = carrinho.iterator();
+
+        while (iterator.hasNext()) {
+            ObjetoCarrinho obj = iterator.next();
+
+            // Verifica se os objetos são do mesmo tipo
+            if (obj.getObjeto() instanceof Produto && objetoParaRemover.getObjeto() instanceof Produto) {
+                Produto p1 = (Produto) obj.getObjeto();
+                Produto p2 = (Produto) objetoParaRemover.getObjeto();
+                if (p1.getIdProduto() == p2.getIdProduto()) {
+                    iterator.remove();
+                    return;
+                }
+            } else if (obj.getObjeto() instanceof Bilhete && objetoParaRemover.getObjeto() instanceof Bilhete) {
+                Bilhete b1 = (Bilhete) obj.getObjeto();
+                Bilhete b2 = (Bilhete) objetoParaRemover.getObjeto();
+
+                boolean mesmaSessao = b1.getSessao().equals(b2.getSessao());
+                boolean mesmoLugar = b1.getLugar().equals(b2.getLugar());
+
+                if (mesmaSessao && mesmoLugar) {
+                    iterator.remove();
+                    return;
+                }
+            }
         }
     }
+
+
 
     public List<ObjetoCarrinho> getElementosCarrinho(){
         return this.carrinho;
@@ -737,6 +766,9 @@ public class BaseDados implements Serializable {
         for(ObjetoCarrinho objeto : this.carrinho){
             if(objeto.getObjeto() instanceof Produto){
                 total += ((Produto) objeto.getObjeto()).getPrecoVendaUnidade() * objeto.getQuantidade() * (1 - objeto.getDesconto());
+            } else if (objeto.getObjeto() instanceof Bilhete) {
+                Bilhete bilhete = (Bilhete) objeto.getObjeto();
+                total += bilhete.getSessao().getPrecoBilhete(); // Cada bilhete é uma unidade
             }
         }
 

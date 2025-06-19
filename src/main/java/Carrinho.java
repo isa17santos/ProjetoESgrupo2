@@ -301,97 +301,128 @@ public class Carrinho {
 
         for (ObjetoCarrinho objecto : carrinhoList) {
 
-                JLabel imagem = new JLabel();
-                JLabel nome = new JLabel();
-                JLabel preco = new JLabel();
+            JLabel imagem = new JLabel();
+            JLabel nome = new JLabel();
+            JLabel preco = new JLabel();
 
-                //verifica se é do tipo do produto
-                //porque o produto tem caracterisitcas especificas, como nomes de metodos, etc
-                if(objecto.getObjeto() instanceof Produto){
-                    ImageIcon icon = new ImageIcon(((Produto) objecto.getObjeto()).getFoto());
-                    Image produtoImg = icon.getImage().getScaledInstance(100, 200, Image.SCALE_DEFAULT);
-                    imagem.setIcon(new ImageIcon(produtoImg));
+            JPanel produtoPanel = new JPanel();
+            produtoPanel.setLayout(new BoxLayout(produtoPanel, BoxLayout.Y_AXIS));
+            produtoPanel.setBackground(corFundo);
+            produtoPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
 
-                    nome.setText(((Produto) objecto.getObjeto()).getNome());
-                    nome.setFont(new Font("Georgia", Font.PLAIN, 20));
-                    Float precoVenda = ((Produto) objecto.getObjeto()).getPrecoVendaUnidade();
+            if (objecto.getObjeto() instanceof Produto) {
+                ImageIcon icon = new ImageIcon(((Produto) objecto.getObjeto()).getFoto());
+                Image produtoImg = icon.getImage().getScaledInstance(100, 200, Image.SCALE_DEFAULT);
+                imagem.setIcon(new ImageIcon(produtoImg));
 
-                    preco.setText(String.format("%.2f €", precoVenda *  (1 - objecto.getDesconto())).replace(".", ","));
-                    preco.setFont(new Font("Georgia", Font.PLAIN, 20));
+                nome.setText(((Produto) objecto.getObjeto()).getNome());
+                nome.setFont(new Font("Georgia", Font.PLAIN, 20));
+                nome.setForeground(corFontePreto);
+                Float precoVenda = ((Produto) objecto.getObjeto()).getPrecoVendaUnidade();
 
-                    JPanel produtoPanel = new JPanel();
-                    produtoPanel.setLayout(new BoxLayout(produtoPanel, BoxLayout.Y_AXIS));
-                    produtoPanel.add(imagem);
-                    produtoPanel.add(Box.createVerticalStrut(15));
+                preco.setText(String.format("%.2f €", precoVenda * (1 - objecto.getDesconto())).replace(".", ","));
+                preco.setFont(new Font("Georgia", Font.PLAIN, 20));
+                preco.setForeground(corFontePreto);
 
-                    produtoPanel.add(nome);
-                    produtoPanel.add(Box.createVerticalStrut(10));
-                    produtoPanel.add(preco);
-                    produtoPanel.setBackground(corFundo);
+            } else if (objecto.getObjeto() instanceof Bilhete) {
+                Bilhete bilhete = (Bilhete) objecto.getObjeto();
+                ImageIcon icon = new ImageIcon(getClass().getResource("/imagens/bilhete.png"));
+                Image bilheteImg = icon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
+                imagem.setIcon(new ImageIcon(bilheteImg));
 
-                    //coloca a quantidade já adicionado
-                    //limite é igual ao stock do produto
-                    //minio  == 0 - removoção do produto
-                    JSpinner spinner = new JSpinner(new SpinnerNumberModel(
-                            objecto.getQuantidade(), //coloca-se quantitdade do objetoCarrinho
-                            0, //minimo
-                            ((Produto) objecto.getObjeto()).getStock(), //definição do limite de comprar a partir do stock do produto
-                            1));//conta de um em um
+                String nomeBilhete = bilhete.getSessao().getFilme().getNome() + " (" + bilhete.getLugar() + " )";
+                nome.setText("Bilhete " + nomeBilhete);
+                nome.setFont(new Font("Georgia", Font.PLAIN, 16));
+                nome.setForeground(corFontePreto);
 
-                    JComponent editor = spinner.getEditor();
-                    JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
-                    tf.setColumns(2);
+                Float precoVenda = bilhete.getSessao().getPrecoBilhete();
+                preco.setText(String.format("%.2f €", precoVenda * (1 - objecto.getDesconto())).replace(".", ","));
+                preco.setFont(new Font("Georgia", Font.PLAIN, 20));
+                preco.setForeground(corFontePreto);
 
-                    spinner.setMaximumSize(new Dimension(70, 30));
-                    spinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+            }
 
-                    //adicionar um espaço em branco para uma margin
-                    produtoPanel.add(Box.createVerticalStrut(10));
-                    produtoPanel.add(spinner);
+            produtoPanel.add(imagem);
+            produtoPanel.add(Box.createVerticalStrut(15));
+            produtoPanel.add(nome);
+            produtoPanel.add(Box.createVerticalStrut(10));
+            produtoPanel.add(preco);
 
-                    imagem.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    nome.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    preco.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    spinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+            if (objecto.getObjeto() instanceof Produto) {
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(
+                        objecto.getQuantidade(),
+                        0,
+                        ((Produto) objecto.getObjeto()).getStock(),
+                        1));
 
-                    spinner.addChangeListener(
-                            new ChangeListener() {
-                                @Override
-                                public void stateChanged(ChangeEvent e) {
+                JComponent editor = spinner.getEditor();
+                JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
+                tf.setColumns(2);
 
-                                    int quantidade = (int) spinner.getValue();
+                spinner.setMaximumSize(new Dimension(70, 30));
+                spinner.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-                                    objecto.setQuantidade(quantidade);
-                                    bd.adicionarAoCarrinho(objecto);
-                                    bd.gravarDados();
+                produtoPanel.add(Box.createVerticalStrut(10));
+                produtoPanel.add(spinner);
 
-                                    //caso o carrinho esteja sem produtos
-                                    if(bd.getElementosCarrinho().size() == 0){
-                                        infoSemCompras.setVisible(true);
-                                        aplicarButton.setVisible(false);
-                                        scrollPaneCarrinho.setVisible(false);
-                                        comboBoxDesconto.setVisible(false);
-                                        precoTotal.setVisible(false);
-                                        pagamentoButton.setVisible(false);
-                                    }
+                imagem.setAlignmentX(Component.CENTER_ALIGNMENT);
+                nome.setAlignmentX(Component.CENTER_ALIGNMENT);
+                preco.setAlignmentX(Component.CENTER_ALIGNMENT);
+                spinner.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-                                    adicionarProdutos(bd.getElementosCarrinho());
+                spinner.addChangeListener(e -> {
+                    int quantidade = (int) spinner.getValue();
 
-                                    //atualiza o preco total
-                                    precoTotal.setText("Total: " + String.format("%.2f €", bd.getTotalCarrinho() ).replace(".", ","));
+                    objecto.setQuantidade(quantidade);
+                    bd.adicionarAoCarrinho(objecto);
+                    bd.gravarDados();
 
-                                    //referesh à página
-                                    mainPanel.revalidate();
-                                    mainPanel.repaint();
-                                }
-                            }
-                    );
-                    // Add to main panel
-                    carrinhoPanel.add(produtoPanel);
-                }
+                    if (bd.getElementosCarrinho().size() == 0) {
+                        infoSemCompras.setVisible(true);
+                        aplicarButton.setVisible(false);
+                        scrollPaneCarrinho.setVisible(false);
+                        comboBoxDesconto.setVisible(false);
+                        precoTotal.setVisible(false);
+                        pagamentoButton.setVisible(false);
+                    }
+
+                    adicionarProdutos(bd.getElementosCarrinho());
+                    precoTotal.setText("Total: " + String.format("%.2f €", bd.getTotalCarrinho()).replace(".", ","));
+
+                    mainPanel.revalidate();
+                    mainPanel.repaint();
+                });
+            } else {
+                imagem.setAlignmentX(Component.CENTER_ALIGNMENT);
+                nome.setAlignmentX(Component.CENTER_ALIGNMENT);
+                preco.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                // Botão de remover bilhete
+                JButton removerBtn = new RoundedButton("Remover", 20);
+                removerBtn.setBackground(corFundoLabel);
+                removerBtn.setForeground(corFontePreto);
+                removerBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+                removerBtn.setFont(new Font("Georgia", Font.PLAIN, 16));
+                removerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                removerBtn.addActionListener(e -> {
+                    bd.removerDoCarrinho(objecto);
+                    bd.gravarDados();
+                    adicionarProdutos(bd.getElementosCarrinho());
+                    precoTotal.setText("Total: " + String.format("%.2f €", bd.getTotalCarrinho()).replace(".", ","));
+
+                    mainPanel.revalidate();
+                    mainPanel.repaint();
+                });
+
+                produtoPanel.add(Box.createVerticalStrut(10));
+                produtoPanel.add(removerBtn,"w 30, h 20");
+            }
+
+            carrinhoPanel.add(produtoPanel);
         }
 
         carrinhoPanel.revalidate();
         carrinhoPanel.repaint();
     }
+
 }
