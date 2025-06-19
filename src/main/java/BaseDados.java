@@ -704,6 +704,23 @@ public class BaseDados implements Serializable {
             }
         }
 
+        // BILHETE
+        else if (objeto.getObjeto() instanceof Bilhete) {
+            Bilhete novoBilhete = (Bilhete) objeto.getObjeto();
+
+            // Garante que não há bilhete duplicado com mesmo lugar + sessão
+            for (ObjetoCarrinho carrinho : this.carrinho) {
+                if (carrinho.getObjeto() instanceof Bilhete) {
+                    Bilhete bilheteCarrinho = (Bilhete) carrinho.getObjeto();
+
+                    if (bilheteCarrinho.getSessao().equals(novoBilhete.getSessao())
+                            && bilheteCarrinho.getLugar().equals(novoBilhete.getLugar())) {
+                        return; // já existe, não adiciona de novo
+                    }
+                }
+            }
+        }
+
         //caso seja novo na lista
         if(!flagObjetoExiste){
             carrinho.add(objeto);
@@ -740,6 +757,25 @@ public class BaseDados implements Serializable {
                 if(((Produto) objeto.getObjeto()).getStock() < 5){
                     stockBaixo = true;
                 }
+            }
+            if (objeto.getObjeto() instanceof Bilhete) {
+                Bilhete bilhete = (Bilhete) objeto.getObjeto();
+
+                // Marcar como vendido
+                bilhete.setVendido(true);
+
+                // Ocupa lugar definitivamente na sessão
+                Sessao sessao = bilhete.getSessao();
+
+                // Extrair fila e lugar a partir da string "F3-L7"
+                String[] partes = bilhete.getLugar().split("-");
+                int fila = Integer.parseInt(partes[0].substring(1)) - 1; // índice zero-based
+                int lugar = Integer.parseInt(partes[1].substring(1)) - 1;
+
+                int lugaresPorFila = sessao.getSala().getNumLugaresFila();
+                int index = fila * lugaresPorFila + lugar;
+
+                sessao.ocuparLugar(index); // aqui grava na base de dados real
             }
         }
 

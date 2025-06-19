@@ -1,7 +1,11 @@
-public class Bilhete {
+import java.io.Serializable;
+
+public class Bilhete implements Serializable {
     private Sessao sessao; // aqui vai buscar o filme, sala, dia, horario e preço
     private String lugar;
     private boolean vendido;
+
+    private static final long serialVersionUID = 1L;
 
     public Bilhete(Sessao sessao, String lugar) {
         this.sessao = sessao;
