@@ -88,7 +88,7 @@ public class PaginaEscolhaFilmeEditar {
         adminLabel.setFont(new Font("Georgia", Font.PLAIN, 100));
         adminLabel.setOpaque(true);
 
-        // Salas label
+        // filmes label
         filmesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         filmesLabel.setForeground(corFundoLabel);
         filmesLabel.setBackground(corFundo);

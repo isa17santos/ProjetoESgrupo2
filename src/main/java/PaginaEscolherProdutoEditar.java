@@ -20,7 +20,7 @@ public class PaginaEscolherProdutoEditar {
     private JLabel adminLabel;
     private JLabel produtoLabel;
     private JComboBox <Object> comboBoxTipo = new JComboBox<>();
-    private RoundedComboBox <Object> produtosComboBox = new RoundedComboBox<>(new String[]{}, 20);
+    private JComboBox <Object> produtosComboBox = new JComboBox<>();
     private JButton editarButton = new JButton("Editar");
 
     private final AppWindow app;
@@ -74,17 +74,15 @@ public class PaginaEscolherProdutoEditar {
         produtoLabel.setOpaque(true);
 
 
-
         // -------------------- ComboBox produto --------------------------
 
-        produtosComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        produtosComboBox = new RoundedComboBox<>(new String[0], 20);
         produtosComboBox.setSelectedItem(null);
-        produtosComboBox.setOpaque(true);
 
         produtosComboBox.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
-                BasicComboPopup popup = new BasicComboPopup(comboBox) {
+                BasicComboPopup popup = new BasicComboPopup(produtosComboBox) {
                     @Override
                     public void show() {
                         // Tira a borda preta
@@ -111,7 +109,7 @@ public class PaginaEscolherProdutoEditar {
 
             @Override
             protected JButton createArrowButton() {
-                return new JButton(new AdicionarFilme.ArrowIcon(comboBox)) {{
+                return new JButton(new ArrowIcon(produtosComboBox)) {{
                     setBackground(corBotaoSetaComboBox);
                     setBorder(BorderFactory.createEmptyBorder());
                 }};
@@ -131,6 +129,7 @@ public class PaginaEscolherProdutoEditar {
                     produtosComboBox.setFont(new Font("Georgia", Font.PLAIN, 35));
                 } else {
                     label.setForeground(corFontePreto);
+                    produtosComboBox.setFont(new Font("Georgia", Font.PLAIN, 30));
                 }
 
                 if (index == -1) label.setBackground(corFundoComponentes);
@@ -146,21 +145,15 @@ public class PaginaEscolherProdutoEditar {
         produtosComboBox.setFont(new Font("Georgia", Font.PLAIN, 25));
         produtosComboBox.setForeground(corFontePreto);
         produtosComboBox.setBackground(corFundoComponentes);
-
         produtosComboBox.setEditable(false);
+        produtosComboBox.setFocusable(false);
         produtosComboBox.setVisible(false);
+        // -------------------- ComboBox produtos --------------------------
 
-        // -------------------- botao editar --------------------------
-        editarButton = new RoundedButton("Editar", 20);
-        editarButton.setFont(new Font("Georgia", Font.PLAIN, 40));
-        editarButton.setBackground(corFundoLabel);
-        editarButton.setForeground(corFontePreto);
-        editarButton.setVisible(false);
 
         // -------------------- ComboBox tipo --------------------------
         String[] opcoes = {"Bebida", "Aperitivo", "Pack"};
         comboBoxTipo = new RoundedComboBox<>(opcoes, 20);
-        comboBoxTipo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Não selecionar nenhum item no início → mostra placeholder
         comboBoxTipo.setSelectedItem(null);
@@ -259,6 +252,7 @@ public class PaginaEscolherProdutoEditar {
                         }
 
                         produtosComboBox.setVisible(true);
+                        produtosComboBox.setSelectedItem(null);
                         editarButton.setVisible(true);
                         break;
 
@@ -277,6 +271,7 @@ public class PaginaEscolherProdutoEditar {
                             produtosComboBox.addItem(p.getNome());
                         }
                         produtosComboBox.setVisible(true);
+                        produtosComboBox.setSelectedItem(null);
                         editarButton.setVisible(true);
                         break;
                     case "Pack":
@@ -293,6 +288,7 @@ public class PaginaEscolherProdutoEditar {
                             produtosComboBox.addItem(p.getNome());
                         }
                         produtosComboBox.setVisible(true);
+                        produtosComboBox.setSelectedItem(null);
                         editarButton.setVisible(true);
                         break;
                 }
@@ -302,9 +298,18 @@ public class PaginaEscolherProdutoEditar {
             }
         });
 
-        // -------------------- ComboBox produtos --------------------------
 
-        //estetica
+
+
+        // -------------------- botao editar --------------------------
+        editarButton = new RoundedButton("Editar", 20);
+        editarButton.setFont(new Font("Georgia", Font.PLAIN, 40));
+        editarButton.setBackground(corFundoLabel);
+        editarButton.setForeground(corFontePreto);
+        editarButton.setVisible(false);
+
+
+
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(adminLabel, "x 500, y 40");

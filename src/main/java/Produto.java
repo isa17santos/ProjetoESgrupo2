@@ -11,7 +11,7 @@ public class Produto implements Serializable{
     private static final long serialVersionUID = 1L;
     private int idProduto;
 
-    public Produto(Integer idProduto, String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {
+    public Produto(int idProduto, String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {
         this.idProduto = idProduto;
         this.foto = foto;
         this.nome = nome;

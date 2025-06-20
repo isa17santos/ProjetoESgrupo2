@@ -628,7 +628,7 @@ public class BaseDados implements Serializable {
         return produtoSelecionado;
     }
 
-    public Integer getLastIdProduto(){
+    public int getLastIdProduto(){
         Produto produto = produtos.get(produtos.size() - 1);
         return produto.getIdProduto();
     }
