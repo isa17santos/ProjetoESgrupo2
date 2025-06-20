@@ -398,36 +398,35 @@ public class EditarProduto {
                 }
             }
 
+
             @Override
             public void focusLost(FocusEvent e) {
-                String textoBruto = stockField.getText().trim();
-                String textoLimpo = textoBruto.replaceAll("[^\\d.-]", "");
 
-                if (textoLimpo.isEmpty() || textoLimpo.equals("-") || textoLimpo.equals(".")) {
-                    erroStockLabel.setText("Insira um valor válido.");
-                    erroStockLabel.setVisible(true);
+                String input = stockField.getText();
+
+                if (input.isEmpty()) {
                     stockField.setText(placeholder);
                     stockField.setForeground(corFonte);
+                    erroStockLabel.setVisible(false);
                     return;
                 }
 
                 try {
-                    int valor = Integer.parseInt(textoLimpo);
+                    //verifica se é um valor inteiro
+                    int valor = Integer.parseInt(input);
                     if (valor <= 0) {
                         erroStockLabel.setText("Insira um valor superior a 0.");
                         erroStockLabel.setVisible(true);
                         stockField.setText(placeholder);
                         stockField.setForeground(corFonte);
                     } else {
-                        stockField.setText(textoLimpo);
-                        stockField.setForeground(corFontePreto);
                         erroStockLabel.setVisible(false);
                     }
                 } catch (NumberFormatException ex) {
-                    stockField.setText("Insira um valor válido.");
-                    stockField.setVisible(true);
-                    erroStockLabel.setText(placeholder);
-                    erroStockLabel.setForeground(corFonte);
+                    erroStockLabel.setText("Insira um valor numérico válido.");
+                    erroStockLabel.setVisible(true);
+                    stockField.setText(placeholder);
+                    stockField.setForeground(corFonte);
                 }
             }
         });
