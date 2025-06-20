@@ -299,7 +299,7 @@ public class EscolherLugar {
         mainPanel.add(logoLabel, "x 20, y 10");
         mainPanel.add(voltaLabel, "x 30, y 200");
         mainPanel.add(bilheteiraLabel, "x 510, y 30");
-        mainPanel.add(salaLabel, "x 585, y 140");
+        mainPanel.add(salaLabel, "x 510, y 140");
         mainPanel.add(nomeFilmeLabel, "pos 0.5al 260");
         mainPanel.add(ecraIconLabel, "x 140, y 305");
         mainPanel.add(ecraLabel, "x 90, y 310");
