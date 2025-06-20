@@ -6,8 +6,11 @@ public class Produto implements Serializable{
     private TipoProduto tipoProduto;
     private Estado estado;
     private int stock;
+    private int quantidadeVendida;
     private float precoCompraUnidade;
     private float precoVendaUnidade;
+    private float precoTotalEmStock;
+    private float precoTotalComprado;
     private static final long serialVersionUID = 1L;
     private int idProduto;
 
@@ -20,6 +23,8 @@ public class Produto implements Serializable{
         this.stock = stock;
         this.precoCompraUnidade = precoCompraUnidade;
         this.precoVendaUnidade = precoVendaUnidade;
+        this.precoTotalEmStock = stock * precoCompraUnidade; // Calcula o preço total em stock.
+        this.precoTotalComprado += precoTotalEmStock;// Calcula o preço total comprado.
     }
 
     public String getFoto() {
@@ -82,6 +87,22 @@ public class Produto implements Serializable{
         return idProduto;
     }
 
+    public void setQuantidadeVendida(int quantidadeVendida) {
+        this.quantidadeVendida = quantidadeVendida;
+    }
+
+    public void venderProduto(int quantidade) {
+        if (quantidade <= stock) {
+            quantidadeVendida += quantidade;
+        } else {
+            throw new IllegalArgumentException("Quantidade vendida excede o stock disponível.");
+        }
+    }
+
+    public int getQuantidadeVendida() {
+        return quantidadeVendida;
+    }
+
     //mostra na consola informação sobre os produtos
     @Override
     public String toString() {
@@ -95,5 +116,17 @@ public class Produto implements Serializable{
                 ", precoVendaUnidade=" + precoVendaUnidade +
                 ", idProduto=" + idProduto +
                 '}';
+    }
+
+    public float getPrecoTotalEmStock() {
+        return precoTotalEmStock;
+    }
+
+    public float getPrecoTotalComprado() {
+        return precoTotalComprado;
+    }
+
+    public void setPrecoTotalComprado(float precoTotalComprado) {
+        this.precoTotalComprado = precoTotalComprado;
     }
 }

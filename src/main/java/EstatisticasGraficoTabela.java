@@ -60,12 +60,6 @@ public class EstatisticasGraficoTabela extends JPanel {
         repaint();
     }
 
-    public void showBarChartDouble(Map<String, Double> taxaOcupacaoPorSessao) {
-        // Convert Map<String, Double> to Map<String, Integer> for bar chart
-        Map<String, Integer> data = taxaOcupacaoPorSessao.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().intValue()));
-        showBarChart(data);
-    }
 
     public void clear() {
         removeAll(); // Remove all components (table or chart)
@@ -76,7 +70,5 @@ public class EstatisticasGraficoTabela extends JPanel {
         repaint();
         cardLayout.show(this, "BAR");
     }
-
-    // Custom JPanel for drawing bar chart
 
 }

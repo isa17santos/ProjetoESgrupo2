@@ -433,7 +433,6 @@ public class EditarSala {
         comboBoxTipo.setSelectedItem(salaAEditar.getTipo());
 
         // Não selecionar nenhum item no início → mostra placeholder
-        comboBoxTipo.setSelectedItem(null);
         comboBoxTipo.setUI(new BasicComboBoxUI() {
             @Override
             protected ComboPopup createPopup() {
