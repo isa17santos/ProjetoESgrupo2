@@ -525,7 +525,7 @@ public class BaseDados implements Serializable {
             String sessaoInfo = String.format("%s - %02d/%02d/%04d %02d:%02d",
                     s.getFilme().getNome(), s.getDia(), s.getMes(), s.getAno(), s.getHora(), s.getMinuto());
             double taxa = (double) s.getBilhetesVendidos() / s.getSala().getLotacao() * 100;
-            String taxaFormatada = String.format("%.2f%%", taxa);
+            String taxaFormatada = String.format(Locale.FRANCE, "%.2f%%", taxa);
             taxaOcupacaoPorSessao.put(sessaoInfo, taxaFormatada);
         }
         return taxaOcupacaoPorSessao;
@@ -661,8 +661,8 @@ public class BaseDados implements Serializable {
         taxaOcupacao.entrySet()
                 .stream()
                 .sorted((e1, e2) -> {
-                    double v1 = Double.parseDouble(e1.getValue().replace("%", ""));
-                    double v2 = Double.parseDouble(e2.getValue().replace("%", ""));
+                    double v1 = Double.parseDouble(e1.getValue().replace("%", "").replace(",", "."));
+                    double v2 = Double.parseDouble(e2.getValue().replace("%", "").replace(",", "."));
                     return Double.compare(v2, v1); // Descending
                 })
                 .forEach(entry -> {
