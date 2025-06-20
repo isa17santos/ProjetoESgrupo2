@@ -101,9 +101,9 @@ public class EditarSala {
         nomeSala.setText(salaAEditar.getDesignacao());            // Substituir por Dados da sala
         nomeSala.setForeground(corFonte); // texto
 
-        //NAO PERMITE ESCREVER MAIS DO QUE 7 CARACTERES NO CAMPO
+        //NAO PERMITE ESCREVER MAIS DO QUE 10 CARACTERES NO CAMPO
         ((AbstractDocument) nomeSala.getDocument()).setDocumentFilter(new DocumentFilter() {
-            private final int MAX_LENGTH = 7;
+            private final int MAX_LENGTH = 10;
 
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
