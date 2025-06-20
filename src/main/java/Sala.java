@@ -108,6 +108,18 @@ public class Sala implements Serializable{
         return lugares;
     }
 
+    public int getNumLugaresOcupados() {
+        int count = 0;
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numLugaresFila; j++) {
+                if (lugares[i][j].getEstado() == EstadoLugar.OCUPADO) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     private void inicializarLugares(boolean acessibilidade) {
         for (int i = 0; i < numFilas; i++) {
             for (int j = 0; j < numLugaresFila; j++) {

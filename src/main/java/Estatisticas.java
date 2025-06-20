@@ -7,7 +7,9 @@ import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Estatisticas {
     private JPanel mainPanel = new JPanel();
@@ -16,6 +18,7 @@ public class Estatisticas {
     private JLabel estatisticasLabel = new JLabel("Estatísticas");
     private JComboBox<Object> comboBoxEstatisticas = new JComboBox<>();
     private EstatisticasGraficoTabela graficoTabelaPanel = new EstatisticasGraficoTabela();
+
 
     private final AppWindow app;
 
@@ -40,6 +43,9 @@ public class Estatisticas {
     }
 
     private void configurarComponentes() {
+
+        BaseDados bd = BaseDados.getInstance();
+        //bd.introduzirUnidadesCompradasProdutosBar();
 
         // pagina principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
@@ -67,7 +73,7 @@ public class Estatisticas {
 
         // -------------------- COMBOBOX Estatística --------------------------
 
-        String[] opcoesEstatistica = {"Vendas por dia", "Vendas por mês", "Vendas por ano", "Vendas por sessão", "Vendas por filme", "Stock", "Produtos mais vendidos no bar", "Taxa de ocupação por sessão", "Taxa de ocupação por sala", "Lucros", "Géneros de filmes mais vistos", "Top 5 filmes mais vistos"};
+        String[] opcoesEstatistica = {"Vendas por dia", "Vendas por mês", "Vendas por ano", "Vendas por sessão", "Vendas por filme", "Stock", "Produtos mais vendidos no bar", "Taxa de ocupação por sessão", "Lucros dos Filmes", "Lucros do Bar", "Géneros de filmes mais vistos", "Top 5 filmes mais vistos"};
         comboBoxEstatisticas = new RoundedComboBox<>(opcoesEstatistica, 20);
 
         // Não selecionar nenhum item no início → mostra placeholder
@@ -206,14 +212,21 @@ public class Estatisticas {
                     Object[][] dataTaxaOcupacaoSessao = BaseDados.getInstance().tabelaTaxaOcupacaoPorSessao();
                     graficoTabelaPanel.showTable(columnsTaxaOcupacaoSessao, dataTaxaOcupacaoSessao);
                     break;
-                case "Taxa de ocupação por sala":       // Gráfico de barras
-                    Map<String, Double> taxaOcupacaoPorSala = BaseDados.getInstance().taxaOcupacaoPorSala();
-                    graficoTabelaPanel.showBarChartDouble(taxaOcupacaoPorSala);
+                case "Lucros dos Filmes": // Tabela
+                    String[] columnsLucrosFilmes = {"Filme", "Lucro"};
+                    Map<String, String> lucrosPorFilmeMap = BaseDados.getInstance().lucrosPorFilme();
+                    Object[][] dataLucrosFilmes = lucrosPorFilmeMap.entrySet().stream()
+                            .map(entry -> new Object[]{entry.getKey(), entry.getValue()})
+                            .toArray(Object[][]::new);
+                    graficoTabelaPanel.showTable(columnsLucrosFilmes, dataLucrosFilmes);
                     break;
-                case "Lucros":      // Tabela
-                    String[] columnsLucros = {"Sessão", "Lucro"};
-                    Object[][] dataLucros = BaseDados.getInstance().tabelaLucros();
-                    graficoTabelaPanel.showTable(columnsLucros, dataLucros);
+                case "Lucros do Bar": // Tabela
+                    String[] columnsLucrosBar = {"Produto", "Lucro"};
+                    Map<String, String> lucrosBarMap = BaseDados.getInstance().lucrosPorProdutoBar();
+                    Object[][] dataLucrosBar = lucrosBarMap.entrySet().stream()
+                            .map(entry -> new Object[]{entry.getKey(), entry.getValue()})
+                            .toArray(Object[][]::new);
+                    graficoTabelaPanel.showTable(columnsLucrosBar, dataLucrosBar);
                     break;
                 case "Géneros de filmes mais vistos":       // Gráfico de barras
                     Map<String, Integer> generosMaisVistos = BaseDados.getInstance().generosMaisVistos();
