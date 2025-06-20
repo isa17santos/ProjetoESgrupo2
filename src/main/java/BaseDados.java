@@ -19,6 +19,7 @@ public class BaseDados implements Serializable {
     private List<Sala> salas = new ArrayList<>();
     private List<Sessao> sessoes = new ArrayList<>();
     private List<ObjetoCarrinho> carrinho = new ArrayList<>();
+    private List<Venda> vendas = new ArrayList<>();
 
     private BaseDados() {
         //---- generos VAIANA 2 -----
@@ -296,6 +297,28 @@ public class BaseDados implements Serializable {
 
         // Inserrir unidades aleatorias compradas dos produtos do bar
         introduzirUnidadesCompradasProdutosBar();
+
+        // Populate vendas with sample data (products)
+        Produto cocaCola = produtos.get(0); // Coca Cola
+        ObjetoCarrinho objCocaCola = new ObjetoCarrinho(cocaCola, 3);
+        vendas.add(new Venda(objCocaCola, 3, cocaCola.getPrecoVendaUnidade(), "Produto", cocaCola.getNome()));
+
+        // Another product
+        Produto nachos = produtos.get(7); // Nachos
+        ObjetoCarrinho objNachos = new ObjetoCarrinho(nachos, 2);
+        vendas.add(new Venda(objNachos, 2, nachos.getPrecoVendaUnidade(), "Produto", nachos.getNome()));
+
+        // Populate vendas with sample data (tickets)
+        Sessao sessao = sessoes.get(0); // First session
+        String bilheteDescricao = sessao.getFilme().getNome() + " - " + sessao.getDia() + "/" + sessao.getMes() + "/" + sessao.getAno();
+        ObjetoCarrinho objBilhete = new ObjetoCarrinho(bilheteDescricao, 1);
+        vendas.add(new Venda(objBilhete, 1, sessao.getPrecoBilhete(), "Bilhete", bilheteDescricao));
+
+        // Another ticket
+        Sessao sessao2 = sessoes.get(1);
+        String bilheteDescricao2 = sessao2.getFilme().getNome() + " - " + sessao2.getDia() + "/" + sessao2.getMes() + "/" + sessao2.getAno();
+        ObjetoCarrinho objBilhete2 = new ObjetoCarrinho(bilheteDescricao2, 2);
+        vendas.add(new Venda(objBilhete2, 2, sessao2.getPrecoBilhete(), "Bilhete", bilheteDescricao2));
     }
 
     public static BaseDados getInstance() {
@@ -308,9 +331,20 @@ public class BaseDados implements Serializable {
         return instance;
     }
 
+    public static void resetInstance() {
+        instance = null;
+    }
+
     public static BaseDados carregarDados() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FICHEIRO_DADOS))) {
-            return (BaseDados) ois.readObject();
+            BaseDados bd = (BaseDados) ois.readObject();
+            if (bd.filmes == null) bd.filmes = new ArrayList<>();
+            if (bd.produtos == null) bd.produtos = new ArrayList<>();
+            if (bd.salas == null) bd.salas = new ArrayList<>();
+            if (bd.sessoes == null) bd.sessoes = new ArrayList<>();
+            if (bd.carrinho == null) bd.carrinho = new ArrayList<>();
+            if (bd.vendas == null) bd.vendas = new ArrayList<>();
+            return bd;
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ficheiro não encontrado ou erro ao carregar: " + e.getMessage());
             return null;
@@ -405,25 +439,28 @@ public class BaseDados implements Serializable {
 
     // ------------------- ESTATÍSTICAS -------------------
 
-    // Fetches ticket sales per day (example: count of Sessao per date)
-    public Map<String, Integer> vendasPorDia() {        // Apenas os ultimos 7 dias
+    public Map<String, Integer> vendasPorDiaTotal() {
+        if (vendas == null) vendas = new ArrayList<>();
         Map<String, Integer> vendasPorDia = new LinkedHashMap<>();
         LocalDate hoje = LocalDate.now();
-        for (Sessao s : sessoes) {
-            LocalDate dataSessao = LocalDate.of(s.getAno(), s.getMes(), s.getDia());
-            if (!dataSessao.isBefore(hoje.minusDays(7))) {
-                String dataFormatada = dataSessao.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                vendasPorDia.put(dataFormatada, vendasPorDia.getOrDefault(dataFormatada, 0) + s.getBilhetesVendidos());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        for (Venda venda : vendas) {
+            LocalDate dataVenda = venda.getDataHora().toLocalDate();
+            if (!dataVenda.isBefore(hoje.minusDays(6)) && !dataVenda.isAfter(hoje)) {
+                String dataFormatada = dataVenda.format(formatter);
+                vendasPorDia.putIfAbsent(dataFormatada, 0);
+                vendasPorDia.put(dataFormatada, vendasPorDia.get(dataFormatada) + venda.getQuantidade());
             }
         }
 
-        // Ordena dia de hoje e depois os 6 dias anteriores
-        LinkedHashMap<String, Integer> orderedVendasPorDia = new LinkedHashMap<>();
-        for (int i = 0; i < 7; i++) {
-            String dataFormatada = hoje.minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            orderedVendasPorDia.put(dataFormatada, vendasPorDia.getOrDefault(dataFormatada, 0));
+        // Ensure all 7 days are present, from oldest to newest
+        LinkedHashMap<String, Integer> ordered = new LinkedHashMap<>();
+        for (int i = 6; i >= 0; i--) {
+            String data = hoje.minusDays(i).format(formatter);
+            ordered.put(data, vendasPorDia.getOrDefault(data, 0));
         }
-        return orderedVendasPorDia;
+        return ordered;
     }
 
     // Fetches stock for each product
@@ -437,51 +474,56 @@ public class BaseDados implements Serializable {
         return data;
     }
 
-    // Vendas por mês
-    public Map<String, Integer> vendasPorMes() {
+    // Vendas por mês (total de bilhetes + produtos)
+    public Map<String, Integer> vendasPorMesTotal() {
+        if (vendas == null) vendas = new ArrayList<>();
         Map<String, Integer> vendasPorMes = new LinkedHashMap<>();
-
-        // Apenas os últimos 12 meses do ano atual
         LocalDate hoje = LocalDate.now();
-        for (Sessao s : sessoes) {
-            LocalDate dataSessao = LocalDate.of(s.getAno(), s.getMes(), s.getDia());
-            if (!dataSessao.isBefore(hoje.minusMonths(12)) && !dataSessao.isAfter(hoje)) {
-                String mesAno = dataSessao.format(DateTimeFormatter.ofPattern("MM-yyyy"));
-                vendasPorMes.put(mesAno, vendasPorMes.getOrDefault(mesAno, 0) + s.getBilhetesVendidos());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy");
+
+        for (Venda venda : vendas) {
+            LocalDate dataVenda = venda.getDataHora().toLocalDate();
+            if (!dataVenda.isBefore(hoje.minusMonths(11).withDayOfMonth(1)) && !dataVenda.isAfter(hoje)) {
+                String mesAno = dataVenda.format(formatter);
+                vendasPorMes.put(mesAno, vendasPorMes.getOrDefault(mesAno, 0) + venda.getQuantidade());
             }
         }
 
-        // Order: now's month, then previous 11 months
-        LinkedHashMap<String, Integer> orderedVendasPorMes = new LinkedHashMap<>();
-        LocalDate current = hoje.withDayOfMonth(1); // Começa no primeiro dia do mês atual
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy");
+        // Order: oldest to newest (last 12 months)
+        LinkedHashMap<String, Integer> ordered = new LinkedHashMap<>();
+        LocalDate current = hoje.withDayOfMonth(1).minusMonths(11);
         for (int i = 0; i < 12; i++) {
             String mesAno = current.format(formatter);
-            orderedVendasPorMes.put(mesAno, vendasPorMes.getOrDefault(mesAno, 0));
-            current = current.minusMonths(1);
+            ordered.put(mesAno, vendasPorMes.getOrDefault(mesAno, 0));
+            current = current.plusMonths(1);
         }
-        return orderedVendasPorMes;
+        return ordered;
     }
 
-    public Map<String, Integer> vendasPorAno() {
+    // Vendas por ano (total de bilhetes + produtos)
+    public Map<String, Integer> vendasPorAnoTotal() {
+        if (vendas == null) vendas = new ArrayList<>();
         Map<String, Integer> vendasPorAno = new LinkedHashMap<>();
-        for (Sessao s : sessoes) {
-            int anoSessao = s.getAno();
-            int vendidos = s.getBilhetesVendidos();
-            vendasPorAno.put(String.valueOf(anoSessao),
-                    vendasPorAno.getOrDefault(String.valueOf(anoSessao), 0) + vendidos);
-        }
-        // Sort by year descending
-        return vendasPorAno.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByKey().reversed())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
+        LocalDate hoje = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 
+        for (Venda venda : vendas) {
+            LocalDate dataVenda = venda.getDataHora().toLocalDate();
+            int ano = dataVenda.getYear();
+            if (ano >= hoje.getYear() - 4 && ano <= hoje.getYear()) {
+                String anoStr = dataVenda.format(formatter);
+                vendasPorAno.put(anoStr, vendasPorAno.getOrDefault(anoStr, 0) + venda.getQuantidade());
+            }
+        }
+
+        // Order: oldest to newest (last 5 years)
+        LinkedHashMap<String, Integer> ordered = new LinkedHashMap<>();
+        int startYear = hoje.getYear() - 4;
+        for (int i = 0; i < 5; i++) {
+            String anoStr = String.valueOf(startYear + i);
+            ordered.put(anoStr, vendasPorAno.getOrDefault(anoStr, 0));
+        }
+        return ordered;
     }
 
 
@@ -863,6 +905,9 @@ public class BaseDados implements Serializable {
 
         for(ObjetoCarrinho objeto : this.carrinho){
             if(objeto.getObjeto() instanceof Produto){
+
+                Produto produto = (Produto) objeto.getObjeto();
+
                 //vai buscar o stock produto
                 int stock = ((Produto) objeto.getObjeto()).getStock();
                 //define um novo = stock atual - quantidade comprada
@@ -875,6 +920,18 @@ public class BaseDados implements Serializable {
 
                 // vende o produto
                 ((Produto) objeto.getObjeto()).venderProduto(objeto.getQuantidade());
+
+                // Registar a venda do produto
+                Venda venda = new Venda(
+                        objeto,
+                        objeto.getQuantidade(),
+                        produto.getPrecoVendaUnidade(),
+                        "Produto",
+                        produto.getNome()
+                );
+                vendas.add(venda);
+                gravarDados();
+
             }
             if (objeto.getObjeto() instanceof Bilhete) {
                 Bilhete bilhete = (Bilhete) objeto.getObjeto();
@@ -893,8 +950,19 @@ public class BaseDados implements Serializable {
                 int lugaresPorFila = sessao.getSala().getNumLugaresFila();
                 int index = fila * lugaresPorFila + lugar;
 
+                // Registar a venda do bilhete
+                Venda venda = new Venda(
+                        objeto,
+                        objeto.getQuantidade(),
+                        bilhete.getSessao().getPrecoBilhete(),
+                        "Bilhete",
+                        bilhete.getLugar() // or another suitable description
+                );
+                vendas.add(venda);
+
                 sessao.ocuparLugar(index); // aqui grava na base de dados real
                 sessao.venderBilhete();
+                gravarDados();
 
             }
         }
@@ -941,5 +1009,36 @@ public class BaseDados implements Serializable {
             int unidadesCompradas = (int) (Math.random() * 41) + 10; // Entre 10 e 50
             produto.setPrecoTotalComprado(produto.getPrecoCompraUnidade() * unidadesCompradas);
         }
+    }
+
+    //populate data for testing
+    public void populateData() {
+        // Introduzir unidades aleatorias vendidas dos produtos do bar
+        //introduzirUnidadesVendidasProdutosBar();
+
+        // Inserrir unidades aleatorias compradas dos produtos do bar
+        //introduzirUnidadesCompradasProdutosBar();
+
+        // Populate vendas with sample data (products)
+        Produto cocaCola = produtos.get(0); // Coca Cola
+        ObjetoCarrinho objCocaCola = new ObjetoCarrinho(cocaCola, 3);
+        vendas.add(new Venda(objCocaCola, 3, cocaCola.getPrecoVendaUnidade(), "Produto", cocaCola.getNome()));
+
+        // Another product
+        Produto nachos = produtos.get(7); // Nachos
+        ObjetoCarrinho objNachos = new ObjetoCarrinho(nachos, 2);
+        vendas.add(new Venda(objNachos, 2, nachos.getPrecoVendaUnidade(), "Produto", nachos.getNome()));
+
+        // Populate vendas with sample data (tickets)
+        Sessao sessao = sessoes.get(0); // First session
+        String bilheteDescricao = sessao.getFilme().getNome() + " - " + sessao.getDia() + "/" + sessao.getMes() + "/" + sessao.getAno();
+        ObjetoCarrinho objBilhete = new ObjetoCarrinho(bilheteDescricao, 1);
+        vendas.add(new Venda(objBilhete, 1, sessao.getPrecoBilhete(), "Bilhete", bilheteDescricao));
+
+        // Another ticket
+        Sessao sessao2 = sessoes.get(1);
+        String bilheteDescricao2 = sessao2.getFilme().getNome() + " - " + sessao2.getDia() + "/" + sessao2.getMes() + "/" + sessao2.getAno();
+        ObjetoCarrinho objBilhete2 = new ObjetoCarrinho(bilheteDescricao2, 2);
+        vendas.add(new Venda(objBilhete2, 2, sessao2.getPrecoBilhete(), "Bilhete", bilheteDescricao2));
     }
 }

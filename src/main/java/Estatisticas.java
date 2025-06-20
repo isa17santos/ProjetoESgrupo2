@@ -44,7 +44,11 @@ public class Estatisticas {
 
     private void configurarComponentes() {
 
-        BaseDados bd = BaseDados.getInstance();
+        // BaseDados bd = BaseDados.getInstance();
+
+        //bd.populateData();
+
+        // introduzir dados iniciais
         //bd.introduzirUnidadesCompradasProdutosBar();
 
         // pagina principal
@@ -73,7 +77,7 @@ public class Estatisticas {
 
         // -------------------- COMBOBOX Estatística --------------------------
 
-        String[] opcoesEstatistica = {"Vendas por dia", "Vendas por mês", "Vendas por ano", "Vendas por sessão", "Vendas por filme", "Stock", "Produtos mais vendidos no bar", "Taxa de ocupação por sessão", "Lucros dos Filmes", "Lucros do Bar", "Géneros de filmes mais vistos", "Top 5 filmes mais vistos"};
+        String[] opcoesEstatistica = {"Vendas por dia (Bilhetes + Produtos)", "Vendas por mês (Bilhetes + Produtos)", "Vendas por ano (Bilhetes + Produtos)", "Vendas por sessão (Bilhetes)", "Vendas por filme (Bilhetes)", "Stock", "Produtos mais vendidos no bar", "Taxa de ocupação por sessão", "Lucros dos Filmes", "Lucros do Bar", "Géneros de filmes mais vistos", "Top 5 filmes mais vistos"};
         comboBoxEstatisticas = new RoundedComboBox<>(opcoesEstatistica, 20);
 
         // Não selecionar nenhum item no início → mostra placeholder
@@ -176,24 +180,24 @@ public class Estatisticas {
 
             // Example: switch based on selected statistic
             switch (selected) {
-                case "Vendas por dia":      // Gráfico de barras
-                    Map<String, Integer> vendasPorDia = BaseDados.getInstance().vendasPorDia();
+                case "Vendas por dia (Bilhetes + Produtos)":      // Gráfico de barras
+                    Map<String, Integer> vendasPorDia = BaseDados.getInstance().vendasPorDiaTotal();
                     graficoTabelaPanel.showBarChart(vendasPorDia);
                     break;
-                case "Vendas por mês":      // Gráfico de barras
-                    Map<String, Integer> vendasPorMes = BaseDados.getInstance().vendasPorMes();
+                case "Vendas por mês (Bilhetes + Produtos)":      // Gráfico de barras
+                    Map<String, Integer> vendasPorMes = BaseDados.getInstance().vendasPorMesTotal();
                     graficoTabelaPanel.showBarChart(vendasPorMes);
                     break;
-                case "Vendas por ano":      // Gráfico de barras
-                    Map<String, Integer> vendasPorAno = BaseDados.getInstance().vendasPorAno();
+                case "Vendas por ano (Bilhetes + Produtos)":      // Gráfico de barras
+                    Map<String, Integer> vendasPorAno = BaseDados.getInstance().vendasPorAnoTotal();
                     graficoTabelaPanel.showBarChart(vendasPorAno);
                     break;
-                case "Vendas por sessão":       // Tabela
+                case "Vendas por sessão (Bilhetes)":       // Tabela
                     String [] columnsSessao = {"Filme", "Sessão", "Vendas"};
                     Object[][] dataSessao = BaseDados.getInstance().tabelaVendasPorSessao();
                     graficoTabelaPanel.showTable(columnsSessao, dataSessao);
                     break;
-                case "Vendas por filme":        // Tabela
+                case "Vendas por filme (Bilhetes)":        // Tabela
                     String[] columnsFilme = {"Filme", "Vendas"};
                     Object[][] dataFilme = BaseDados.getInstance().tabelaVendasPorFilme();
                     graficoTabelaPanel.showTable(columnsFilme, dataFilme);
