@@ -564,8 +564,13 @@ public class BaseDados implements Serializable {
     public Map<String, String> taxaOcupacaoPorSessao() {
         Map<String, String> taxaOcupacaoPorSessao = new LinkedHashMap<>();
         for (Sessao s : sessoes) {
-            String sessaoInfo = String.format("%s - %02d/%02d/%04d %02d:%02d",
-                    s.getFilme().getNome(), s.getDia(), s.getMes(), s.getAno(), s.getHora(), s.getMinuto());
+            String sessaoInfo = String.format("%s (%s) (%s) - %02d/%02d/%04d %02d:%02d - %s",
+                    s.getFilme().getNome(),
+                    s.getFilme().getTipos(), // Film type (e.g., 2D, 3D, 5D)
+                    s.getFilme().getIdiomas(), // Film language (e.g., VO, VP)
+                    s.getDia(), s.getMes(), s.getAno(),
+                    s.getHora(), s.getMinuto(),
+                    s.getSala().getDesignacao()); // Optionally add room name for more uniqueness
             double taxa = (double) s.getBilhetesVendidos() / s.getSala().getLotacao() * 100;
             String taxaFormatada = String.format(Locale.FRANCE, "%.2f%%", taxa);
             taxaOcupacaoPorSessao.put(sessaoInfo, taxaFormatada);
