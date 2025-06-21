@@ -88,21 +88,14 @@ public class Produto implements Serializable{
     }
 
     public void setQuantidadeVendida(int quantidadeVendida) {
-        if (quantidadeVendida > stock) {
-            throw new IllegalArgumentException("Quantidade vendida excede o stock disponível.");
-        }else {
-            this.quantidadeVendida = quantidadeVendida;
-            this.stock -= quantidadeVendida;
-        }
-
+        this.quantidadeVendida = quantidadeVendida;
     }
 
     public void venderProduto(int quantidade) {
-        if (quantidade > stock) {
-            throw new IllegalArgumentException("Quantidade vendida excede o stock disponível.");
-        }else {
+        if (quantidade <= stock) {
             quantidadeVendida += quantidade;
-            this.stock -= quantidadeVendida;
+        } else {
+            throw new IllegalArgumentException("Quantidade vendida excede o stock disponível.");
         }
     }
 
@@ -119,11 +112,8 @@ public class Produto implements Serializable{
                 ", tipoProduto=" + tipoProduto +
                 ", estado=" + estado +
                 ", stock=" + stock +
-                ", quantidadeVendida=" + quantidadeVendida +
                 ", precoCompraUnidade=" + precoCompraUnidade +
                 ", precoVendaUnidade=" + precoVendaUnidade +
-                ", precoTotalEmStock=" + precoTotalEmStock +
-                ", precoTotalComprado=" + precoTotalComprado +
                 ", idProduto=" + idProduto +
                 '}';
     }
