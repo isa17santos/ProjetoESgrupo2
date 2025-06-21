@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class BaseDados implements Serializable {
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private static BaseDados instance = null;
     private static final String FICHEIRO_DADOS = "basedados.dat";
     //------------ GUARDAR DADOS EM FICHEIROS ----------------
@@ -910,27 +910,32 @@ public class BaseDados implements Serializable {
 
                 //vai buscar o stock produto
                 int stock = ((Produto) objeto.getObjeto()).getStock();
-                //define um novo = stock atual - quantidade comprada
-                ((Produto) objeto.getObjeto()).setStock(stock - objeto.getQuantidade());
+                //verifica se o stock é inferior à quantidade comprada
+                if(stock < objeto.getQuantidade()){
+                    System.out.println("Stock insuficiente para o produto: " + produto.getNome());
+                    return false; // Não é possível completar a compra
+                }else {
+                    // Vende o produto
+                    produto.venderProduto(objeto.getQuantidade());
 
-                //se o stock do produto for menor que 5
-                if(((Produto) objeto.getObjeto()).getStock() < 5){
-                    stockBaixo = true;
+                    // Registar a venda do produto
+                    Venda venda = new Venda(
+                            objeto,
+                            objeto.getQuantidade(),
+                            produto.getPrecoVendaUnidade(),
+                            "Produto",
+                            produto.getNome()
+                    );
+                    vendas.add(venda);
+
+                    //define um novo = stock atual - quantidade comprada
+                    ((Produto) objeto.getObjeto()).setStock(stock - objeto.getQuantidade());
+
+                    //se o stock do produto for menor que 5
+                    if (((Produto) objeto.getObjeto()).getStock() < 5) {
+                        stockBaixo = true;
+                    }
                 }
-
-                // vende o produto
-                ((Produto) objeto.getObjeto()).venderProduto(objeto.getQuantidade());
-
-                // Registar a venda do produto
-                Venda venda = new Venda(
-                        objeto,
-                        objeto.getQuantidade(),
-                        produto.getPrecoVendaUnidade(),
-                        "Produto",
-                        produto.getNome()
-                );
-                vendas.add(venda);
-                gravarDados();
 
             }
             if (objeto.getObjeto() instanceof Bilhete) {
@@ -962,7 +967,6 @@ public class BaseDados implements Serializable {
 
                 sessao.ocuparLugar(index); // aqui grava na base de dados real
                 sessao.venderBilhete();
-                gravarDados();
 
             }
         }

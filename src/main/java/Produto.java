@@ -95,7 +95,7 @@ public class Produto implements Serializable{
         if (quantidade <= stock) {
             quantidadeVendida += quantidade;
         } else {
-            throw new IllegalArgumentException("Quantidade vendida excede o stock disponível.");
+            throw new IllegalArgumentException("Quantidade excede o stock disponível.");
         }
     }
 
