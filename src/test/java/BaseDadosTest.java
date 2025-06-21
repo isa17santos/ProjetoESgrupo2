@@ -31,7 +31,7 @@ class BaseDadosTest {
         //verifica se não retorna uma lista null
         assertNotNull(produtos);
 
-        Produto produto1 = new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f);
+        Produto produto1 = new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f);
         Produto produto2 = new Produto(2,"sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f);
 
         System.out.println(produtos.toString());
