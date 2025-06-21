@@ -47,19 +47,31 @@ public class EstatisticasGraficoTabela extends JPanel {
     }
 
 
-    // Show table with data
+    // Show table with data and auto-resize columns
     public void showTable(String[] columns, Object[][] data) {
         table = new JTable(data, columns);
         table.setRowHeight(30);
         table.setFont(new Font("Georgia", Font.PLAIN, 18));
-        table.setBackground(corFundoSubMenu); // Table background
+        table.setBackground(corFundoSubMenu);
 
         // Set header color (different yellow)
         JTableHeader header = table.getTableHeader();
         header.setBackground(corBotaoSetaComboBox);
         header.setFont(new Font("Georgia", Font.BOLD, 20));
 
-        // Set scroll pane and viewport background to match table
+        // Auto-resize columns based on content
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            int maxWidth = header.getFontMetrics(header.getFont()).stringWidth(columns[col]) + 30; // header width + padding
+            for (int row = 0; row < table.getRowCount(); row++) {
+                Object value = table.getValueAt(row, col);
+                if (value != null) {
+                    int cellWidth = table.getFontMetrics(table.getFont()).stringWidth(value.toString()) + 20; // cell width + padding
+                    maxWidth = Math.max(maxWidth, cellWidth);
+                }
+            }
+            table.getColumnModel().getColumn(col).setPreferredWidth(maxWidth);
+        }
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.getViewport().setBackground(corFundoSubMenu);
         scrollPane.setBackground(corFundoSubMenu);
