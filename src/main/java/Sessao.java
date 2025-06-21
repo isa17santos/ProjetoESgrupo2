@@ -22,7 +22,7 @@ public class Sessao implements Serializable{
 
     private List<Integer> lugaresOcupados;
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     public Sessao(Filme filme, Sala sala, Estado estado, int dia, int mes, int ano, int hora, int minuto, float precoBilhete) {
         this.filme = filme;

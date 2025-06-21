@@ -5,6 +5,8 @@ public class Lugar implements Serializable{
     private boolean acessivel; // true = cadeira de rodas
     private EstadoLugar estado;
 
+    private static final long serialVersionUID = 2L;
+
     public Lugar(boolean acessivel, EstadoLugar estado) {
         this.acessivel = acessivel;
         this.estado = estado;

@@ -11,7 +11,7 @@ public class Produto implements Serializable{
     private float precoVendaUnidade;
     private float precoTotalEmStock;
     private float precoTotalComprado;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private int idProduto;
 
     public Produto(int idProduto, String foto, String nome, TipoProduto tipoProduto, Estado estado, int stock, float precoCompraUnidade, float precoVendaUnidade) {

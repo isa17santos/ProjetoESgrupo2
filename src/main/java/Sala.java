@@ -13,7 +13,7 @@ public class Sala implements Serializable{
     private Lugar[][] lugares;
 
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     public Sala(String designacao, int numFilas, int numLugaresFila, String ecra, Acessibilidade acessibilidade, String tipo, Estado estado) {
         this.designacao = designacao;

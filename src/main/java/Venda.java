@@ -1,4 +1,6 @@
-public class Venda {
+import java.io.Serializable;
+
+public class Venda implements Serializable {
     private ObjetoCarrinho itemVendido; // Produto ou Bilhete
     private int quantidade;     // Para Produto, 1 para Bilhete
     private float precoUnitario;
@@ -6,6 +8,8 @@ public class Venda {
     private String tipo;        // "Produto" ou "Bilhete"
     private String descricao;   // Nome do produto ou info do bilhete
     private java.time.LocalDateTime dataHora;
+
+    private static final long serialVersionUID = 2L;
 
     public Venda(ObjetoCarrinho itemVendido, int quantidade, float precoUnitario, String tipo, String descricao) {
         this.itemVendido = itemVendido;

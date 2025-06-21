@@ -13,7 +13,8 @@ public class Filme implements Serializable{
     private Estado estado;
     private float precoCompra;
     private boolean comSessao;
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 2L;
 
     public Filme(String nome, int duracao, String foto, Idioma idiomas, String idade, LinkedList<Genero> generos, String tipos, Estado estado, Float precoCompra) {
         this.nome = nome;

@@ -10,6 +10,8 @@ public class ObjetoCarrinho implements Serializable {
     private int quantidade;
     private float desconto;
 
+    private static final long serialVersionUID = 2L;
+
     public ObjetoCarrinho(Serializable objeto, int quantidade){
         this.objeto = objeto;
         this.quantidade = quantidade;
