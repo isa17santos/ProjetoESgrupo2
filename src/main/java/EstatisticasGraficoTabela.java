@@ -37,6 +37,16 @@ public class EstatisticasGraficoTabela extends JPanel {
         cardLayout.show(this, "BAR");
     }
 
+    public void showBarChartList(Map<String,int[]> vendasPorDia) {
+        // Convert the map to a format suitable for the bar chart
+        Map<String, Integer> data = vendasPorDia.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()[0])); // Assuming you want the first value
+
+        barChartPanel.setData(data);
+        cardLayout.show(this, "BAR");
+    }
+
+
     // Show table with data
     public void showTable(String[] columns, Object[][] data) {
         table = new JTable(data, columns);
@@ -70,5 +80,6 @@ public class EstatisticasGraficoTabela extends JPanel {
         repaint();
         cardLayout.show(this, "BAR");
     }
+
 
 }
