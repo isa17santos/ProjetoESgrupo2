@@ -141,7 +141,7 @@ public class BaseDados implements Serializable {
         // -------------------------------------- criar filmes ----------------------------------
 
         //criar produtos
-        produtos.add(new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,20,0.50f,1.50f));
+        produtos.add(new Produto(1,"cocaCola.png","Coca Cola",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
         produtos.add(new Produto(2,"sumolAnanas.png","Sumol Ananás",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
         produtos.add(new Produto(3,"icedTeaLimão.png","Iced tea Limão",TipoProduto.BEBIDA,Estado.ATIVO,50,0.50f,1.50f));
         produtos.add(new Produto(4,"agua.png","Água",TipoProduto.BEBIDA,Estado.ATIVO,40,0.20f,0.90f));
@@ -918,6 +918,7 @@ public class BaseDados implements Serializable {
                     stockBaixo = true;
                 }
 
+                System.out.println(objeto.getQuantidade());
                 // vende o produto
                 ((Produto) objeto.getObjeto()).venderProduto(objeto.getQuantidade());
 
@@ -926,7 +927,7 @@ public class BaseDados implements Serializable {
                         objeto,
                         objeto.getQuantidade(),
                         produto.getPrecoVendaUnidade(),
-                        "Produto",
+                        "Produto",//deveria usar enums
                         produto.getNome()
                 );
                 vendas.add(venda);
@@ -955,7 +956,7 @@ public class BaseDados implements Serializable {
                         objeto,
                         objeto.getQuantidade(),
                         bilhete.getSessao().getPrecoBilhete(),
-                        "Bilhete",
+                        "Bilhete",//deveria usar enums
                         bilhete.getLugar() // or another suitable description
                 );
                 vendas.add(venda);

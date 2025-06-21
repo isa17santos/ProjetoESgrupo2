@@ -1,4 +1,6 @@
-public class Venda {
+import java.io.Serializable;
+
+public class Venda implements Serializable {
     private ObjetoCarrinho itemVendido; // Produto ou Bilhete
     private int quantidade;     // Para Produto, 1 para Bilhete
     private float precoUnitario;
