@@ -72,44 +72,13 @@ public class Filme implements Serializable{
         this.nome = nome;
     }
 
-    public void setDuracao(int duracao) {
-        this.duracao = duracao;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
-    public void setIdiomas(Idioma idiomas) {
-        this.idiomas = idiomas;
-    }
-
-    public void setIdade(String idade) {
-        this.idade = idade;
-    }
-
-    public void setGeneros(LinkedList<Genero> generos) {
-        this.generos = generos;
-    }
-
-    public void setTipos(String tipos) {
-        this.tipos = tipos;
-    }
-
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
-    public void setPrecoCompra(Float precoCompra) {
-        this.precoCompra = precoCompra;
-    }
 
     public void setComSessao(boolean comSessao) {
         this.comSessao = comSessao;
-    }
-
-    public int getPrecoBilhete() {
-        return 0;
     }
 
     @Override
