@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Produto implements Serializable{
     private String foto;
@@ -128,24 +127,6 @@ public class Produto implements Serializable{
                 ", idProduto=" + idProduto +
                 '}';
     }
-
-    // --- funções para poder fazer a comparação correta nos testes unitários ---
-    //compara o conteúdo
-    @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) return false;
-        Produto produto = (Produto) object;
-        //retirado o stock e quantidade vendida,precoTotalEmStock e precoTotalComprado uma vez que são números random
-        return  Float.compare(precoCompraUnidade, produto.precoCompraUnidade) == 0 && Float.compare(precoVendaUnidade, produto.precoVendaUnidade) == 0 && idProduto == produto.idProduto && Objects.equals(foto, produto.foto) && Objects.equals(nome, produto.nome) && tipoProduto == produto.tipoProduto && estado == produto.estado;
-    }
-
-    @Override
-    public int hashCode() {
-        //retirado o stock e quantidade vendida,precoTotalEmStock e precoTotalComprado uma vez que são números rando
-        return Objects.hash(foto, nome, tipoProduto, estado, precoCompraUnidade, precoVendaUnidade, idProduto);
-    }
-
-    // --- funções para poder fazer a comparação correta nos testes unitários ---
 
     public float getPrecoTotalEmStock() {
         return precoTotalEmStock;

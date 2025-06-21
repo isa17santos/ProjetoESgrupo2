@@ -319,8 +319,6 @@ public class BaseDados implements Serializable {
         String bilheteDescricao2 = sessao2.getFilme().getNome() + " - " + sessao2.getDia() + "/" + sessao2.getMes() + "/" + sessao2.getAno();
         ObjetoCarrinho objBilhete2 = new ObjetoCarrinho(bilheteDescricao2, 2);
         vendas.add(new Venda(objBilhete2, 2, sessao2.getPrecoBilhete(), "Bilhete", bilheteDescricao2));
-
-        this.gravarDados();
     }
 
     public static BaseDados getInstance() {
