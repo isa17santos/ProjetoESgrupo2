@@ -20,10 +20,8 @@ public class PaginaPacks {
     private final AppWindow app;
 
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
-    private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundoLabel = Color.decode("#FBA720");
     private final Color corFundo = Color.decode("#F9E6BB");
-    private final Color corFonte = Color.decode("#6B3838");
     private final Color corFontePreto = Color.decode("#000000");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 

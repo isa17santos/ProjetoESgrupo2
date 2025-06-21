@@ -35,11 +35,8 @@ public class PaginaEscolhaSessao {
     private final Color corFundoComponentes = Color.decode("#FFC133");
     private final Color corFundoLabel = Color.decode("#FBA720");
     private final Color corFundo = Color.decode("#F9E6BB");
-    private final Color corFonte = Color.decode("#6B3838");
     private final Color corFontePreto = Color.decode("#000000");
-    private final Color corFundoUploadButton = Color.decode("#E3E3E3");
     private final Color corFundoSubMenu = Color.decode("#FBDC95");
-    private final Color corBotaoSetaComboBox = Color.decode("#F2AF14");
     private final Color corHoverComboBox = Color.decode("#FCD373");
     //---------------------------- DEFINIÇÃO DE CORES ---------------------------------------------
 

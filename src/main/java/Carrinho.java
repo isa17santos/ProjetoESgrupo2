@@ -49,7 +49,7 @@ public class Carrinho {
         configurarComponentes();
     }
 
-    public void configurarComponentes(){
+    private void configurarComponentes(){
         // Página principal
         mainPanel.setLayout(new MigLayout("nogrid, insets 0"));
         mainPanel.setBackground(corFundo);
